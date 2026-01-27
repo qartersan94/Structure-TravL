@@ -324,4 +324,373 @@ function App() {
           </section>
         )} 
 
+   {/* ========== TEAMS SECTION ========== */}
+        {activeSection === 'teams' && (
+          <section className="min-h-screen py-20 px-4">
+            <div className="max-w-7xl mx-auto">
+              
+              <div className="text-center mb-16">
+                <h2 className="text-6xl md:text-8xl font-black mb-4 font-bebas">
+                  <span className="bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
+                    NOS ÉQUIPES
+                  </span>
+                </h2>
+                <p className="text-xl text-gray-400">7 équipes, 35 joueurs, une seule passion</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {TEAMS.map((team, idx) => (
+                  <div
+                    key={team.id}
+                    onClick={() => setSelectedTeam(selectedTeam === team.id ? null : team.id)}
+                    className="group relative bg-gradient-to-br from-gray-900 to-black backdrop-blur-xl border-2 border-red-900 border-opacity-10 rounded-2xl overflow-hidden cursor-pointer hover:border-red-600 hover:border-opacity-40 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_20px_60px_rgba(220,20,60,0.3)]"
+                    style={{ 
+                      animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s forwards`,
+                      opacity: 0
+                    }}
+                  >
+                    <div className={`relative h-48 bg-gradient-to-br ${team.gradient} p-6`}>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                      
+                      <div className="relative z-10">
+                        <div className="inline-flex items-center bg-red-900 bg-opacity-30 border border-red-600 border-opacity-50 backdrop-blur-sm rounded-full px-3 py-1 mb-2">
+                          <Award className="h-3 w-3 mr-1" />
+                          <span className="text-xs font-black tracking-wide">{team.rank}</span>
+                        </div>
+                        <h3 className="text-3xl font-black text-white font-bebas drop-shadow-lg">
+                          {team.name}
+                        </h3>
+                        <p className="text-sm text-white text-opacity-80 mt-1">{team.motto}</p>
+                      </div>
+                      
+                      <div className="relative z-10 absolute bottom-6 left-6 right-6 flex items-center justify-between">
+                        <div>
+                          <div className="text-4xl font-black text-white font-bebas">
+                            {team.globalStats.totalWins}-{team.globalStats.totalLosses}
+                          </div>
+                          <div className="text-xs text-white text-opacity-80 font-bold">
+                            {team.globalStats.winRate}% WINRATE
+                          </div>
+                        </div>
+                        <div className="text-6xl opacity-30">{team.logo}</div>
+                      </div>
+                    </div>
+
+                    <div className="p-6 space-y-4">
+                      <div>
+                        <h4 className="text-xs font-bold text-gray-500 mb-3 tracking-wider">ROSTER</h4>
+                        <div className="space-y-2">
+                          {team.roster.slice(0, 3).map((player, pIdx) => (
+                            <div
+                              key={pIdx}
+                              className="flex items-center justify-between bg-red-900 bg-opacity-5 hover:bg-opacity-15 border-l-2 border-transparent hover:border-red-600 rounded px-3 py-2 transition-all duration-200"
+                            >
+                              <div className="flex items-center space-x-2">
+                                <div className="text-xs font-bold text-red-500 w-12">{player.role}</div>
+                                <div className="text-sm font-bold">{player.pseudo}</div>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-xs text-gray-400">{player.kda} KDA</span>
+                                <div 
+                                  className="w-2 h-2 rounded-full shadow-lg"
+                                  style={{ backgroundColor: team.color, boxShadow: `0 0 10px ${team.color}` }}
+                                ></div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        {selectedTeam === team.id && team.roster.length > 3 && (
+                          <div className="mt-2 space-y-2">
+                            {team.roster.slice(3).map((player, pIdx) => (
+                              <div
+                                key={pIdx}
+                                className="flex items-center justify-between bg-red-900 bg-opacity-5 hover:bg-opacity-15 border-l-2 border-transparent hover:border-red-600 rounded px-3 py-2 transition-all duration-200"
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <div className="text-xs font-bold text-red-500 w-12">{player.role}</div>
+                                  <div className="text-sm font-bold">{player.pseudo}</div>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <span className="text-xs text-gray-400">{player.kda} KDA</span>
+                                  <div 
+                                    className="w-2 h-2 rounded-full shadow-lg"
+                                    style={{ backgroundColor: team.color, boxShadow: `0 0 10px ${team.color}` }}
+                                  ></div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-gray-400">Winrate</span>
+                          <span className="font-bold" style={{ color: team.color }}>{team.globalStats.winRate}%</span>
+                        </div>
+                        <div className="h-2 bg-gray-900 rounded-full overflow-hidden shadow-inner">
+                          <div 
+                            className="h-full rounded-full transition-all duration-1000"
+                            style={{ 
+                              width: `${team.globalStats.winRate}%`,
+                              background: `linear-gradient(to right, ${team.color}, ${team.secondaryColor})`,
+                              boxShadow: `0 0 10px ${team.color}`
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {team.competitions.map((comp, cIdx) => (
+                          <div key={cIdx} className="text-xs bg-red-950 bg-opacity-30 border border-red-900 border-opacity-30 rounded px-2 py-1 text-red-400">
+                            #{comp.position} {comp.name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div 
+                      className="absolute bottom-0 left-0 right-0 h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                      style={{ backgroundColor: team.color, boxShadow: `0 0 20px ${team.color}` }}
+                    ></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ========== NEWS SECTION ========== */}
+        {activeSection === 'news' && (
+          <section className="min-h-screen py-20 px-4">
+            <div className="max-w-6xl mx-auto">
+              
+              <div className="text-center mb-16">
+                <h2 className="text-6xl md:text-8xl font-black mb-4 font-bebas">
+                  <span className="bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
+                    ACTUALITÉS
+                  </span>
+                </h2>
+                <p className="text-xl text-gray-400">
+                  Les dernières nouvelles de l'arène
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {[
+                  {
+                    title: 'Mount X en tête du Nexus Tour',
+                    date: '25 Jan 2026',
+                    category: 'Classement',
+                    emoji: '⚡',
+                    color: '#00FF88',
+                    excerpt: 'Avec un record de 32-13, Mount X domine la compétition et vise le titre.'
+                  },
+                  {
+                    title: 'Flux remporte un match épique',
+                    date: '24 Jan 2026',
+                    category: 'Match Report',
+                    emoji: '🔥',
+                    color: '#FF6B35',
+                    excerpt: 'Victoire 2-1 dans un match marathon de plus de 50 minutes.'
+                  },
+                  {
+                    title: 'VisionaRY : La montée en puissance',
+                    date: '23 Jan 2026',
+                    category: 'Analyse',
+                    emoji: '👁️',
+                    color: '#9D4EDD',
+                    excerpt: 'L\'équipe High Diamond enchaîne les victoires avec un style unique.'
+                  },
+                  {
+                    title: 'LeGendaRY : Les étoiles montantes',
+                    date: '22 Jan 2026',
+                    category: 'Portrait',
+                    emoji: '⚔️',
+                    color: '#4169E1',
+                    excerpt: 'Focus sur la plus jeune équipe de la compétition et son potentiel.'
+                  }
+                ].map((article, idx) => (
+                  <div
+                    key={idx}
+                    className="group bg-gradient-to-br from-gray-900 to-black border border-red-900 border-opacity-10 rounded-2xl overflow-hidden hover:border-red-600 hover:border-opacity-40 transition-all duration-300 hover:-translate-y-2"
+                    style={{ 
+                      animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s forwards`,
+                      opacity: 0
+                    }}
+                  >
+                    <div className="relative h-64 bg-gradient-to-br from-gray-900 to-black flex items-center justify-center text-9xl group-hover:scale-110 transition-transform duration-500">
+                      {article.emoji}
+                      <div className="absolute inset-0 bg-black opacity-30 group-hover:opacity-10 transition-opacity"></div>
+                    </div>
+
+                    <div className="p-6 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span 
+                          className="text-xs font-bold tracking-widest uppercase"
+                          style={{ color: article.color }}
+                        >
+                          {article.category}
+                        </span>
+                        <span className="text-xs text-gray-500">{article.date}</span>
+                      </div>
+
+                      <h3 className="text-2xl font-black group-hover:text-red-500 transition-colors font-bebas">
+                        {article.title}
+                      </h3>
+
+                      <p className="text-gray-400 leading-relaxed">
+                        {article.excerpt}
+                      </p>
+
+                      <button className="flex items-center space-x-2 font-bold text-red-500 group-hover:text-red-400 transition-colors">
+                        <span>Lire la suite</span>
+                        <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ========== SCHEDULE SECTION ========== */}
+        {activeSection === 'schedule' && (
+          <section className="min-h-screen py-20 px-4">
+            <div className="max-w-5xl mx-auto">
+              
+              <div className="text-center mb-16">
+                <h2 className="text-6xl md:text-8xl font-black mb-4 font-bebas">
+                  <span className="bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
+                    PLANNING
+                  </span>
+                </h2>
+                <p className="text-xl text-gray-400">
+                  Prochains matchs de la semaine
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {[
+                  { date: '27 Jan', time: '18:00', team1: 'Mount X', team2: 'Flux', status: 'À venir', competition: 'Nexus Tour' },
+                  { date: '27 Jan', time: '20:00', team1: 'VisionaRY', team2: 'LeGendaRY', status: 'À venir', competition: 'Ouat\'venture' },
+                  { date: '28 Jan', time: '18:00', team1: 'Froz\'nLéGion', team2: 'MymétiC', status: 'À venir', competition: 'Nexus Tour' },
+                  { date: '28 Jan', time: '20:00', team1: 'Team', team2: 'Flux', status: 'À venir', competition: 'Prime League' },
+                  { date: '29 Jan', time: '19:00', team1: 'Mount X', team2: 'VisionaRY', status: 'À venir', competition: 'Nexus Tour' }
+                ].map((match, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-gradient-to-r from-gray-900 to-black border border-red-900 border-opacity-20 rounded-2xl p-6 hover:border-red-600 hover:border-opacity-50 hover:-translate-y-1 transition-all duration-300"
+                    style={{ 
+                      animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s forwards`,
+                      opacity: 0
+                    }}
+                  >
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                      
+                      <div className="flex items-center space-x-4">
+                        <div className="text-center bg-red-600 bg-opacity-10 border border-red-600 border-opacity-30 rounded-xl px-4 py-3 min-w-[100px]">
+                          <div className="text-sm font-bold text-red-500">{match.date}</div>
+                          <div className="text-2xl font-black text-white font-bebas">{match.time}</div>
+                        </div>
+
+                        <div className="flex items-center space-x-3">
+                          <div className="text-right">
+                            <div className="text-lg font-bold">{match.team1}</div>
+                            <div className="text-xs text-gray-500">{match.competition}</div>
+                          </div>
+                          <div className="text-red-500 font-black text-2xl font-bebas px-3">VS</div>
+                          <div className="text-left">
+                            <div className="text-lg font-bold">{match.team2}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-red-600 bg-opacity-20 border border-red-600 border-opacity-50 px-4 py-2 rounded-full text-sm font-bold text-red-400">
+                        ⚡ {match.status}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+      </main>
+
+      {/* ========== FOOTER ========== */}
+      <footer className="relative z-10 bg-black border-t border-red-900 border-opacity-30 py-12 mt-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+            
+            <div className="flex items-center space-x-3">
+              <img 
+                src="/logo-travl-small.png" 
+                alt="TravL Esports Logo" 
+                className="h-10 w-10 object-contain"
+                style={{
+                  filter: 'drop-shadow(0 0 10px rgba(220, 20, 60, 0.6))'
+                }}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'block';
+                }}
+              />
+              <Shield className="h-8 w-8 text-red-600 hidden" />
+              <div>
+                <h3 className="text-xl font-black font-bebas">STRUCTURE TRAVL</h3>
+                <p className="text-xs text-gray-500">Structure TravL © 2026</p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-6">
+              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors font-bold">Contact</a>
+              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors font-bold">Discord</a>
+              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors font-bold">Twitter</a>
+              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors font-bold">Twitch</a>
+            </div>
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-red-900 border-opacity-20 text-center">
+            <p className="text-sm text-gray-500">
+              Made with <span className="text-red-500">❤️</span> for the esports community
+            </p>
+          </div>
+        </div>
+      </footer>
+
+      {/* CSS Animations */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
         
+        .font-bebas {
+          font-family: 'Bebas Neue', sans-serif;
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(40px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes drift {
+          0% { background-position: 0 0; }
+          100% { background-position: 60px 60px; }
+        }
+        
+        @keyframes gradient {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default App;     
