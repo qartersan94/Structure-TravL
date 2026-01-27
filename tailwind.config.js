@@ -47,15 +47,13 @@ export default {
       },
       
       fontFamily: {
-        orbitron: ['Orbitron', 'sans-serif'],
+        bebas: ['Bebas Neue', 'sans-serif'],
         rajdhani: ['Rajdhani', 'sans-serif'],
-        grotesk: ['Space Grotesk', 'sans-serif'],
       },
       
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'fade-in-up': 'fadeInUp 0.6s ease-out',
-        'fade-in-down': 'fadeInDown 0.6s ease-out',
       },
       
       keyframes: {
@@ -67,18 +65,11 @@ export default {
           '0%': { opacity: '0', transform: 'translateY(30px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-        fadeInDown: {
-          '0%': { opacity: '0', transform: 'translateY(-30px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
       },
       
       boxShadow: {
-        'neon-green': '0 0 20px rgba(0, 255, 136, 0.5), 0 0 40px rgba(0, 255, 136, 0.3)',
-        'neon-green-lg': '0 0 30px rgba(0, 255, 136, 0.6), 0 0 60px rgba(0, 255, 136, 0.4)',
-        'neon-orange': '0 0 20px rgba(255, 107, 53, 0.5), 0 0 40px rgba(255, 107, 53, 0.3)',
-        'neon-purple': '0 0 20px rgba(157, 78, 221, 0.5), 0 0 40px rgba(157, 78, 221, 0.3)',
-        'neon-blue': '0 0 20px rgba(65, 105, 225, 0.5), 0 0 40px rgba(65, 105, 225, 0.3)',
+        'neon-red': '0 0 20px rgba(220, 20, 60, 0.5), 0 0 40px rgba(220, 20, 60, 0.3)',
+        'neon-red-lg': '0 0 30px rgba(220, 20, 60, 0.6), 0 0 60px rgba(220, 20, 60, 0.4)',
       },
     },
   },
