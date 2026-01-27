@@ -12,7 +12,7 @@
     "react",
     "vite",
     "tailwindcss",
-    "futuristic"
+    "structure-travl"
   ],
   "author": "Structure TravL",
   "license": "MIT",
@@ -43,5 +43,9 @@
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qartersan94/Structure-TravL.git"
   }
 }
