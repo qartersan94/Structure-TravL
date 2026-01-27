@@ -161,7 +161,8 @@ function App() {
           </div>
         )}
       </nav>
-{/* ========== MAIN CONTENT ========== */}
+
+      {/* ========== MAIN CONTENT ========== */}
       <main className="relative z-10 pt-24">
         
         {/* ========== HOME SECTION ========== */}
@@ -322,9 +323,9 @@ function App() {
 
             </div>
           </section>
-        )} 
+        )}
 
-   {/* ========== TEAMS SECTION ========== */}
+        {/* ========== TEAMS SECTION ========== */}
         {activeSection === 'teams' && (
           <section className="min-h-screen py-20 px-4">
             <div className="max-w-7xl mx-auto">
@@ -693,4 +694,4 @@ function App() {
   );
 }
 
-export default App;     
+export default App;
