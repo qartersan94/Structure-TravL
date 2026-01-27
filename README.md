@@ -1,36 +1,101 @@
-# 🎮 Structure TravL - Esports Arena
+# 🔥 Structure TravL - Site Esports Professionnel
 
-Plateforme esports professionnelle ultra-moderne pour 7 équipes League of Legends.
+![Version](https://img.shields.io/badge/version-1.0.0-red)
+![React](https://img.shields.io/badge/React-18.2-blue)
+![Vite](https://img.shields.io/badge/Vite-5.0-purple)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-3.4-cyan)
+
+**Site esports ultra-moderne pour 7 équipes League of Legends avec formulaire d'inscription**
+
+---
+
+## ✨ Fonctionnalités
+
+- 🏠 **Accueil** - Hero + Stats + Formulaire d'inscription
+- 👥 **Équipes** - 7 équipes avec rosters complets
+- 📰 **Actualités** - Articles récents
+- 📅 **Planning** - Calendrier des matchs
+
+### 📝 Formulaire d'inscription
+✅ Pseudo de jeu  
+✅ Riot ID (Pseudo#TAG)  
+✅ Email  
+✅ Téléphone  
+
+---
+
+## 🏆 Les 7 Équipes
+
+| Équipe | Rang | Couleur | Record |
+|--------|------|---------|--------|
+| ⚡ Mount X | Master | 🟢 Vert | 32-13 (71%) |
+| 🔥 Flux | Master | 🟠 Orange | 28-14 (67%) |
+| ❄️ Froz'nLéGion | Master | ⚪ Blanc | 26-14 (65%) |
+| 👁️ VisionaRY | High Diamond | 🟣 Violet | 23-15 (61%) |
+| 🌑 MymétiC | High Diamond | ⚫ Noir | 21-15 (58%) |
+| ⭐ Team | Diamond | 🟡 Jaune | 19-15 (56%) |
+| ⚔️ LeGendaRY | Diamond | 🔵 Bleu | 16-16 (50%) |
+
+---
 
 ## 🚀 Installation
 ```bash
 # Installer les dépendances
 npm install
 
-# Lancer le serveur de développement
+# Lancer le serveur
 npm run dev
 
-# Build de production
-npm run build
+# Ouvrir http://localhost:3000
 ```
 
-## 🏆 Les 7 Équipes
-
-1. ⚡ Mount X - Master - Vert
-2. 🔥 Flux - Master - Orange
-3. ❄️ Froz'nLéGion - Master - Blanc
-4. 👁️ VisionaRY - High Diamond - Violet
-5. 🌑 MymétiC - High Diamond - Noir
-6. ⭐ Team - Diamond - Jaune
-7. ⚔️ LeGendaRY - Diamond - Bleu
+---
 
 ## 🛠️ Technologies
 
-- React 18
-- Vite 5
-- Tailwind CSS 3
-- Lucide Icons
+- **React 18** - Framework UI
+- **Vite 5** - Build tool
+- **Tailwind CSS 3** - Styles
+- **Lucide React** - Icônes
+- **Bebas Neue** - Typographie
+
+---
+
+## 📁 Structure
+```
+Structure-TravL/
+├── public/
+│   ├── logo-travl.png
+│   ├── logo-travl-small.png
+│   └── favicon.png
+├── src/
+│   ├── data/
+│   │   └── teamsData.js
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+├── index.html
+├── package.json
+└── vite.config.js
+```
+
+---
 
 ## 📝 License
 
 MIT © Structure TravL
+
+---
+
+## 📞 Contact
+
+- 🌐 Website : [structuretravl.gg](#)
+- 🐦 Twitter : [@TravLEsports](#)
+- 📺 Twitch : [twitch.tv/travl](#)
+- 💬 Discord : [discord.gg/travl](#)
+
+---
+
+**Made with ❤️ by Structure TravL**
+
+🔥 **Dominez l'arène** 🏆
