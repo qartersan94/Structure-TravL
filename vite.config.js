@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   
-  base: '/Structure-TravL/',  // ← CETTE LIGNE EST IMPORTANTE !
+  base: '/Structure-TravL/',
   
   server: {
     port: 3000,
