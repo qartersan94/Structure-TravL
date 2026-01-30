@@ -441,25 +441,41 @@ function App() {
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap gap-2">
-                        {team.competitions.map((comp, cIdx) => (
-                          <div key={cIdx} className="text-xs bg-red-950 bg-opacity-30 border border-red-900 border-opacity-30 rounded px-2 py-1 text-red-400">
-                            #{comp.position} {comp.name}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div 
-                      className="absolute bottom-0 left-0 right-0 h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
-                      style={{ backgroundColor: team.color, boxShadow: `0 0 20px ${team.color}` }}
-                    ></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+                    <div className={`relative h-48 bg-gradient-to-br ${team.gradient} p-6`}>
+  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+  
+  {/* HEADER - Rank + Nom */}
+  <div className="relative z-10">
+    <div className="inline-flex items-center bg-red-900 bg-opacity-30 border border-red-600 border-opacity-50 backdrop-blur-sm rounded-full px-3 py-1 mb-2">
+      <Award className="h-3 w-3 mr-1" />
+      <span className="text-xs font-black tracking-wide">{team.rank}</span>
+    </div>
+    <h3 className="text-3xl font-black text-white font-bebas drop-shadow-lg">
+      {team.name}
+    </h3>
+    <p className="text-sm text-white text-opacity-80 mt-1">{team.motto}</p>
+  </div>
+  
+  {/* FOOTER - Score + Logo (CORRIGÉ) */}
+  <div className="absolute bottom-4 left-4 right-4 z-10">
+    <div className="flex items-end justify-between">
+      {/* Score à gauche */}
+      <div className="flex-shrink-0">
+        <div className="text-3xl md:text-4xl font-black text-white font-bebas leading-none">
+          {team.globalStats.totalWins}-{team.globalStats.totalLosses}
+        </div>
+        <div className="text-xs text-white text-opacity-80 font-bold mt-1">
+          {team.globalStats.winRate}% WINRATE
+        </div>
+      </div>
+      
+      {/* Logo à droite */}
+      <div className="text-5xl md:text-6xl opacity-30 flex-shrink-0">
+        {team.logo}
+      </div>
+    </div>
+  </div>
+</div>
 
         {/* ========== NEWS SECTION ========== */}
         {activeSection === 'news' && (
