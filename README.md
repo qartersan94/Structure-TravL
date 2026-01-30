@@ -98,4 +98,4 @@ MIT © Structure TravL
 
 **Made with ❤️ by Structure TravL**
 
-🔥 **Dominez l'arène** 🏆
+🔥 **Dominez l'arène** 🏆 
