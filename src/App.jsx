@@ -5,11 +5,15 @@ import {
 } from 'lucide-react';
 import { TEAMS, COMPETITIONS } from './data/teamsData';
 import Calendar from './components/Calendar';
+import PlayerStats from './components/PlayerStats';
+import StatsChart from './components/StatsChart';
+import ChampionPool from './components/ChampionPool';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [scrollY, setScrollY] = useState(0);
 
   // Form state
@@ -394,7 +398,11 @@ function App() {
                           {team.roster.slice(0, 3).map((player, pIdx) => (
                             <div
                               key={pIdx}
-                              className="flex items-center justify-between bg-red-900 bg-opacity-5 hover:bg-opacity-15 border-l-2 border-transparent hover:border-red-600 rounded px-3 py-2 transition-all duration-200"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedPlayer({ player, teamColor: team.color, teamName: team.name });
+                              }}
+                              className="flex items-center justify-between bg-red-900 bg-opacity-5 hover:bg-opacity-15 border-l-2 border-transparent hover:border-red-600 rounded px-3 py-2 transition-all duration-200 cursor-pointer"
                             >
                               <div className="flex items-center space-x-2">
                                 <div className="text-xs font-bold text-red-500 w-12">{player.role}</div>
@@ -415,7 +423,11 @@ function App() {
                             {team.roster.slice(3).map((player, pIdx) => (
                               <div
                                 key={pIdx}
-                                className="flex items-center justify-between bg-red-900 bg-opacity-5 hover:bg-opacity-15 border-l-2 border-transparent hover:border-red-600 rounded px-3 py-2 transition-all duration-200"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedPlayer({ player, teamColor: team.color, teamName: team.name });
+                                }}
+                                className="flex items-center justify-between bg-red-900 bg-opacity-5 hover:bg-opacity-15 border-l-2 border-transparent hover:border-red-600 rounded px-3 py-2 transition-all duration-200 cursor-pointer"
                               >
                                 <div className="flex items-center space-x-2">
                                   <div className="text-xs font-bold text-red-500 w-12">{player.role}</div>
@@ -589,6 +601,56 @@ function App() {
           </section>
         )}
       </main>
+
+      {/* ========== PLAYER STATS MODAL ========== */}
+      {selectedPlayer && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-90"
+          onClick={() => setSelectedPlayer(null)}
+        >
+          <div 
+            className="relative max-w-6xl w-full max-h-[90vh] overflow-y-auto bg-gradient-to-br from-gray-900 to-black border-2 border-red-900 border-opacity-30 rounded-3xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div 
+              className="sticky top-0 z-10 bg-gradient-to-br from-gray-900 to-black border-b border-red-900 border-opacity-30 p-6 flex items-center justify-between"
+              style={{
+                background: `linear-gradient(135deg, ${selectedPlayer.teamColor}15 0%, transparent 100%)`
+              }}
+            >
+              <div>
+                <h2 className="text-4xl font-black font-bebas" style={{ color: selectedPlayer.teamColor }}>
+                  {selectedPlayer.player.pseudo}
+                </h2>
+                <p className="text-gray-400">
+                  {selectedPlayer.player.role} • {selectedPlayer.teamName} • {selectedPlayer.player.realName}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedPlayer(null)}
+                className="p-3 rounded-lg bg-red-600 hover:bg-red-700 transition-all"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 space-y-6">
+              
+              {/* Stats Overview */}
+              <PlayerStats player={selectedPlayer.player} teamColor={selectedPlayer.teamColor} />
+
+              {/* Evolution Chart */}
+              <StatsChart player={selectedPlayer.player} teamColor={selectedPlayer.teamColor} />
+
+              {/* Champion Pool */}
+              <ChampionPool player={selectedPlayer.player} teamColor={selectedPlayer.teamColor} />
+
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ========== FOOTER ========== */}
       <footer className="relative z-10 bg-black border-t border-red-900 border-opacity-30 py-12 mt-20">
