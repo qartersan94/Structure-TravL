@@ -1,199 +1,120 @@
 import React, { useState } from 'react';
-import { Lock, User, Eye, EyeOff, Shield, Award } from 'lucide-react';
+import { Lock, User, Eye, EyeOff, Shield } from 'lucide-react';
 
 function LoginForm({ onLogin }) {
-  const [credentials, setCredentials] = useState({
-    username: '',
-    password: ''
-  });
+  const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const authorizedAccounts = {
-    // Staff (accès complet)
-    'coach': { password: 'travl2026', role: 'Coach', name: 'Coach Principal', teamId: null, teamName: null },
-    'manager': { password: 'travl2026', role: 'Manager', name: 'Manager Structure', teamId: null, teamName: null },
-    'staff': { password: 'travl2026', role: 'Staff', name: 'Staff TravL', teamId: null, teamName: null },
-
-    // Capitaines (accès leur équipe uniquement)
-    'mountainking': { password: 'mountx2026', role: 'Capitaine', name: 'MountainKing', teamId: 1, teamName: 'Mount X' },
-    'flamewave': { password: 'flux2026', role: 'Capitaine', name: 'FlameWave', teamId: 2, teamName: 'Flux' },
-    'icebreaker': { password: 'froz2026', role: 'Capitaine', name: 'IceBreaker', teamId: 3, teamName: "Froz'nLéGion" },
-    'besetop': { password: 'vision2026', role: 'Capitaine', name: 'BeSeTop', teamId: 4, teamName: 'VisionaRY' },
-    'shadowgame': { password: 'mymetic2026', role: 'Capitaine', name: 'ShadowGame', teamId: 5, teamName: 'MymétiC' },
-    'goldenshield': { password: 'team2026', role: 'Capitaine', name: 'GoldenShield', teamId: 6, teamName: 'Team' },
-    'legacystop': { password: 'legendary2026', role: 'Capitaine', name: 'LegacysTop', teamId: 7, teamName: 'LeGendaRY' }
+  const ACCOUNTS = {
+    coach:        { password: 'travl2026',      role: 'Staff',      name: 'Coach Principal' },
+    manager:      { password: 'travl2026',      role: 'Staff',      name: 'Manager Structure' },
+    staff:        { password: 'travl2026',      role: 'Staff',      name: 'Staff TravL' },
+    mountainking: { password: 'mountx2026',     role: 'Capitaine',  name: 'MountainKing',  teamId: 1, teamName: 'Mount X' },
+    flamewave:    { password: 'flux2026',       role: 'Capitaine',  name: 'FlameWave',     teamId: 2, teamName: 'Flux' },
+    icebreaker:   { password: 'froz2026',       role: 'Capitaine',  name: 'IceBreaker',    teamId: 3, teamName: "Froz'nLéGion" },
+    besetop:      { password: 'vision2026',     role: 'Capitaine',  name: 'BeSeTop',       teamId: 4, teamName: 'VisionaRY' },
+    shadowgame:   { password: 'mymetic2026',    role: 'Capitaine',  name: 'ShadowGame',    teamId: 5, teamName: 'MymétiC' },
+    goldenshield: { password: 'team2026',       role: 'Capitaine',  name: 'GoldenShield',  teamId: 6, teamName: 'Team' },
+    legacystop:   { password: 'legendary2026',  role: 'Capitaine',  name: 'LegacysTop',    teamId: 7, teamName: 'LeGendaRY' }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     setTimeout(() => {
-      const account = authorizedAccounts[credentials.username.toLowerCase()];
-
+      const account = ACCOUNTS[credentials.username];
       if (account && account.password === credentials.password) {
         onLogin({
           username: credentials.username,
           role: account.role,
           name: account.name,
-          teamId: account.teamId,
-          teamName: account.teamName,
-          loggedAt: new Date().toISOString()
+          teamId: account.teamId || null,
+          teamName: account.teamName || null,
+          loggedAt: new Date().toLocaleTimeString()
         });
       } else {
-        setError('Identifiants incorrects. Vérifie ton username et mot de passe.');
+        setError('Identifiants invalides');
+        setLoading(false);
       }
-      setLoading(false);
     }, 800);
   };
 
-  const handleInputChange = (e) => {
-    setCredentials({
-      ...credentials,
-      [e.target.name]: e.target.value
-    });
-    setError('');
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-black via-gray-950 to-black">
-
-      {/* Background Effects */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600 rounded-full blur-[120px] opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-900 rounded-full blur-[120px] opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-3/4 left-1/2 w-64 h-64 bg-red-500 rounded-full blur-[100px] opacity-10 animate-pulse" style={{ animationDelay: '2s' }}></div>
+    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 relative overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-950 to-black"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600 rounded-full blur-[120px] opacity-15 animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-900 rounded-full blur-[120px] opacity-15 animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
       <div className="relative z-10 w-full max-w-md">
-
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-red-600 bg-opacity-10 border-2 border-red-600 border-opacity-30 rounded-2xl mb-4">
-            <Shield className="w-10 h-10 text-red-500" />
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-red-600 bg-opacity-10 border-2 border-red-600 border-opacity-40 rounded-2xl mb-6">
+            <Shield className="w-12 h-12 text-red-500" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-            <span className="bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
-              DASHBOARD
-            </span>
+          <h1 className="text-5xl font-black font-bebas tracking-tight">
+            <span className="bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">STRUCTURE TRAVL</span>
           </h1>
-          <p className="text-gray-400 text-lg">
-            Espace réservé au Staff & Capitaines
-          </p>
+          <p className="text-gray-500 mt-2 text-sm tracking-widest uppercase">Panel de Gestion</p>
         </div>
 
-        {/* Login Card */}
-        <div className="bg-gradient-to-br from-gray-900 via-black to-gray-950 border-2 border-red-900 border-opacity-30 rounded-3xl p-8 backdrop-blur-xl relative overflow-hidden">
+        <div className="bg-gradient-to-br from-gray-900 to-black border border-red-900 border-opacity-30 rounded-2xl p-8 relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-60"></div>
 
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-50"></div>
-          <div className="absolute -top-20 -right-20 w-60 h-60 bg-red-600 rounded-full blur-[80px] opacity-10"></div>
-
-          <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-
-            {/* Username */}
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">
-                <User className="inline w-4 h-4 mr-2" />
-                Identifiant
-              </label>
-              <input
-                type="text"
-                name="username"
-                value={credentials.username}
-                onChange={handleInputChange}
-                required
-                placeholder="coach / manager / capitaine"
-                className="w-full bg-black bg-opacity-50 border-2 border-red-900 border-opacity-30 rounded-xl px-6 py-4 text-white placeholder-gray-600 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-20 transition-all duration-300"
-              />
+              <label className="block text-xs font-bold text-gray-500 mb-2 tracking-widest uppercase">Identifiant</label>
+              <div className="relative">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                <input
+                  type="text"
+                  value={credentials.username}
+                  onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+                  placeholder="Nom d'utilisateur"
+                  required
+                  className="w-full bg-black bg-opacity-50 border border-red-900 border-opacity-30 rounded-xl pl-12 pr-4 py-4 text-white placeholder-gray-600 focus:border-red-600 focus:outline-none transition-all"
+                />
+              </div>
             </div>
 
-            {/* Password */}
             <div>
-              <label className="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">
-                <Lock className="inline w-4 h-4 mr-2" />
-                Mot de passe
-              </label>
+              <label className="block text-xs font-bold text-gray-500 mb-2 tracking-widest uppercase">Mot de passe</label>
               <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  name="password"
                   value={credentials.password}
-                  onChange={handleInputChange}
-                  required
+                  onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
                   placeholder="••••••••"
-                  className="w-full bg-black bg-opacity-50 border-2 border-red-900 border-opacity-30 rounded-xl px-6 py-4 pr-14 text-white placeholder-gray-600 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-20 transition-all duration-300"
+                  required
+                  className="w-full bg-black bg-opacity-50 border border-red-900 border-opacity-30 rounded-xl pl-12 pr-12 py-4 text-white placeholder-gray-600 focus:border-red-600 focus:outline-none transition-all"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors">
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
-            {/* Error */}
             {error && (
-              <div className="bg-red-900 bg-opacity-20 border border-red-600 border-opacity-50 rounded-lg px-4 py-3 text-red-400 text-sm">
-                {error}
-              </div>
+              <div className="bg-red-900 bg-opacity-20 border border-red-800 border-opacity-40 rounded-lg px-4 py-3 text-red-400 text-sm text-center">{error}</div>
             )}
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-black text-lg tracking-wide py-5 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(220,20,60,0.5)] flex items-center justify-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed" style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+              className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:opacity-50 text-white font-black text-base tracking-widest uppercase py-4 rounded-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.4)] flex items-center justify-center space-x-2 font-bebas"
             >
-              {loading ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>CONNEXION...</span>
-                </>
-              ) : (
-                <>
-                  <Shield className="w-6 h-6" />
-                  <span>SE CONNECTER</span>
-                </>
-              )}
+              {loading ? <span className="animate-pulse">Connexion...</span> : (<><Shield className="w-5 h-5" /><span>Se connecter</span></>)}
             </button>
           </form>
-
-          {/* Info comptes */}
-          <div className="mt-6 p-4 bg-black bg-opacity-50 rounded-xl border border-red-900 border-opacity-20 relative z-10">
-            <h3 className="text-sm font-bold text-gray-400 mb-3 flex items-center">
-              <Award className="w-4 h-4 mr-2 text-red-500" />
-              COMPTES DISPONIBLES
-            </h3>
-            <div className="space-y-2 text-xs text-gray-500">
-              <div className="flex items-start space-x-2">
-                <span className="text-red-400 font-bold w-16 shrink-0">Staff</span>
-                <span>coach / manager / staff</span>
-              </div>
-              <div className="flex items-start space-x-2">
-                <span className="text-red-400 font-bold w-16 shrink-0">Caps</span>
-                <span>mountainking / flamewave / icebreaker / besetop / shadowgame / goldenshield / legacystop</span>
-              </div>
-              <div className="mt-2 pt-2 border-t border-red-900 border-opacity-20 text-gray-600">
-                Staff → <span className="text-gray-400">travl2026</span> &nbsp;|&nbsp; Caps → <span className="text-gray-400">[équipe]2026</span>
-              </div>
-            </div>
-          </div>
         </div>
-
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Accès sécurisé • Structure TravL © 2026
-        </p>
+        <p className="text-center text-gray-600 text-xs mt-6">Structure TravL © 2026</p>
       </div>
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-      `}</style>
+      <style>{`.font-bebas { font-family: 'Bebas Neue', sans-serif; }`}</style>
     </div>
   );
 }
