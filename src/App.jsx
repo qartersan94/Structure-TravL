@@ -8,6 +8,8 @@ import Calendar from './components/Calendar';
 import PlayerStats from './components/PlayerStats';
 import StatsChart from './components/StatsChart';
 import ChampionPool from './components/ChampionPool';
+import LoginForm from './components/LoginForm';
+import Dashboard from './components/Dashboard';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
@@ -15,6 +17,8 @@ function App() {
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [scrollY, setScrollY] = useState(0);
+  const [user, setUser] = useState(null);
+  const [showDashboard, setShowDashboard] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -49,6 +53,26 @@ function App() {
     alert(`Bienvenue ${formData.pseudo} ! Votre inscription a été envoyée.`);
     setFormData({ pseudo: '', riotId: '', email: '', phone: '' });
   };
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+    setShowDashboard(true);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setShowDashboard(false);
+  };
+
+  // Si le dashboard est affiché
+  if (showDashboard && user) {
+    return <Dashboard user={user} onLogout={handleLogout} />;
+  }
+
+  // Si l'utilisateur veut accéder au dashboard
+  if (activeSection === 'dashboard') {
+    return <LoginForm onLogin={handleLogin} />;
+  }
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
@@ -114,6 +138,7 @@ function App() {
                 { id: 'teams', label: 'Équipes' },
                 { id: 'news', label: 'Actualités' },
                 { id: 'schedule', label: 'Planning' },
+                { id: 'dashboard', label: 'Dashboard', icon: Shield }
               ].map((item) => (
                 <button
                   key={item.id}
@@ -122,8 +147,9 @@ function App() {
                     activeSection === item.id
                       ? 'text-red-500'
                       : 'text-gray-300 hover:text-red-400'
-                  }`}
+                  } ${item.id === 'dashboard' ? 'flex items-center space-x-2' : ''}`}
                 >
+                  {item.icon && <item.icon className="w-4 h-4" />}
                   <span>{item.label}</span>
                   {activeSection === item.id && (
                     <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 shadow-[0_0_10px_rgba(220,20,60,0.8)]"></div>
@@ -149,6 +175,7 @@ function App() {
                 { id: 'teams', label: 'Équipes' },
                 { id: 'news', label: 'Actualités' },
                 { id: 'schedule', label: 'Planning' },
+                { id: 'dashboard', label: 'Dashboard' }
               ].map((item) => (
                 <button
                   key={item.id}
