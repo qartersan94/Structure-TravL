@@ -62,6 +62,7 @@ function App() {
   const handleLogout = () => {
     setUser(null);
     setShowDashboard(false);
+    setActiveSection('home');
   };
 
   // Si le dashboard est affiché
@@ -213,7 +214,7 @@ function App() {
                     <span className="text-white drop-shadow-2xl">L'ARÈNE</span>
                   </h1>
                   <p className="text-2xl md:text-3xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light">
-                    7 équipes d'élite • De Master à Diamond • Une seule mission : <span className="text-red-500 font-bold">la victoire absolue</span>
+                    7 équipes d'elite • De Master à Diamond • Une seule mission : <span className="text-red-500 font-bold">la victoire absolue</span>
                   </p>
                 </div>
 
@@ -222,7 +223,7 @@ function App() {
                     { icon: '🎮', value: '7', label: 'Équipes' },
                     { icon: '🏆', value: '3', label: 'Compétitions' },
                     { icon: '⚔️', value: '100+', label: 'Matchs' },
-                    { icon: '👥', value: '35', label: 'Joueurs' }
+                    { icon: '🦁', value: '35', label: 'Joueurs' }
                   ].map((stat, idx) => (
                     <div key={idx} className="bg-black bg-opacity-70 backdrop-blur-xl border border-red-900 border-opacity-20 rounded-2xl p-8 hover:scale-105 hover:border-red-600 hover:border-opacity-40 transition-all duration-300">
                       <div className="text-6xl mb-3">{stat.icon}</div>
@@ -385,7 +386,6 @@ function App() {
                     <div className={`relative h-48 bg-gradient-to-br ${team.gradient} p-6`}>
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
                       
-                      {/* HEADER - Rank + Nom */}
                       <div className="relative z-10">
                         <div className="inline-flex items-center bg-red-900 bg-opacity-30 border border-red-600 border-opacity-50 backdrop-blur-sm rounded-full px-3 py-1 mb-2">
                           <Award className="h-3 w-3 mr-1" />
@@ -397,10 +397,8 @@ function App() {
                         <p className="text-sm text-white text-opacity-80 mt-1">{team.motto}</p>
                       </div>
                       
-                      {/* FOOTER - Score + Logo (CORRIGÉ) */}
                       <div className="absolute bottom-4 left-4 right-4 z-10">
                         <div className="flex items-end justify-between">
-                          {/* Score à gauche */}
                           <div className="flex-shrink-0">
                             <div className="text-3xl md:text-4xl font-black text-white font-bebas leading-none">
                               {team.globalStats.totalWins}-{team.globalStats.totalLosses}
@@ -409,8 +407,6 @@ function App() {
                               {team.globalStats.winRate}% WINRATE
                             </div>
                           </div>
-                          
-                          {/* Logo à droite */}
                           <div className="text-5xl md:text-6xl opacity-30 flex-shrink-0">
                             {team.logo}
                           </div>
@@ -550,7 +546,7 @@ function App() {
                     category: 'Analyse',
                     emoji: '👁️',
                     color: '#9D4EDD',
-                    excerpt: 'L\'équipe High Diamond enchaîne les victoires avec un style unique.'
+                    excerpt: "L'équipe High Diamond enchaîne les victoires avec un style unique."
                   },
                   {
                     title: 'LeGendaRY : Les étoiles montantes',
