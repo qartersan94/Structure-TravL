@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Shield, Trophy, Users, Newspaper, Calendar, 
+  Shield, Trophy, Users, Newspaper, Calendar as CalendarIcon, 
   ChevronRight, Menu, X, Target, Award, Star, User, Mail, Phone, Gamepad2
 } from 'lucide-react';
 import { TEAMS, COMPETITIONS } from './data/teamsData';
+import Calendar from './components/Calendar';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
@@ -353,6 +354,7 @@ function App() {
                     <div className={`relative h-48 bg-gradient-to-br ${team.gradient} p-6`}>
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
                       
+                      {/* HEADER - Rank + Nom */}
                       <div className="relative z-10">
                         <div className="inline-flex items-center bg-red-900 bg-opacity-30 border border-red-600 border-opacity-50 backdrop-blur-sm rounded-full px-3 py-1 mb-2">
                           <Award className="h-3 w-3 mr-1" />
@@ -364,16 +366,24 @@ function App() {
                         <p className="text-sm text-white text-opacity-80 mt-1">{team.motto}</p>
                       </div>
                       
-                      <div className="relative z-10 absolute bottom-6 left-6 right-6 flex items-center justify-between">
-                        <div>
-                          <div className="text-4xl font-black text-white font-bebas">
-                            {team.globalStats.totalWins}-{team.globalStats.totalLosses}
+                      {/* FOOTER - Score + Logo (CORRIGÉ) */}
+                      <div className="absolute bottom-4 left-4 right-4 z-10">
+                        <div className="flex items-end justify-between">
+                          {/* Score à gauche */}
+                          <div className="flex-shrink-0">
+                            <div className="text-3xl md:text-4xl font-black text-white font-bebas leading-none">
+                              {team.globalStats.totalWins}-{team.globalStats.totalLosses}
+                            </div>
+                            <div className="text-xs text-white text-opacity-80 font-bold mt-1">
+                              {team.globalStats.winRate}% WINRATE
+                            </div>
                           </div>
-                          <div className="text-xs text-white text-opacity-80 font-bold">
-                            {team.globalStats.winRate}% WINRATE
+                          
+                          {/* Logo à droite */}
+                          <div className="text-5xl md:text-6xl opacity-30 flex-shrink-0">
+                            {team.logo}
                           </div>
                         </div>
-                        <div className="text-6xl opacity-30">{team.logo}</div>
                       </div>
                     </div>
 
@@ -441,41 +451,25 @@ function App() {
                         </div>
                       </div>
 
-                    <div className={`relative h-48 bg-gradient-to-br ${team.gradient} p-6`}>
-  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
-  
-  {/* HEADER - Rank + Nom */}
-  <div className="relative z-10">
-    <div className="inline-flex items-center bg-red-900 bg-opacity-30 border border-red-600 border-opacity-50 backdrop-blur-sm rounded-full px-3 py-1 mb-2">
-      <Award className="h-3 w-3 mr-1" />
-      <span className="text-xs font-black tracking-wide">{team.rank}</span>
-    </div>
-    <h3 className="text-3xl font-black text-white font-bebas drop-shadow-lg">
-      {team.name}
-    </h3>
-    <p className="text-sm text-white text-opacity-80 mt-1">{team.motto}</p>
-  </div>
-  
-  {/* FOOTER - Score + Logo (CORRIGÉ) */}
-  <div className="absolute bottom-4 left-4 right-4 z-10">
-    <div className="flex items-end justify-between">
-      {/* Score à gauche */}
-      <div className="flex-shrink-0">
-        <div className="text-3xl md:text-4xl font-black text-white font-bebas leading-none">
-          {team.globalStats.totalWins}-{team.globalStats.totalLosses}
-        </div>
-        <div className="text-xs text-white text-opacity-80 font-bold mt-1">
-          {team.globalStats.winRate}% WINRATE
-        </div>
-      </div>
-      
-      {/* Logo à droite */}
-      <div className="text-5xl md:text-6xl opacity-30 flex-shrink-0">
-        {team.logo}
-      </div>
-    </div>
-  </div>
-</div>
+                      <div className="flex flex-wrap gap-2">
+                        {team.competitions.map((comp, cIdx) => (
+                          <div key={cIdx} className="text-xs bg-red-950 bg-opacity-30 border border-red-900 border-opacity-30 rounded px-2 py-1 text-red-400">
+                            #{comp.position} {comp.name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div 
+                      className="absolute bottom-0 left-0 right-0 h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                      style={{ backgroundColor: team.color, boxShadow: `0 0 20px ${team.color}` }}
+                    ></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ========== NEWS SECTION ========== */}
         {activeSection === 'news' && (
@@ -575,7 +569,7 @@ function App() {
         {/* ========== SCHEDULE SECTION ========== */}
         {activeSection === 'schedule' && (
           <section className="min-h-screen py-20 px-4">
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-7xl mx-auto">
               
               <div className="text-center mb-16">
                 <h2 className="text-6xl md:text-8xl font-black mb-4 font-bebas">
@@ -584,53 +578,13 @@ function App() {
                   </span>
                 </h2>
                 <p className="text-xl text-gray-400">
-                  Prochains matchs de la semaine
+                  Planning complet de la structure - Toutes les sessions
                 </p>
               </div>
 
-              <div className="space-y-4">
-                {[
-                  { date: '27 Jan', time: '18:00', team1: 'Mount X', team2: 'Flux', status: 'À venir', competition: 'Nexus Tour' },
-                  { date: '27 Jan', time: '20:00', team1: 'VisionaRY', team2: 'LeGendaRY', status: 'À venir', competition: 'Ouat\'venture' },
-                  { date: '28 Jan', time: '18:00', team1: 'Froz\'nLéGion', team2: 'MymétiC', status: 'À venir', competition: 'Nexus Tour' },
-                  { date: '28 Jan', time: '20:00', team1: 'Team', team2: 'Flux', status: 'À venir', competition: 'Prime League' },
-                  { date: '29 Jan', time: '19:00', team1: 'Mount X', team2: 'VisionaRY', status: 'À venir', competition: 'Nexus Tour' }
-                ].map((match, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-gradient-to-r from-gray-900 to-black border border-red-900 border-opacity-20 rounded-2xl p-6 hover:border-red-600 hover:border-opacity-50 hover:-translate-y-1 transition-all duration-300"
-                    style={{ 
-                      animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s forwards`,
-                      opacity: 0
-                    }}
-                  >
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                      
-                      <div className="flex items-center space-x-4">
-                        <div className="text-center bg-red-600 bg-opacity-10 border border-red-600 border-opacity-30 rounded-xl px-4 py-3 min-w-[100px]">
-                          <div className="text-sm font-bold text-red-500">{match.date}</div>
-                          <div className="text-2xl font-black text-white font-bebas">{match.time}</div>
-                        </div>
-
-                        <div className="flex items-center space-x-3">
-                          <div className="text-right">
-                            <div className="text-lg font-bold">{match.team1}</div>
-                            <div className="text-xs text-gray-500">{match.competition}</div>
-                          </div>
-                          <div className="text-red-500 font-black text-2xl font-bebas px-3">VS</div>
-                          <div className="text-left">
-                            <div className="text-lg font-bold">{match.team2}</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="bg-red-600 bg-opacity-20 border border-red-600 border-opacity-50 px-4 py-2 rounded-full text-sm font-bold text-red-400">
-                        ⚡ {match.status}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              {/* Nouveau Calendrier Interactif */}
+              <Calendar />
+              
             </div>
           </section>
         )}
