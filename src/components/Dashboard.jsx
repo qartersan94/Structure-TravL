@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import {
   Shield, LogOut, Users, Calendar, Newspaper, FileText, Target,
   Plus, Trash2, ChevronDown, ChevronUp, Check, X, Clock, ArrowLeft,
-  Edit2, Save, User, Swords
+  Edit2, Save, User, Swords, BarChart3, TrendingUp, Trophy
 } from 'lucide-react';
 import { TEAMS } from '../data/teamsData';
 import { SESSION_TYPES } from '../data/scheduleData';
@@ -17,7 +17,7 @@ const DAYS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dima
 
 function Dashboard({ user, onLogout }) {
   // ─── TABS ───
-  const [activeTab, setActiveTab] = useState('planning');
+  const [activeTab, setActiveTab] = useState('overview');
 
   // ─── TEAMS STATE (rosters par équipe, mutable) ───
   const [teamsState, setTeamsState] = useState(() =>
@@ -58,12 +58,236 @@ function Dashboard({ user, onLogout }) {
 
   // Tabs disponibles selon rôle
   const tabs = [
-    { id: 'planning', label: 'Planning', icon: Calendar },
-    { id: 'equipes', label: 'Équipes', icon: Users },
-    { id: 'actualites', label: 'Actualités', icon: Newspaper },
-    { id: 'notes', label: 'Notes', icon: FileText },
-    { id: 'objectifs', label: 'Objectifs', icon: Target }
+    { id: 'overview',    label: "Vue d'ensemble", icon: BarChart3 },
+    { id: 'planning',    label: 'Planning',       icon: Calendar },
+    { id: 'equipes',     label: 'Équipes',        icon: Users },
+    { id: 'actualites',  label: 'Actualités',     icon: Newspaper },
+    { id: 'notes',       label: 'Notes',          icon: FileText },
+    { id: 'objectifs',   label: 'Objectifs',      icon: Target }
   ];
+
+  // ============================================================
+  // OVERVIEW TAB — Vue d'ensemble
+  // ============================================================
+  function OverviewTab() {
+    const visibleTeams = isStaff ? teamsState : teamsState.filter(t => t.id === userTeamId);
+
+    const totalPlayers = visibleTeams.reduce((s, t) => s + t.roster.length, 0);
+
+    const avgWinrate = visibleTeams.length
+      ? Math.round(visibleTeams.reduce((s, t) => {
+          const orig = TEAMS.find(o => o.id === t.id);
+          return s + (orig?.globalStats?.winRate || 0);
+        }, 0) / visibleTeams.length)
+      : 0;
+
+    const visibleSessions = isStaff ? sessions : sessions.filter(s => s.teamId === userTeamId);
+    const totalMatches = visibleSessions.filter(s => s.type === 'match').length;
+
+    // Trier par jour puis heure, prendre les 6 prochaines
+    const upcoming = [...visibleSessions].sort((a, b) => {
+      const d = DAYS.indexOf(a.dayName) - DAYS.indexOf(b.dayName);
+      return d !== 0 ? d : a.time.localeCompare(b.time);
+    }).slice(0, 6);
+
+    return (
+      <div className="space-y-6">
+
+        {/* ── 4 STAT CARDS ── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { icon: Users,       color: 'blue',   value: totalPlayers,          label: 'Joueurs',  sub: isStaff ? `${visibleTeams.length} équipes actives` : 'Roster de ton équipe' },
+            { icon: Trophy,      color: 'yellow', value: `${avgWinrate}%`,      label: 'Winrate',  sub: isStaff ? 'Moyenne globale' : 'Performance équipe' },
+            { icon: Calendar,    color: 'purple', value: visibleSessions.length, label: 'Sessions', sub: 'Cette semaine' },
+            { icon: TrendingUp,  color: 'green',  value: totalMatches,          label: 'Matchs',   sub: 'Compétitions officielles' }
+          ].map((card, i) => {
+            const Icon = card.icon;
+            const colors = {
+              blue:   { bg: 'rgba(59,130,246,0.12)',  border: 'rgba(59,130,246,0.3)',  text: '#60a5fa' },
+              yellow: { bg: 'rgba(234,179,8,0.12)',   border: 'rgba(234,179,8,0.3)',   text: '#facc15' },
+              purple: { bg: 'rgba(168,85,247,0.12)',  border: 'rgba(168,85,247,0.3)',  text: '#c084fc' },
+              green:  { bg: 'rgba(34,197,94,0.12)',   border: 'rgba(34,197,94,0.3)',   text: '#4ade80' }
+            }[card.color];
+            return (
+              <div key={i} className="rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5"
+                style={{ background: 'linear-gradient(135deg, #111 0%, #000 100%)', border: '1px solid rgba(220,20,60,0.15)' }}>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                    style={{ background: colors.bg, border: `1px solid ${colors.border}` }}>
+                    <Icon className="w-5 h-5" style={{ color: colors.text }} />
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bebas leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif", color: colors.text }}>{card.value}</div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wider">{card.label}</div>
+                  </div>
+                </div>
+                <div className="text-xs text-gray-600">{card.sub}</div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ── DEUX COLONNES : Sessions + Équipes ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+          {/* Prochaines sessions (2/3) */}
+          <div className="lg:col-span-2 rounded-2xl p-5"
+            style={{ background: 'linear-gradient(135deg, #111 0%, #000 100%)', border: '1px solid rgba(220,20,60,0.15)' }}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bebas tracking-widest text-white flex items-center gap-2"
+                style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                <Clock className="w-4 h-4 text-red-500" />
+                PROCHAINES SESSIONS
+              </h3>
+              {visibleSessions.length > 0 && (
+                <button onClick={() => setActiveTab('planning')}
+                  className="text-xs text-red-500 hover:text-red-400 transition-colors">Voir tout →</button>
+              )}
+            </div>
+
+            {upcoming.length === 0 ? (
+              <div className="text-center py-10">
+                <div className="text-4xl mb-2 opacity-30">📅</div>
+                <p className="text-xs text-gray-600 mb-2">Aucune session créée</p>
+                <button onClick={() => setActiveTab('planning')}
+                  className="text-xs text-red-500 hover:text-red-400 transition-colors">+ Créer une session</button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {upcoming.map((session, idx) => {
+                  const sType = SESSION_TYPES[session.type.toUpperCase()] || { color: '#666', emoji: '📌', label: session.type };
+                  const team = getTeam(session.teamId);
+                  return (
+                    <div key={idx} className="flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:border-red-900"
+                      style={{ background: 'rgba(0,0,0,0.45)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                      {/* emoji type */}
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0"
+                        style={{ background: sType.color + '18', border: `1.5px solid ${sType.color}35` }}>
+                        {sType.emoji}
+                      </div>
+                      {/* texte */}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-bold text-white truncate">{session.title || sType.label}</div>
+                        <div className="text-xs text-gray-500 flex items-center gap-1.5 mt-0.5">
+                          <span>{session.dayName}</span>
+                          <span className="text-gray-700">•</span>
+                          <span>{session.time}</span>
+                          <span className="text-gray-700">•</span>
+                          <span style={{ color: team?.color }}>{team?.name}</span>
+                        </div>
+                      </div>
+                      {/* badges */}
+                      <div className="flex gap-1.5 flex-shrink-0">
+                        {session.mandatory && (
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                            style={{ background: 'rgba(220,20,60,0.15)', border: '1px solid rgba(220,20,60,0.4)', color: '#f87171' }}>
+                            Obligatoire
+                          </span>
+                        )}
+                        {session.important && !session.mandatory && (
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                            style={{ background: 'rgba(234,179,8,0.15)', border: '1px solid rgba(234,179,8,0.4)', color: '#fbbf24' }}>
+                            Important
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Mini-rosters (1/3) */}
+          <div className="rounded-2xl p-5"
+            style={{ background: 'linear-gradient(135deg, #111 0%, #000 100%)', border: '1px solid rgba(220,20,60,0.15)' }}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bebas tracking-widest text-white flex items-center gap-2"
+                style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                <Users className="w-4 h-4 text-red-500" />
+                ÉQUIPES
+              </h3>
+              <button onClick={() => setActiveTab('equipes')}
+                className="text-xs text-red-500 hover:text-red-400 transition-colors">Gérer →</button>
+            </div>
+            <div className="space-y-2">
+              {visibleTeams.map(t => {
+                const orig = TEAMS.find(o => o.id === t.id);
+                const filled = t.roster.length;
+                const pct = (filled / 5) * 100;
+                return (
+                  <div key={t.id} className="rounded-lg overflow-hidden"
+                    style={{ border: `1px solid ${orig?.color}22` }}>
+                    {/* header */}
+                    <div className="px-3 py-1.5 flex items-center justify-between"
+                      style={{ background: orig?.color + '0e' }}>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: orig?.color, boxShadow: `0 0 5px ${orig?.color}` }}></div>
+                        <span className="text-xs font-bold" style={{ color: orig?.color }}>{orig?.name}</span>
+                      </div>
+                      <span className="text-xs text-gray-600">{filled}/5</span>
+                    </div>
+                    {/* jauge roster */}
+                    <div className="px-3 py-2">
+                      <div className="h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full rounded-full transition-all duration-500"
+                          style={{ width: `${pct}%`, background: orig?.color, boxShadow: pct > 0 ? `0 0 6px ${orig?.color}60` : 'none' }}></div>
+                      </div>
+                      {/* 5 rôles en points */}
+                      <div className="flex justify-between mt-1.5 px-0.5">
+                        {ROLES.map((role, ri) => {
+                          const has = t.roster.find(p => p.role === role);
+                          return (
+                            <div key={ri} className="flex flex-col items-center gap-0.5">
+                              <div className="w-1.5 h-1.5 rounded-full transition-all duration-300"
+                                style={{ backgroundColor: has ? orig?.color : '#333', boxShadow: has ? `0 0 4px ${orig?.color}` : 'none' }}></div>
+                              <span className="text-gray-700" style={{ fontSize: '7px' }}>{role[0]}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* ── DERNIÈRES ACTUALITÉS (si quelques articles existent) ── */}
+        {news.length > 0 && (
+          <div className="rounded-2xl p-5"
+            style={{ background: 'linear-gradient(135deg, #111 0%, #000 100%)', border: '1px solid rgba(220,20,60,0.15)' }}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bebas tracking-widest text-white flex items-center gap-2"
+                style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
+                <Newspaper className="w-4 h-4 text-red-500" />
+                DERNIÈRES ACTUALITÉS
+              </h3>
+              <button onClick={() => setActiveTab('actualites')}
+                className="text-xs text-red-500 hover:text-red-400 transition-colors">Voir tout →</button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {news.slice(0, 3).map((a, i) => (
+                <div key={i} className="rounded-xl p-4 transition-all duration-200 hover:border-red-900"
+                  style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">{a.emoji || '📰'}</span>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={{ background: (a.color || '#DC143C') + '18', color: a.color || '#DC143C', border: `1px solid ${a.color || '#DC143C'}35` }}>
+                      {a.category || 'Général'}
+                    </span>
+                  </div>
+                  <h4 className="text-sm font-bold text-white leading-snug" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{a.title}</h4>
+                  <p className="text-xs text-gray-600 mt-1" style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{a.content}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   // ============================================================
   // PLANNING TAB
@@ -1015,11 +1239,12 @@ function Dashboard({ user, onLogout }) {
 
           {/* Content */}
           <div className="p-6">
-            {activeTab === 'planning' && <PlanningTab />}
-            {activeTab === 'equipes' && <EquipesTab />}
+            {activeTab === 'overview'   && <OverviewTab />}
+            {activeTab === 'planning'   && <PlanningTab />}
+            {activeTab === 'equipes'    && <EquipesTab />}
             {activeTab === 'actualites' && <ActualitesTab />}
-            {activeTab === 'notes' && <NotesTab />}
-            {activeTab === 'objectifs' && <ObjectifsTab />}
+            {activeTab === 'notes'      && <NotesTab />}
+            {activeTab === 'objectifs'  && <ObjectifsTab />}
           </div>
         </div>
       </div>
