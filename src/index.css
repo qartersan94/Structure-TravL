@@ -1,233 +1,432 @@
-/* Import Google Fonts - Futuristic Typography */
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap');
-
-/* Tailwind Base Styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ========== GLOBAL STYLES ========== */
+/* ============================================================
+   GOOGLE FONTS
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
-@layer base {
-  * {
-    @apply border-gray-200;
-  }
-  
-  body {
-    @apply bg-black text-white font-rajdhani;
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-  }
-  
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  /* Headings */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bebas font-bold;
-  }
-  
-  h1 {
-    @apply text-5xl md:text-7xl;
-  }
-  
-  h2 {
-    @apply text-4xl md:text-6xl;
-  }
-  
-  h3 {
-    @apply text-3xl md:text-5xl;
-  }
+/* ============================================================
+   BASE / RESET
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-/* ========== CUSTOM SCROLLBAR ========== */
+html {
+  scroll-behavior: smooth;
+}
 
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background-color: #000;
+  color: #fff;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
   background: #0a0a0a;
-  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #DC143C 0%, #8B0000 100%);
-  border-radius: 10px;
-  border: 2px solid #0a0a0a;
-  transition: all 0.3s ease;
+  background: linear-gradient(180deg, #DC143C, #8B0000);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #FF1744 0%, #DC143C 100%);
-  box-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+  background: linear-gradient(180deg, #ff1a3d, #DC143C);
 }
 
-/* Firefox Scrollbar */
+/* Firefox scrollbar */
 * {
   scrollbar-width: thin;
   scrollbar-color: #DC143C #0a0a0a;
 }
 
-/* ========== SELECTION COLORS ========== */
-
+/* ============================================================
+   SELECTION COLORS
+   ============================================================ */
 ::selection {
-  background-color: #DC143C;
-  color: #ffffff;
-  text-shadow: none;
+  background-color: rgba(220, 20, 60, 0.4);
+  color: #fff;
 }
 
 ::-moz-selection {
-  background-color: #DC143C;
-  color: #ffffff;
-  text-shadow: none;
+  background-color: rgba(220, 20, 60, 0.4);
+  color: #fff;
 }
 
-/* ========== CUSTOM UTILITIES ========== */
-
-@layer utilities {
-  /* Bebas Neue Font */
-  .font-bebas {
-    font-family: 'Bebas Neue', sans-serif;
-  }
-  
-  .font-rajdhani {
-    font-family: 'Rajdhani', sans-serif;
-  }
-  
-  /* Text Gradients */
-  .text-gradient-red {
-    @apply bg-gradient-to-r from-red-500 via-red-600 to-red-900 bg-clip-text text-transparent;
-  }
-  
-  /* Glass Morphism */
-  .glass {
-    @apply bg-white bg-opacity-5 backdrop-blur-lg border border-white border-opacity-10;
-  }
-  
-  .glass-strong {
-    @apply bg-white bg-opacity-10 backdrop-blur-xl border border-white border-opacity-20;
-  }
-  
-  /* Neon Borders */
-  .border-neon-red {
-    @apply border-2 border-red-600 shadow-[0_0_20px_rgba(220,20,60,0.5)];
-  }
-  
-  /* Hover Lift Effect */
-  .hover-lift {
-    @apply transition-all duration-300 ease-out;
-  }
-  
-  .hover-lift:hover {
-    @apply -translate-y-2 scale-105;
-  }
-  
-  /* Card Styles */
-  .card-dark {
-    @apply bg-black bg-opacity-80 backdrop-blur-md rounded-xl border border-white border-opacity-10 p-6;
-  }
-  
-  .card-team {
-    @apply bg-black bg-opacity-60 backdrop-blur-lg rounded-2xl border border-white border-opacity-5 p-6 transition-all duration-300;
-  }
-  
-  .card-team:hover {
-    @apply border-opacity-30 -translate-y-2 shadow-2xl;
-  }
-  
-  /* Button Styles */
-  .btn-primary {
-    @apply px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(220,20,60,0.6)] hover:-translate-y-1;
-  }
-  
-  .btn-secondary {
-    @apply px-8 py-4 bg-white hover:bg-gray-200 text-black font-bold rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
-  }
-  
-  .btn-ghost {
-    @apply px-8 py-4 border-2 border-white border-opacity-30 hover:border-opacity-100 text-white font-bold rounded-lg transition-all duration-300 hover:bg-white hover:bg-opacity-10;
-  }
-  
-  /* Loading States */
-  .skeleton {
-    @apply animate-pulse bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-[length:200%_100%];
-    animation: shimmer 2s infinite;
-  }
-  
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-  
-  /* Focus States */
-  .focus-visible-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 focus-visible:ring-offset-black;
-  }
+/* ============================================================
+   UTILITY CLASSES — FONTS
+   ============================================================ */
+.font-bebas {
+  font-family: 'Bebas Neue', sans-serif;
 }
 
-/* ========== CUSTOM COMPONENTS ========== */
-
-@layer components {
-  /* Hexagon Pattern Background */
-  .hexagon-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill='none' stroke='%23DC143C' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E");
-    background-size: 60px 60px;
-    animation: drift 20s linear infinite;
-  }
-  
-  @keyframes drift {
-    0% { background-position: 0 0; }
-    100% { background-position: 60px 60px; }
-  }
-  
-  /* Gradient Mesh Background */
-  .gradient-mesh {
-    background: 
-      radial-gradient(circle at 20% 50%, rgba(220, 20, 60, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 50% 20%, rgba(255, 23, 68, 0.1) 0%, transparent 50%);
-  }
-  
-  /* Stats Bar */
-  .stat-bar {
-    @apply relative h-2 bg-gray-800 rounded-full overflow-hidden;
-  }
-  
-  .stat-bar-fill {
-    @apply absolute top-0 left-0 h-full bg-gradient-to-r from-red-600 to-red-700 rounded-full transition-all duration-1000 ease-out;
-  }
-  
-  /* Badge Styles */
-  .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide;
-  }
-  
-  .badge-success {
-    @apply bg-red-600 bg-opacity-20 text-red-500 border border-red-600 border-opacity-50;
-  }
-  
-  .badge-warning {
-    @apply bg-orange-600 bg-opacity-20 text-orange-500 border border-orange-600 border-opacity-50;
-  }
-  
-  .badge-info {
-    @apply bg-blue-600 bg-opacity-20 text-blue-500 border border-blue-600 border-opacity-50;
-  }
+.font-rajdhani {
+  font-family: 'Rajdhani', sans-serif;
 }
 
-/* ========== ANIMATIONS ========== */
+/* ============================================================
+   UTILITY CLASSES — TEXT GRADIENTS
+   ============================================================ */
+.text-gradient-red {
+  background: linear-gradient(135deg, #DC143C, #ff1a3d, #8B0000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
-/* Entrance Animations */
+.text-gradient-red-animate {
+  background: linear-gradient(135deg, #DC143C, #ff1a3d, #8B0000, #DC143C);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient 3s ease infinite;
+}
+
+/* ============================================================
+   UTILITY CLASSES — GLASS MORPHISM
+   ============================================================ */
+.glass {
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(220, 20, 60, 0.15);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(220, 20, 60, 0.2);
+}
+
+.glass-light {
+  background: rgba(30, 30, 30, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(220, 20, 60, 0.1);
+}
+
+/* ============================================================
+   UTILITY CLASSES — NEON / GLOW BORDERS
+   ============================================================ */
+.neon-border {
+  border: 1px solid rgba(220, 20, 60, 0.4);
+  box-shadow: 0 0 8px rgba(220, 20, 60, 0.2), inset 0 0 8px rgba(220, 20, 60, 0.05);
+}
+
+.neon-border-hover {
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.neon-border-hover:hover {
+  border-color: rgba(220, 20, 60, 0.8);
+  box-shadow: 0 0 20px rgba(220, 20, 60, 0.4), inset 0 0 12px rgba(220, 20, 60, 0.1);
+}
+
+.neon-glow-red {
+  box-shadow: 0 0 15px rgba(220, 20, 60, 0.5);
+}
+
+.neon-text-red {
+  text-shadow: 0 0 10px rgba(220, 20, 60, 0.6), 0 0 30px rgba(220, 20, 60, 0.3);
+}
+
+/* ============================================================
+   UTILITY CLASSES — HOVER LIFT
+   ============================================================ */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(220, 20, 60, 0.25);
+}
+
+/* ============================================================
+   CARD STYLES
+   ============================================================ */
+.card-dark {
+  background: linear-gradient(135deg, #111 0%, #0a0a0a 100%);
+  border: 1px solid rgba(220, 20, 60, 0.15);
+  border-radius: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.card-dark:hover {
+  border-color: rgba(220, 20, 60, 0.4);
+  box-shadow: 0 8px 32px rgba(220, 20, 60, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   BUTTON STYLES
+   ============================================================ */
+.btn-red {
+  background: linear-gradient(135deg, #DC143C, #b01030);
+  color: #fff;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.btn-red:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 30px rgba(220, 20, 60, 0.5);
+}
+
+.btn-red:active {
+  transform: scale(0.98);
+}
+
+.btn-ghost-red {
+  background: transparent;
+  color: #DC143C;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  padding: 0.6rem 1.5rem;
+  border: 1px solid rgba(220, 20, 60, 0.5);
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, color 0.3s;
+}
+
+.btn-ghost-red:hover {
+  background: rgba(220, 20, 60, 0.15);
+  box-shadow: 0 0 16px rgba(220, 20, 60, 0.25);
+  color: #ff1a3d;
+}
+
+/* ============================================================
+   INPUT STYLES
+   ============================================================ */
+.input-dark {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1.5px solid rgba(220, 20, 60, 0.25);
+  border-radius: 0.75rem;
+  color: #fff;
+  padding: 0.85rem 1.2rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+  width: 100%;
+}
+
+.input-dark::placeholder {
+  color: #555;
+}
+
+.input-dark:focus {
+  border-color: rgba(220, 20, 60, 0.7);
+  box-shadow: 0 0 12px rgba(220, 20, 60, 0.2);
+}
+
+/* ============================================================
+   BACKGROUND — HEXAGON PATTERN
+   ============================================================ */
+.bg-hex-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill='none' stroke='%23DC143C' stroke-width='0.5' opacity='0.12'/%3E%3C/svg%3E");
+  background-size: 60px 60px;
+  animation: drift 40s linear infinite;
+}
+
+/* ============================================================
+   BACKGROUND — GRADIENT MESH (AMBIENT GLOW)
+   ============================================================ */
+.gradient-mesh {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gradient-mesh .orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.gradient-mesh .orb-1 {
+  top: 20%;
+  left: 15%;
+  width: 400px;
+  height: 400px;
+  background: rgba(220, 20, 60, 0.18);
+  animation-delay: 0s;
+}
+
+.gradient-mesh .orb-2 {
+  bottom: 20%;
+  right: 15%;
+  width: 350px;
+  height: 350px;
+  background: rgba(139, 0, 0, 0.18);
+  animation-delay: 1.5s;
+}
+
+.gradient-mesh .orb-3 {
+  top: 50%;
+  right: 30%;
+  width: 250px;
+  height: 250px;
+  background: rgba(220, 20, 60, 0.12);
+  animation-delay: 3s;
+}
+
+/* ============================================================
+   STAT BARS
+   ============================================================ */
+.stat-bar-track {
+  height: 6px;
+  background: #1a1a1a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+  background: linear-gradient(90deg, #DC143C, #ff1a3d);
+  box-shadow: 0 0 8px rgba(220, 20, 60, 0.4);
+}
+
+/* ============================================================
+   BADGES
+   ============================================================ */
+.badge-red {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(220, 20, 60, 0.12);
+  border: 1px solid rgba(220, 20, 60, 0.35);
+  color: #DC143C;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.badge-green {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  color: #00ff88;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.badge-purple {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(157, 78, 221, 0.1);
+  border: 1px solid rgba(157, 78, 221, 0.3);
+  color: #9D4EDD;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+}
+
+/* ============================================================
+   RANK BADGES (League of Legends)
+   ============================================================ */
+.rank-iron    { color: #8B7355; }
+.rank-bronze  { color: #CD7F32; }
+.rank-silver  { color: #C0C0C0; }
+.rank-gold    { color: #FFD700; }
+.rank-plat    { color: #00CED1; }
+.rank-emerald { color: #50C878; }
+.rank-diamond { color: #B9F2FF; }
+.rank-master  { color: #FF8C00; }
+.rank-gm      { color: #FF4500; }
+.rank-chall   { color: #00BFFF; }
+
+/* ============================================================
+   SKELETON LOADING
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  border-radius: 0.5rem;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ============================================================
+   FOCUS STATES (accessibility)
+   ============================================================ */
+.focus-red:focus-visible {
+  outline: 2px solid rgba(220, 20, 60, 0.7);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   SCROLLBAR FOR INNER PANELS (dashboard etc.)
+   ============================================================ */
+.scroll-panel {
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+}
+
+.scroll-panel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scroll-panel::-webkit-scrollbar-track {
+  background: #111;
+  border-radius: 3px;
+}
+
+.scroll-panel::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+.scroll-panel::-webkit-scrollbar-thumb:hover {
+  background: #DC143C;
+}
+
+/* ============================================================
+   ANIMATIONS / KEYFRAMES
+   ============================================================ */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
   }
   to {
     opacity: 1;
@@ -238,7 +437,7 @@
 @keyframes fadeInScale {
   from {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.92);
   }
   to {
     opacity: 1;
@@ -246,54 +445,99 @@
   }
 }
 
-/* Glow Pulse */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+    box-shadow: 0 0 10px rgba(220, 20, 60, 0.3);
   }
   50% {
-    box-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
+    box-shadow: 0 0 30px rgba(220, 20, 60, 0.6);
   }
 }
 
-/* ========== RESPONSIVE UTILITIES ========== */
+@keyframes drift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 60px 60px; }
+}
 
-/* Mobile Optimizations */
-@media (max-width: 640px) {
-  .mobile-scroll {
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  .mobile-tap-highlight {
-    -webkit-tap-highlight-color: rgba(220, 20, 60, 0.2);
+@keyframes gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   ANIMATION UTILITY CLASSES
+   ============================================================ */
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fadeInScale {
+  animation: fadeInScale 0.5s ease-out forwards;
+}
+
+.animate-glowPulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* ============================================================
+   RESPONSIVE UTILITIES
+   ============================================================ */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .text-responsive-title {
+    font-size: 3rem;
   }
 }
 
-/* Reduce Motion for Accessibility */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+@media (min-width: 769px) {
+  .hide-desktop { display: none !important; }
+  .text-responsive-title {
+    font-size: 6rem;
   }
 }
 
-/* ========== PRINT STYLES ========== */
-
+/* ============================================================
+   PRINT STYLES
+   ============================================================ */
 @media print {
   body {
-    background: white;
-    color: black;
+    background: #fff;
+    color: #000;
   }
-  
-  .no-print {
-    display: none !important;
-  }
-  
-  * {
-    box-shadow: none !important;
-    text-shadow: none !important;
+  .no-print { display: none !important; }
+  .glass, .glass-dark, .glass-light {
+    background: #fff;
+    border: 1px solid #ddd;
+    backdrop-filter: none;
   }
 }
