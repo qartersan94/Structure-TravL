@@ -6,6 +6,7 @@ import { TEAMS } from './data/teamsData';
 import Calendar from './components/Calendar';
 import LoginForm from './components/LoginForm';
 import Dashboard from './components/Dashboard';
+import PlayerProfile from './components/PlayerProfile';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
@@ -14,9 +15,9 @@ function App() {
   const [scrollY, setScrollY] = useState(0);
 
   // Auth state
-  const [loggedInUser, setLoggedInUser] = useState(null); // null = pas connecté
+  const [loggedInUser, setLoggedInUser] = useState(null);
 
-  // Form state
+  // Form state (home inscription)
   const [formData, setFormData] = useState({ pseudo: '', riotId: '', email: '', phone: '' });
 
   // Scroll effect
@@ -40,7 +41,7 @@ function App() {
     setFormData({ pseudo: '', riotId: '', email: '', phone: '' });
   };
 
-  // ─── Si on est dans le dashboard (connecté) ───
+  // ─── Dashboard (connecté) ───
   if (loggedInUser) {
     return (
       <Dashboard
@@ -50,7 +51,7 @@ function App() {
     );
   }
 
-  // ─── Si on veut aller au login (section 'dashboard') ───
+  // ─── Login (section 'dashboard') ───
   if (activeSection === 'dashboard') {
     return (
       <LoginForm onLogin={(account) => setLoggedInUser(account)} />
@@ -63,7 +64,6 @@ function App() {
       {/* ========== ANIMATED BACKGROUND ========== */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-950 to-black"></div>
-
         <div className="absolute inset-0 opacity-30">
           <div style={{
             backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill='none' stroke='%23DC143C' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E\")",
@@ -72,7 +72,6 @@ function App() {
             height: '100%'
           }}></div>
         </div>
-
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600 rounded-full blur-[120px] opacity-20 animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-900 rounded-full blur-[120px] opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
         <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-red-500 rounded-full blur-[100px] opacity-15 animate-pulse" style={{ animationDelay: '2s' }}></div>
@@ -108,13 +107,14 @@ function App() {
               </div>
             </div>
 
-            {/* Nav links */}
+            {/* Nav links desktop */}
             <div className="hidden md:flex items-center space-x-2">
               {[
                 { id: 'home', label: 'Accueil' },
                 { id: 'teams', label: 'Équipes' },
                 { id: 'news', label: 'Actualités' },
                 { id: 'schedule', label: 'Planning' },
+                { id: 'profils', label: 'Profils' },
               ].map((item) => (
                 <button
                   key={item.id}
@@ -159,6 +159,7 @@ function App() {
                 { id: 'teams', label: 'Équipes' },
                 { id: 'news', label: 'Actualités' },
                 { id: 'schedule', label: 'Planning' },
+                { id: 'profils', label: '👤 Profils' },
                 { id: 'dashboard', label: '🛡️ Dashboard' },
               ].map((item) => (
                 <button
@@ -179,11 +180,10 @@ function App() {
       {/* ========== MAIN CONTENT ========== */}
       <main className="relative z-10 pt-24">
 
-        {/* ========== HOME SECTION ========== */}
+        {/* ─── HOME ─── */}
         {activeSection === 'home' && (
           <section className="min-h-screen flex items-center justify-center px-4 py-20">
             <div className="max-w-7xl mx-auto">
-
               <div className="text-center space-y-12 mb-16">
                 <div className="space-y-6" style={{ animation: 'fadeInUp 0.8s ease-out forwards' }}>
                   <h1 className="text-7xl md:text-9xl font-black leading-none font-bebas tracking-tight" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
@@ -198,13 +198,13 @@ function App() {
                   </p>
                 </div>
 
-                {/* Stats */}
+                {/* Stats cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto" style={{ animation: 'fadeInUp 0.8s ease-out 0.2s forwards', opacity: 0 }}>
                   {[
                     { icon: '🎮', value: '7', label: 'Équipes' },
                     { icon: '🏆', value: '3', label: 'Compétitions' },
                     { icon: '⚔️', value: '100+', label: 'Matchs' },
-                    { icon: '👥', value: '35', label: 'Joueurs' }
+                    { icon: '🤝', value: '35', label: 'Joueurs' }
                   ].map((stat, idx) => (
                     <div key={idx} className="bg-black bg-opacity-70 backdrop-blur-xl border border-red-900 border-opacity-20 rounded-2xl p-8 hover:scale-105 hover:border-red-600 hover:border-opacity-40 transition-all duration-300">
                       <div className="text-6xl mb-3">{stat.icon}</div>
@@ -214,7 +214,7 @@ function App() {
                   ))}
                 </div>
 
-                {/* Competitions */}
+                {/* Competitions pills */}
                 <div className="flex flex-wrap justify-center gap-4" style={{ animation: 'fadeInUp 0.8s ease-out 0.4s forwards', opacity: 0 }}>
                   {[
                     { emoji: '🏆', name: 'NEXUS TOUR' },
@@ -229,12 +229,11 @@ function App() {
                 </div>
               </div>
 
-              {/* ========== FORMULAIRE D'INSCRIPTION ========== */}
+              {/* Formulaire inscription */}
               <div className="max-w-4xl mx-auto mt-20" style={{ animation: 'fadeInUp 0.8s ease-out 0.6s forwards', opacity: 0 }}>
                 <div className="bg-gradient-to-br from-gray-900 via-black to-gray-950 border-2 border-red-900 border-opacity-30 rounded-3xl p-8 md:p-12 backdrop-blur-xl relative overflow-hidden">
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-50"></div>
                   <div className="absolute -top-40 -right-40 w-80 h-80 bg-red-600 rounded-full blur-[120px] opacity-20"></div>
-
                   <div className="relative z-10">
                     <div className="text-center mb-8">
                       <div className="inline-flex items-center justify-center w-20 h-20 bg-red-600 bg-opacity-10 border-2 border-red-600 border-opacity-30 rounded-2xl mb-4">
@@ -245,7 +244,6 @@ function App() {
                       </h2>
                       <p className="text-gray-400 text-lg">Crée ton compte et commence ton aventure esports</p>
                     </div>
-
                     <form onSubmit={handleSubmit} className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -277,7 +275,6 @@ function App() {
                             className="w-full bg-black bg-opacity-50 border-2 border-red-900 border-opacity-30 rounded-xl px-6 py-4 text-white placeholder-gray-600 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-20 transition-all duration-300" />
                         </div>
                       </div>
-
                       <button type="submit"
                         className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-black text-lg tracking-wide py-5 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(220,20,60,0.5)] flex items-center justify-center space-x-3 font-bebas"
                         style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
@@ -285,7 +282,6 @@ function App() {
                         <span>CRÉER MON COMPTE</span>
                         <ChevronRight className="w-5 h-5" />
                       </button>
-
                       <p className="text-center text-sm text-gray-500 mt-4">
                         En créant un compte, tu acceptes nos conditions d'utilisation
                       </p>
@@ -297,7 +293,7 @@ function App() {
           </section>
         )}
 
-        {/* ========== TEAMS SECTION ========== */}
+        {/* ─── TEAMS ─── */}
         {activeSection === 'teams' && (
           <section className="min-h-screen py-20 px-4">
             <div className="max-w-7xl mx-auto">
@@ -307,7 +303,6 @@ function App() {
                 </h2>
                 <p className="text-xl text-gray-400">7 équipes, une seule passion</p>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {TEAMS.map((team, idx) => (
                   <div
@@ -318,38 +313,31 @@ function App() {
                   >
                     <div className={`relative h-48 bg-gradient-to-br ${team.gradient} p-6`}>
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
-
                       <div className="relative z-10">
                         <div className="inline-flex items-center bg-red-900 bg-opacity-30 border border-red-600 border-opacity-50 backdrop-blur-sm rounded-full px-3 py-1 mb-2">
                           <Award className="h-3 w-3 mr-1" />
                           <span className="text-xs font-black tracking-wide">{team.rank}</span>
                         </div>
-                        <h3 className="text-3xl font-black text-white font-bebas drop-shadow-lg" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                          {team.name}
-                        </h3>
+                        <h3 className="text-3xl font-black text-white font-bebas drop-shadow-lg" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>{team.name}</h3>
                         <p className="text-sm text-white text-opacity-80 mt-1">{team.motto}</p>
                       </div>
-
                       <div className="absolute bottom-4 left-4 right-4 z-10">
                         <div className="flex items-end justify-between">
                           <div className="flex-shrink-0">
                             <div className="text-3xl md:text-4xl font-black text-white font-bebas leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
                               {team.globalStats.totalWins}-{team.globalStats.totalLosses}
                             </div>
-                            <div className="text-xs text-white text-opacity-80 font-bold mt-1">
-                              {team.globalStats.winRate}% WINRATE
-                            </div>
+                            <div className="text-xs text-white text-opacity-80 font-bold mt-1">{team.globalStats.winRate}% WINRATE</div>
                           </div>
                           <div className="text-5xl md:text-6xl opacity-30 flex-shrink-0">{team.logo}</div>
                         </div>
                       </div>
                     </div>
-
                     <div className="p-6 space-y-4">
                       <div>
                         <h4 className="text-xs font-bold text-gray-500 mb-3 tracking-wider">ROSTER</h4>
                         {team.roster.length === 0 ? (
-                          <p className="text-xs text-gray-600 italic">Roster à compléter via le Dashboard</p>
+                          <p className="text-xs text-gray-600 italic">Roster à completer via le Dashboard</p>
                         ) : (
                           <div className="space-y-2">
                             {team.roster.slice(0, selectedTeam === team.id ? 5 : 3).map((player, pIdx) => (
@@ -364,7 +352,6 @@ function App() {
                           </div>
                         )}
                       </div>
-
                       <div className="space-y-2">
                         <div className="flex justify-between text-xs">
                           <span className="text-gray-400">Winrate</span>
@@ -375,7 +362,6 @@ function App() {
                             style={{ width: `${team.globalStats.winRate}%`, background: `linear-gradient(to right, ${team.color}, ${team.secondaryColor})`, boxShadow: `0 0 10px ${team.color}` }}></div>
                         </div>
                       </div>
-
                       <div className="flex flex-wrap gap-2">
                         {team.competitions.map((comp, cIdx) => (
                           <div key={cIdx} className="text-xs bg-red-950 bg-opacity-30 border border-red-900 border-opacity-30 rounded px-2 py-1 text-red-400">
@@ -384,7 +370,6 @@ function App() {
                         ))}
                       </div>
                     </div>
-
                     <div className="absolute bottom-0 left-0 right-0 h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
                       style={{ backgroundColor: team.color, boxShadow: `0 0 20px ${team.color}` }}></div>
                   </div>
@@ -394,7 +379,7 @@ function App() {
           </section>
         )}
 
-        {/* ========== NEWS SECTION ========== */}
+        {/* ─── NEWS ─── */}
         {activeSection === 'news' && (
           <section className="min-h-screen py-20 px-4">
             <div className="max-w-6xl mx-auto">
@@ -404,7 +389,6 @@ function App() {
                 </h2>
                 <p className="text-xl text-gray-400">Les dernières nouvelles de l'arène</p>
               </div>
-
               <div className="text-center py-20">
                 <div className="text-6xl mb-4">📰</div>
                 <p className="text-gray-500">Les actualités sont gérées via le Dashboard.</p>
@@ -416,7 +400,7 @@ function App() {
           </section>
         )}
 
-        {/* ========== SCHEDULE SECTION ========== */}
+        {/* ─── SCHEDULE ─── */}
         {activeSection === 'schedule' && (
           <section className="min-h-screen py-20 px-4">
             <div className="max-w-7xl mx-auto">
@@ -430,6 +414,12 @@ function App() {
             </div>
           </section>
         )}
+
+        {/* ─── PROFILS ─── */}
+        {activeSection === 'profils' && (
+          <PlayerProfile onBack={() => setActiveSection('home')} />
+        )}
+
       </main>
 
       {/* ========== FOOTER ========== */}
@@ -467,6 +457,10 @@ function App() {
           from { opacity: 0; transform: translateY(40px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes fadeInScale {
+          from { opacity: 0; transform: scale(0.92); }
+          to { opacity: 1; transform: scale(1); }
+        }
         @keyframes drift {
           0% { background-position: 0 0; }
           100% { background-position: 60px 60px; }
@@ -477,10 +471,6 @@ function App() {
         }
       `}</style>
     </div>
-  );
-}
-
-export default App;
   );
 }
 
