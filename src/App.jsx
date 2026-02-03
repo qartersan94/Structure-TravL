@@ -1,477 +1,268 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Shield, Trophy, Users, ChevronRight, Menu, X, Award, User, Mail, Phone, Gamepad2
-} from 'lucide-react';
-import { TEAMS } from './data/teamsData';
-import Calendar from './components/Calendar';
-import LoginForm from './components/LoginForm';
-import Dashboard from './components/Dashboard';
-import PlayerProfile from './components/PlayerProfile';
+import React, { useState } from 'react';
+import { Calendar as CalendarIcon, Clock, Users, MapPin, Trophy, Filter, ChevronDown } from 'lucide-react';
+import { SCHEDULE, SESSION_TYPES } from '../data/scheduleData';
+import { TEAMS } from '../data/teamsData';
 
-function App() {
-  const [activeSection, setActiveSection] = useState('home');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [selectedTeam, setSelectedTeam] = useState(null);
-  const [scrollY, setScrollY] = useState(0);
+function Calendar() {
+  const [selectedType, setSelectedType] = useState('all');
+  const [selectedTeam, setSelectedTeam] = useState('all');
+  const [selectedDay, setSelectedDay] = useState('all');
 
-  // Auth state
-  const [loggedInUser, setLoggedInUser] = useState(null);
+  // Jours de la semaine
+  const weekDays = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 
-  // Form state (home inscription)
-  const [formData, setFormData] = useState({ pseudo: '', riotId: '', email: '', phone: '' });
+  // Filtrer les sessions
+  const filteredSessions = SCHEDULE.filter(session => {
+    const typeMatch = selectedType === 'all' || session.type.id === selectedType;
+    const teamMatch = selectedTeam === 'all' || session.teamId === parseInt(selectedTeam);
+    const dayMatch = selectedDay === 'all' || session.dayName === selectedDay;
+    return typeMatch && teamMatch && dayMatch;
+  });
 
-  // Scroll effect
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Grouper par jour
+  const sessionsByDay = weekDays.reduce((acc, day) => {
+    acc[day] = filteredSessions.filter(s => s.dayName === day);
+    return acc;
+  }, {});
 
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [activeSection]);
-
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`Bienvenue ${formData.pseudo} ! Votre inscription a été envoyée.`);
-    setFormData({ pseudo: '', riotId: '', email: '', phone: '' });
-  };
-
-  // ─── Dashboard (connecté) ───
-  if (loggedInUser) {
-    return (
-      <Dashboard
-        user={loggedInUser}
-        onLogout={() => setLoggedInUser(null)}
-      />
-    );
-  }
-
-  // ─── Login (section 'dashboard') ───
-  if (activeSection === 'dashboard') {
-    return (
-      <LoginForm onLogin={(account) => setLoggedInUser(account)} />
-    );
-  }
-
-  // ─── SITE PRINCIPAL ───
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* ========== ANIMATED BACKGROUND ========== */}
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-950 to-black"></div>
-        <div className="absolute inset-0 opacity-30">
-          <div style={{
-            backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill='none' stroke='%23DC143C' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E\")",
-            backgroundSize: '60px 60px',
-            animation: 'drift 30s linear infinite',
-            height: '100%'
-          }}></div>
+    <div className="space-y-8">
+      
+      {/* ========== FILTRES ========== */}
+      <div className="bg-gradient-to-br from-gray-900 to-black border border-red-900 border-opacity-20 rounded-2xl p-6">
+        <div className="flex items-center space-x-2 mb-4">
+          <Filter className="h-5 w-5 text-red-500" />
+          <h3 className="text-xl font-bold">Filtres</h3>
         </div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600 rounded-full blur-[120px] opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-900 rounded-full blur-[120px] opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-red-500 rounded-full blur-[100px] opacity-15 animate-pulse" style={{ animationDelay: '2s' }}></div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          {/* Filtre Type */}
+          <div>
+            <label className="block text-sm font-bold text-gray-400 mb-2">Type de session</label>
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="w-full bg-black bg-opacity-50 border border-red-900 border-opacity-30 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-all"
+            >
+              <option value="all">Toutes les sessions</option>
+              {Object.values(SESSION_TYPES).map(type => (
+                <option key={type.id} value={type.id}>
+                  {type.emoji} {type.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Filtre Équipe */}
+          <div>
+            <label className="block text-sm font-bold text-gray-400 mb-2">Équipe</label>
+            <select
+              value={selectedTeam}
+              onChange={(e) => setSelectedTeam(e.target.value)}
+              className="w-full bg-black bg-opacity-50 border border-red-900 border-opacity-30 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-all"
+            >
+              <option value="all">Toutes les équipes</option>
+              {TEAMS.map(team => (
+                <option key={team.id} value={team.id}>
+                  {team.logo} {team.name}
+                </option>
+              ))}
+              <option value="staff">Staff TravL</option>
+            </select>
+          </div>
+
+          {/* Filtre Jour */}
+          <div>
+            <label className="block text-sm font-bold text-gray-400 mb-2">Jour</label>
+            <select
+              value={selectedDay}
+              onChange={(e) => setSelectedDay(e.target.value)}
+              className="w-full bg-black bg-opacity-50 border border-red-900 border-opacity-30 rounded-lg px-4 py-3 text-white focus:border-red-600 focus:outline-none transition-all"
+            >
+              <option value="all">Toute la semaine</option>
+              {weekDays.map(day => (
+                <option key={day} value={day}>{day}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Résultats */}
+        <div className="mt-4 text-sm text-gray-400">
+          <span className="font-bold text-red-500">{filteredSessions.length}</span> session{filteredSessions.length > 1 ? 's' : ''} trouvée{filteredSessions.length > 1 ? 's' : ''}
+        </div>
       </div>
 
-      {/* ========== NAVIGATION ========== */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrollY > 50 ? 'bg-black bg-opacity-95 backdrop-blur-xl shadow-2xl border-b border-red-900 border-opacity-30' : 'bg-transparent'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-24">
-            {/* Logo */}
-            <div className="flex items-center space-x-4 cursor-pointer group" onClick={() => setActiveSection('home')}>
-              <img
-                src="/logo-travl-small.png"
-                alt="TravL Esports Logo"
-                className="h-20 w-20 object-contain transition-all duration-300 group-hover:scale-110"
-                style={{ filter: 'drop-shadow(0 0 20px rgba(220, 20, 60, 0.8))' }}
-                onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
-              />
-              <Shield className="h-16 w-16 text-red-600 hidden" style={{ filter: 'drop-shadow(0 0 20px rgba(220, 20, 60, 0.8))' }} />
-              <div>
-                <h1 className="text-3xl md:text-4xl font-black tracking-tight font-bebas" style={{
-                  textShadow: '0 0 30px rgba(220, 20, 60, 0.9), 0 0 60px rgba(220, 20, 60, 0.6)',
-                  letterSpacing: '0.05em',
-                  fontFamily: "'Bebas Neue', sans-serif"
-                }}>
-                  STRUCTURE TRAVL
-                </h1>
-                <p className="text-sm text-red-500 font-medium tracking-[0.25em] -mt-1">
-                  Commence ton voyage avec nous
-                </p>
-              </div>
-            </div>
+      {/* ========== CALENDRIER PAR JOUR ========== */}
+      <div className="space-y-6">
+        {weekDays.map((day, dayIdx) => {
+          const daySessions = sessionsByDay[day];
+          
+          if (daySessions.length === 0) return null;
 
-            {/* Nav links desktop */}
-            <div className="hidden md:flex items-center space-x-2">
-              {[
-                { id: 'home', label: 'Accueil' },
-                { id: 'teams', label: 'Équipes' },
-                { id: 'news', label: 'Actualités' },
-                { id: 'schedule', label: 'Planning' },
-                { id: 'profils', label: 'Profils' },
-              ].map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveSection(item.id)}
-                  className={`relative px-6 py-3 rounded-lg font-bold text-sm tracking-wide transition-all duration-300 ${
-                    activeSection === item.id ? 'text-red-500' : 'text-gray-300 hover:text-red-400'
-                  }`}
-                >
-                  <span>{item.label}</span>
-                  {activeSection === item.id && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 shadow-[0_0_10px_rgba(220,20,60,0.8)]"></div>
-                  )}
-                </button>
-              ))}
-
-              {/* Dashboard button */}
-              <button
-                onClick={() => setActiveSection('dashboard')}
-                className="ml-4 flex items-center gap-2 px-5 py-2.5 bg-red-600 bg-opacity-20 border border-red-600 border-opacity-50 hover:bg-opacity-40 text-red-400 font-bold text-sm rounded-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,20,60,0.3)]"
-              >
-                <Shield className="w-4 h-4" />
-                Dashboard
-              </button>
-            </div>
-
-            {/* Mobile menu toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-3 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-all duration-300"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-black bg-opacity-95 backdrop-blur-xl border-t border-red-900 border-opacity-30">
-            <div className="px-4 py-3 space-y-2">
-              {[
-                { id: 'home', label: 'Accueil' },
-                { id: 'teams', label: 'Équipes' },
-                { id: 'news', label: 'Actualités' },
-                { id: 'schedule', label: 'Planning' },
-                { id: 'profils', label: '👤 Profils' },
-                { id: 'dashboard', label: '🛡️ Dashboard' },
-              ].map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveSection(item.id)}
-                  className={`w-full px-4 py-3 rounded-lg font-bold text-left transition-all duration-300 ${
-                    activeSection === item.id ? 'bg-red-600 text-white' : 'text-gray-300 hover:bg-red-900 hover:bg-opacity-30'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </nav>
-
-      {/* ========== MAIN CONTENT ========== */}
-      <main className="relative z-10 pt-24">
-
-        {/* ─── HOME ─── */}
-        {activeSection === 'home' && (
-          <section className="min-h-screen flex items-center justify-center px-4 py-20">
-            <div className="max-w-7xl mx-auto">
-              <div className="text-center space-y-12 mb-16">
-                <div className="space-y-6" style={{ animation: 'fadeInUp 0.8s ease-out forwards' }}>
-                  <h1 className="text-7xl md:text-9xl font-black leading-none font-bebas tracking-tight" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                    <span className="bg-gradient-to-r from-red-500 via-red-600 to-red-900 bg-clip-text text-transparent" style={{ backgroundSize: '200% 200%', animation: 'gradient 3s ease infinite' }}>
-                      DOMINEZ
-                    </span>
-                    <br />
-                    <span className="text-white drop-shadow-2xl">L'ARÈNE</span>
-                  </h1>
-                  <p className="text-2xl md:text-3xl text-gray-400 max-w-4xl mx-auto leading-relaxed font-light">
-                    7 équipes d'élite • De Master à Diamond • Une seule mission : <span className="text-red-500 font-bold">la victoire absolue</span>
-                  </p>
+          return (
+            <div key={day} className="space-y-3">
+              
+              {/* Header Jour */}
+              <div className="flex items-center space-x-3">
+                <div className="bg-red-600 bg-opacity-20 border border-red-600 border-opacity-50 rounded-lg px-4 py-2">
+                  <div className="text-sm font-bold text-red-500">{day}</div>
                 </div>
-
-                {/* Stats cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto" style={{ animation: 'fadeInUp 0.8s ease-out 0.2s forwards', opacity: 0 }}>
-                  {[
-                    { icon: '🎮', value: '7', label: 'Équipes' },
-                    { icon: '🏆', value: '3', label: 'Compétitions' },
-                    { icon: '⚔️', value: '100+', label: 'Matchs' },
-                    { icon: '🤝', value: '35', label: 'Joueurs' }
-                  ].map((stat, idx) => (
-                    <div key={idx} className="bg-black bg-opacity-70 backdrop-blur-xl border border-red-900 border-opacity-20 rounded-2xl p-8 hover:scale-105 hover:border-red-600 hover:border-opacity-40 transition-all duration-300">
-                      <div className="text-6xl mb-3">{stat.icon}</div>
-                      <div className="text-6xl font-black font-bebas text-red-500 mb-1" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>{stat.value}</div>
-                      <div className="text-sm text-gray-400 tracking-widest uppercase">{stat.label}</div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Competitions pills */}
-                <div className="flex flex-wrap justify-center gap-4" style={{ animation: 'fadeInUp 0.8s ease-out 0.4s forwards', opacity: 0 }}>
-                  {[
-                    { emoji: '🏆', name: 'NEXUS TOUR' },
-                    { emoji: '⚔️', name: "OUAT'VENTURE" },
-                    { emoji: '👑', name: 'PRIME LEAGUE' }
-                  ].map((comp, idx) => (
-                    <div key={idx} className="bg-gradient-to-r from-red-900 from-opacity-10 to-red-950 to-opacity-20 border border-red-900 border-opacity-30 backdrop-blur-lg px-6 py-3 rounded-full text-sm font-bold cursor-pointer hover:border-red-600 hover:bg-red-900 hover:bg-opacity-20 transition-all">
-                      <span className="text-2xl mr-2">{comp.emoji}</span>
-                      <span className="text-red-400">{comp.name}</span>
-                    </div>
-                  ))}
+                <div className="h-px flex-1 bg-gradient-to-r from-red-600 to-transparent opacity-20"></div>
+                <div className="text-sm text-gray-500 font-bold">
+                  {daySessions.length} session{daySessions.length > 1 ? 's' : ''}
                 </div>
               </div>
 
-              {/* Formulaire inscription */}
-              <div className="max-w-4xl mx-auto mt-20" style={{ animation: 'fadeInUp 0.8s ease-out 0.6s forwards', opacity: 0 }}>
-                <div className="bg-gradient-to-br from-gray-900 via-black to-gray-950 border-2 border-red-900 border-opacity-30 rounded-3xl p-8 md:p-12 backdrop-blur-xl relative overflow-hidden">
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-50"></div>
-                  <div className="absolute -top-40 -right-40 w-80 h-80 bg-red-600 rounded-full blur-[120px] opacity-20"></div>
-                  <div className="relative z-10">
-                    <div className="text-center mb-8">
-                      <div className="inline-flex items-center justify-center w-20 h-20 bg-red-600 bg-opacity-10 border-2 border-red-600 border-opacity-30 rounded-2xl mb-4">
-                        <User className="w-10 h-10 text-red-500" />
-                      </div>
-                      <h2 className="text-4xl md:text-5xl font-black font-bebas tracking-tight mb-3" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                        <span className="bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">REJOINS-NOUS</span>
-                      </h2>
-                      <p className="text-gray-400 text-lg">Crée ton compte et commence ton aventure esports</p>
-                    </div>
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">
-                            <User className="inline w-4 h-4 mr-2" />Pseudo
-                          </label>
-                          <input type="text" name="pseudo" value={formData.pseudo} onChange={handleInputChange} required placeholder="Ton pseudo en jeu"
-                            className="w-full bg-black bg-opacity-50 border-2 border-red-900 border-opacity-30 rounded-xl px-6 py-4 text-white placeholder-gray-600 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-20 transition-all duration-300" />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">
-                            <Gamepad2 className="inline w-4 h-4 mr-2" />Riot ID
-                          </label>
-                          <input type="text" name="riotId" value={formData.riotId} onChange={handleInputChange} required placeholder="Pseudo#TAG"
-                            className="w-full bg-black bg-opacity-50 border-2 border-red-900 border-opacity-30 rounded-xl px-6 py-4 text-white placeholder-gray-600 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-20 transition-all duration-300" />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">
-                            <Mail className="inline w-4 h-4 mr-2" />Email
-                          </label>
-                          <input type="email" name="email" value={formData.email} onChange={handleInputChange} required placeholder="ton.email@exemple.com"
-                            className="w-full bg-black bg-opacity-50 border-2 border-red-900 border-opacity-30 rounded-xl px-6 py-4 text-white placeholder-gray-600 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-20 transition-all duration-300" />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">
-                            <Phone className="inline w-4 h-4 mr-2" />Téléphone
-                          </label>
-                          <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} required placeholder="+33 6 12 34 56 78"
-                            className="w-full bg-black bg-opacity-50 border-2 border-red-900 border-opacity-30 rounded-xl px-6 py-4 text-white placeholder-gray-600 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-20 transition-all duration-300" />
-                        </div>
-                      </div>
-                      <button type="submit"
-                        className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-black text-lg tracking-wide py-5 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(220,20,60,0.5)] flex items-center justify-center space-x-3 font-bebas"
-                        style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                        <Trophy className="w-6 h-6" />
-                        <span>CRÉER MON COMPTE</span>
-                        <ChevronRight className="w-5 h-5" />
-                      </button>
-                      <p className="text-center text-sm text-gray-500 mt-4">
-                        En créant un compte, tu acceptes nos conditions d'utilisation
-                      </p>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ─── TEAMS ─── */}
-        {activeSection === 'teams' && (
-          <section className="min-h-screen py-20 px-4">
-            <div className="max-w-7xl mx-auto">
-              <div className="text-center mb-16">
-                <h2 className="text-6xl md:text-8xl font-black mb-4 font-bebas" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                  <span className="bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">NOS ÉQUIPES</span>
-                </h2>
-                <p className="text-xl text-gray-400">7 équipes, une seule passion</p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {TEAMS.map((team, idx) => (
-                  <div
-                    key={team.id}
-                    onClick={() => setSelectedTeam(selectedTeam === team.id ? null : team.id)}
-                    className="group relative bg-gradient-to-br from-gray-900 to-black backdrop-blur-xl border-2 border-red-900 border-opacity-10 rounded-2xl overflow-hidden cursor-pointer hover:border-red-600 hover:border-opacity-40 transition-all duration-500 hover:-translate-y-3 hover:shadow-[0_20px_60px_rgba(220,20,60,0.3)]"
-                    style={{ animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s forwards`, opacity: 0 }}
-                  >
-                    <div className={`relative h-48 bg-gradient-to-br ${team.gradient} p-6`}>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
-                      <div className="relative z-10">
-                        <div className="inline-flex items-center bg-red-900 bg-opacity-30 border border-red-600 border-opacity-50 backdrop-blur-sm rounded-full px-3 py-1 mb-2">
-                          <Award className="h-3 w-3 mr-1" />
-                          <span className="text-xs font-black tracking-wide">{team.rank}</span>
-                        </div>
-                        <h3 className="text-3xl font-black text-white font-bebas drop-shadow-lg" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>{team.name}</h3>
-                        <p className="text-sm text-white text-opacity-80 mt-1">{team.motto}</p>
-                      </div>
-                      <div className="absolute bottom-4 left-4 right-4 z-10">
-                        <div className="flex items-end justify-between">
-                          <div className="flex-shrink-0">
-                            <div className="text-3xl md:text-4xl font-black text-white font-bebas leading-none" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                              {team.globalStats.totalWins}-{team.globalStats.totalLosses}
-                            </div>
-                            <div className="text-xs text-white text-opacity-80 font-bold mt-1">{team.globalStats.winRate}% WINRATE</div>
-                          </div>
-                          <div className="text-5xl md:text-6xl opacity-30 flex-shrink-0">{team.logo}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="p-6 space-y-4">
-                      <div>
-                        <h4 className="text-xs font-bold text-gray-500 mb-3 tracking-wider">ROSTER</h4>
-                        {team.roster.length === 0 ? (
-                          <p className="text-xs text-gray-600 italic">Roster à completer via le Dashboard</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {team.roster.slice(0, selectedTeam === team.id ? 5 : 3).map((player, pIdx) => (
-                              <div key={pIdx} className="flex items-center justify-between bg-red-900 bg-opacity-5 hover:bg-opacity-15 border-l-2 border-transparent hover:border-red-600 rounded px-3 py-2 transition-all duration-200">
-                                <div className="flex items-center space-x-2">
-                                  <div className="text-xs font-bold w-12" style={{ color: team.color }}>{player.role}</div>
-                                  <div className="text-sm font-bold">{player.pseudo}</div>
-                                </div>
-                                <div className="w-2 h-2 rounded-full shadow-lg" style={{ backgroundColor: team.color, boxShadow: `0 0 10px ${team.color}` }}></div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-gray-400">Winrate</span>
-                          <span className="font-bold" style={{ color: team.color }}>{team.globalStats.winRate}%</span>
-                        </div>
-                        <div className="h-2 bg-gray-900 rounded-full overflow-hidden shadow-inner">
-                          <div className="h-full rounded-full transition-all duration-1000"
-                            style={{ width: `${team.globalStats.winRate}%`, background: `linear-gradient(to right, ${team.color}, ${team.secondaryColor})`, boxShadow: `0 0 10px ${team.color}` }}></div>
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {team.competitions.map((comp, cIdx) => (
-                          <div key={cIdx} className="text-xs bg-red-950 bg-opacity-30 border border-red-900 border-opacity-30 rounded px-2 py-1 text-red-400">
-                            #{comp.position} {comp.name}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
-                      style={{ backgroundColor: team.color, boxShadow: `0 0 20px ${team.color}` }}></div>
-                  </div>
+              {/* Sessions du jour */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {daySessions.map((session, idx) => (
+                  <SessionCard key={session.id} session={session} index={idx} />
                 ))}
               </div>
             </div>
-          </section>
-        )}
+          );
+        })}
 
-        {/* ─── NEWS ─── */}
-        {activeSection === 'news' && (
-          <section className="min-h-screen py-20 px-4">
-            <div className="max-w-6xl mx-auto">
-              <div className="text-center mb-16">
-                <h2 className="text-6xl md:text-8xl font-black mb-4 font-bebas" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                  <span className="bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">ACTUALITÉS</span>
-                </h2>
-                <p className="text-xl text-gray-400">Les dernières nouvelles de l'arène</p>
-              </div>
-              <div className="text-center py-20">
-                <div className="text-6xl mb-4">📰</div>
-                <p className="text-gray-500">Les actualités sont gérées via le Dashboard.</p>
-                <button onClick={() => setActiveSection('dashboard')} className="mt-4 text-red-500 hover:text-red-400 text-sm font-bold transition-colors">
-                  → Accéder au Dashboard
-                </button>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ─── SCHEDULE ─── */}
-        {activeSection === 'schedule' && (
-          <section className="min-h-screen py-20 px-4">
-            <div className="max-w-7xl mx-auto">
-              <div className="text-center mb-16">
-                <h2 className="text-6xl md:text-8xl font-black mb-4 font-bebas" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-                  <span className="bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">PLANNING</span>
-                </h2>
-                <p className="text-xl text-gray-400">Planning complet de la structure</p>
-              </div>
-              <Calendar />
-            </div>
-          </section>
-        )}
-
-        {/* ─── PROFILS ─── */}
-        {activeSection === 'profils' && (
-          <PlayerProfile onBack={() => setActiveSection('home')} />
-        )}
-
-      </main>
-
-      {/* ========== FOOTER ========== */}
-      <footer className="relative z-10 bg-black border-t border-red-900 border-opacity-30 py-12 mt-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-            <div className="flex items-center space-x-3">
-              <img src="/logo-travl-small.png" alt="TravL" className="h-10 w-10 object-contain"
-                style={{ filter: 'drop-shadow(0 0 10px rgba(220, 20, 60, 0.6))' }}
-                onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
-              <Shield className="h-8 w-8 text-red-600 hidden" />
-              <div>
-                <h3 className="text-xl font-black font-bebas" style={{ fontFamily: "'Bebas Neue', sans-serif" }}>STRUCTURE TRAVL</h3>
-                <p className="text-xs text-gray-500">Structure TravL © 2026</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-6">
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors font-bold">Contact</a>
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors font-bold">Discord</a>
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors font-bold">Twitter</a>
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors font-bold">Twitch</a>
-            </div>
+        {/* Message si aucun résultat */}
+        {filteredSessions.length === 0 && (
+          <div className="text-center py-20">
+            <CalendarIcon className="h-16 w-16 text-gray-700 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-gray-500 mb-2">Aucune session trouvée</h3>
+            <p className="text-gray-600">Essayez de modifier les filtres</p>
           </div>
-          <div className="mt-8 pt-8 border-t border-red-900 border-opacity-20 text-center">
-            <p className="text-sm text-gray-500">Made with <span className="text-red-500">❤️</span> for the esports community</p>
-          </div>
-        </div>
-      </footer>
-
-      {/* CSS Animations */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap');
-        .font-bebas { font-family: 'Bebas Neue', sans-serif; }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(40px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInScale {
-          from { opacity: 0; transform: scale(0.92); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes drift {
-          0% { background-position: 0 0; }
-          100% { background-position: 60px 60px; }
-        }
-        @keyframes gradient {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-      `}</style>
+        )}
+      </div>
     </div>
   );
 }
 
-export default App;
+// ========== COMPOSANT CARTE SESSION ==========
+function SessionCard({ session, index }) {
+  const [expanded, setExpanded] = useState(false);
+  const type = session.type;
+
+  return (
+    <div
+      className="group bg-gradient-to-br from-gray-900 to-black border-2 border-red-900 border-opacity-10 rounded-xl overflow-hidden hover:border-red-600 hover:border-opacity-30 transition-all duration-300 hover:-translate-y-1"
+      style={{ 
+        animation: `fadeInUp 0.4s ease-out ${index * 0.05}s forwards`,
+        opacity: 0
+      }}
+    >
+      {/* Header avec type de session */}
+      <div 
+        className="p-4 border-b border-red-900 border-opacity-20"
+        style={{ 
+          background: `linear-gradient(135deg, ${type.color}15 0%, transparent 100%)`
+        }}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div 
+              className={`${type.bgColor} bg-opacity-20 border ${type.borderColor} border-opacity-50 rounded-lg p-2`}
+            >
+              <span className="text-2xl">{type.emoji}</span>
+            </div>
+            <div>
+              <div className="text-sm font-bold" style={{ color: type.color }}>
+                {type.label}
+              </div>
+              <div className="text-xs text-gray-500">{session.teamName}</div>
+            </div>
+          </div>
+          
+          <div className="text-right">
+            <div className="flex items-center space-x-2 text-white font-bold">
+              <Clock className="h-4 w-4 text-red-500" />
+              <span>{session.time}</span>
+            </div>
+            <div className="text-xs text-gray-500">{session.duration}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Contenu */}
+      <div className="p-4 space-y-3">
+        
+        {/* Titre */}
+        <h4 className="font-bold text-white group-hover:text-red-500 transition-colors">
+          {session.title}
+        </h4>
+
+        {/* Description */}
+        <p className="text-sm text-gray-400 leading-relaxed">
+          {session.description}
+        </p>
+
+        {/* Infos complémentaires */}
+        <div className="space-y-2 text-sm">
+          
+          {/* Location */}
+          <div className="flex items-center space-x-2 text-gray-400">
+            <MapPin className="h-4 w-4 text-red-500 flex-shrink-0" />
+            <span>{session.location}</span>
+          </div>
+
+          {/* Participants */}
+          <div className="flex items-center space-x-2 text-gray-400">
+            <Users className="h-4 w-4 text-red-500 flex-shrink-0" />
+            <span>{session.participants.join(', ')}</span>
+          </div>
+
+          {/* Compétition (si applicable) */}
+          {session.competition && (
+            <div className="flex items-center space-x-2 text-gray-400">
+              <Trophy className="h-4 w-4 text-red-500 flex-shrink-0" />
+              <span className="font-bold text-red-400">{session.competition}</span>
+              {session.opponent && <span>vs {session.opponent}</span>}
+            </div>
+          )}
+
+          {/* Coach */}
+          {session.coach && (
+            <div className="text-xs text-gray-500">
+              Coach : <span className="text-gray-400 font-bold">{session.coach}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Badges */}
+        <div className="flex flex-wrap gap-2 pt-2">
+          {session.mandatory && (
+            <span className="bg-red-600 bg-opacity-20 border border-red-600 border-opacity-50 text-red-400 text-xs font-bold px-2 py-1 rounded">
+              Obligatoire
+            </span>
+          )}
+          {session.important && (
+            <span className="bg-yellow-600 bg-opacity-20 border border-yellow-600 border-opacity-50 text-yellow-400 text-xs font-bold px-2 py-1 rounded">
+              Important
+            </span>
+          )}
+          {session.streamUrl && (
+            <a 
+              href={session.streamUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-purple-600 bg-opacity-20 border border-purple-600 border-opacity-50 text-purple-400 text-xs font-bold px-2 py-1 rounded hover:bg-opacity-30 transition-all"
+            >
+              📺 Stream
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* Barre de couleur en bas */}
+      <div 
+        className="h-1"
+        style={{ 
+          background: `linear-gradient(90deg, ${type.color} 0%, transparent 100%)`,
+          boxShadow: `0 0 10px ${type.color}50`
+        }}
+      ></div>
+    </div>
+  );
+}
+
+export default Calendar;
