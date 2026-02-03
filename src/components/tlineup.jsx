@@ -1,656 +1,417 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TLineup - Créateur de Compositions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background: #080808;
-            color: #fff;
-            min-height: 100vh;
-        }
-        
-        .tlineup-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-        
-        .header h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.5rem;
-            letter-spacing: 3px;
-        }
-        
-        .header h1 span {
-            color: #DC143C;
-        }
-        
-        .save-bar {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 1rem;
-            backdrop-filter: blur(12px);
-        }
-        
-        .save-bar input {
-            flex: 1;
-            max-width: 300px;
-            padding: 0.75rem 1rem;
-            background: #000;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 0.5rem;
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-        }
-        
-        .save-bar input:focus {
-            outline: none;
-            border-color: #DC143C;
-        }
-        
-        .btn {
-            padding: 0.75rem 1.5rem;
-            background: rgba(220,20,60,0.15);
-            border: 1px solid rgba(220,20,60,0.4);
-            border-radius: 0.5rem;
-            color: #DC143C;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-            background: rgba(220,20,60,0.25);
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary {
-            background: rgba(255,255,255,0.04);
-            border-color: rgba(255,255,255,0.1);
-            color: #888;
-        }
-        
-        .lineups-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        
-        .team-panel {
-            background: rgba(0,0,0,0.4);
-            border: 1.5px solid;
-            border-radius: 1.5rem;
-            padding: 2rem;
-            backdrop-filter: blur(12px);
-        }
-        
-        .team-panel.blue {
-            border-color: rgba(52,152,219,0.3);
-            background: rgba(52,152,219,0.05);
-        }
-        
-        .team-panel.red {
-            border-color: rgba(231,76,60,0.3);
-            background: rgba(231,76,60,0.05);
-        }
-        
-        .team-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .team-header h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.75rem;
-            letter-spacing: 2px;
-        }
-        
-        .team-panel.blue h2 {
-            color: #3498db;
-        }
-        
-        .team-panel.red h2 {
-            color: #e74c3c;
-        }
-        
-        .role-slot {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 0.75rem;
-            margin-bottom: 0.75rem;
-            transition: all 0.3s ease;
-        }
-        
-        .role-slot:hover {
-            background: rgba(255,255,255,0.05);
-        }
-        
-        .role-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Bebas Neue', sans-serif;
-            font-weight: 700;
-            font-size: 0.875rem;
-        }
-        
-        .champion-info {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .champion-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.125rem;
-        }
-        
-        .champion-name {
-            font-weight: 700;
-        }
-        
-        .champion-class {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 50px;
-        }
-        
-        .btn-pick {
-            padding: 0.5rem 1rem;
-            background: none;
-            border: none;
-            color: #888;
-            font-family: 'Rajdhani', sans-serif;
-            cursor: pointer;
-        }
-        
-        .btn-pick:hover {
-            color: #fff;
-        }
-        
-        .btn-remove {
-            padding: 0.5rem;
-            background: none;
-            border: none;
-            color: #888;
-            cursor: pointer;
-            border-radius: 0.375rem;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-remove:hover {
-            background: rgba(231,76,60,0.2);
-            color: #e74c3c;
-        }
-        
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: #0a0a0a;
-            border: 1px solid rgba(220,20,60,0.3);
-            border-radius: 1.5rem;
-            max-width: 700px;
-            width: 100%;
-            max-height: 80vh;
-            overflow: hidden;
-            animation: modalSlideIn 0.3s ease-out;
-        }
-        
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-        
-        .modal-header {
-            padding: 1.5rem;
-            background: rgba(220,20,60,0.1);
-            border-bottom: 1px solid rgba(220,20,60,0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-body {
-            padding: 1.5rem;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: #000;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 0.75rem;
-            color: #fff;
-            font-family: 'Rajdhani', sans-serif;
-            margin-bottom: 1rem;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: #DC143C;
-        }
-        
-        .champions-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
-        }
-        
-        .champion-card {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 0.75rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .champion-card:hover {
-            background: rgba(255,255,255,0.05);
-            transform: translateY(-2px);
-        }
-        
-        /* Analysis */
-        .analysis-section {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 1.5rem;
-            padding: 2rem;
-            backdrop-filter: blur(12px);
-        }
-        
-        .analysis-section h3 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        
-        .stat-item {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 0.75rem;
-            padding: 1rem;
-        }
-        
-        .stat-label {
-            font-size: 0.875rem;
-            color: #888;
-            margin-bottom: 0.75rem;
-        }
-        
-        .stat-bar {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .stat-value {
-            font-weight: 700;
-            font-size: 0.875rem;
-            min-width: 45px;
-            text-align: right;
-        }
-        
-        .bar-container {
-            flex: 1;
-            height: 8px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .bar-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-    </style>
-</head>
-<body>
-    <div class="tlineup-container">
-        <!-- Header -->
-        <div class="header">
+import React, { useState, useMemo } from 'react';
+import { Plus, X, RotateCcw, Save, Users, TrendingUp, Shield, Zap } from 'lucide-react';
+
+// Champions data (120+ champions)
+const CHAMPIONS = [
+  {id:'aatrox',name:'Aatrox',role:'top',class:'Juggernaut',color:'#c0392b'},
+  {id:'ahri',name:'Ahri',role:'mid',class:'Mage',color:'#e91e8c'},
+  {id:'akali',name:'Akali',role:'mid',class:'Assassin',color:'#1e8449'},
+  {id:'amumu',name:'Amumu',role:'jungle',class:'Tank',color:'#e67e22'},
+  {id:'anivia',name:'Anivia',role:'mid',class:'Mage',color:'#3498db'},
+  {id:'ashe',name:'Ashe',role:'adc',class:'Marksman',color:'#3498db'},
+  {id:'azir',name:'Azir',role:'mid',class:'Mage',color:'#d4a017'},
+  {id:'bard',name:'Bard',role:'support',class:'Enchanter',color:'#1abc9c'},
+  {id:'blitzcrank',name:'Blitzcrank',role:'support',class:'Tank',color:'#f39c12'},
+  {id:'brand',name:'Brand',role:'mid',class:'Mage',color:'#e74c3c'},
+  {id:'braum',name:'Braum',role:'support',class:'Tank',color:'#3498db'},
+  {id:'caitlyn',name:'Caitlyn',role:'adc',class:'Marksman',color:'#2980b9'},
+  {id:'camille',name:'Camille',role:'top',class:'Assassin',color:'#34495e'},
+  {id:'darius',name:'Darius',role:'top',class:'Juggernaut',color:'#c0392b'},
+  {id:'diana',name:'Diana',role:'jungle',class:'Assassin',color:'#1a5276'},
+  {id:'draven',name:'Draven',role:'adc',class:'Marksman',color:'#c0392b'},
+  {id:'ekko',name:'Ekko',role:'jungle',class:'Assassin',color:'#1abc9c'},
+  {id:'elise',name:'Elise',role:'jungle',class:'Mage',color:'#922b21'},
+  {id:'ezreal',name:'Ezreal',role:'adc',class:'Marksman',color:'#f39c12'},
+  {id:'fiora',name:'Fiora',role:'top',class:'Assassin',color:'#27ae60'},
+  {id:'fizz',name:'Fizz',role:'mid',class:'Assassin',color:'#2e86c1'},
+  {id:'garen',name:'Garen',role:'top',class:'Juggernaut',color:'#c0392b'},
+  {id:'graves',name:'Graves',role:'jungle',class:'Marksman',color:'#d35400'},
+  {id:'irelia',name:'Irelia',role:'top',class:'Assassin',color:'#2c3e50'},
+  {id:'janna',name:'Janna',role:'support',class:'Enchanter',color:'#3498db'},
+  {id:'jax',name:'Jax',role:'top',class:'Assassin',color:'#d4ac0d'},
+  {id:'jhin',name:'Jhin',role:'adc',class:'Marksman',color:'#922b21'},
+  {id:'jinx',name:'Jinx',role:'adc',class:'Marksman',color:'#1abc9c'},
+  {id:'kaisa',name:"Kai'Sa",role:'adc',class:'Marksman',color:'#1a5276'},
+  {id:'katarina',name:'Katarina',role:'mid',class:'Assassin',color:'#c0392b'},
+  {id:'leesin',name:'Lee Sin',role:'jungle',class:'Assassin',color:'#c0392b'},
+  {id:'leona',name:'Leona',role:'support',class:'Tank',color:'#f39c12'},
+  {id:'lux',name:'Lux',role:'mid',class:'Mage',color:'#f39c12'},
+  {id:'malphite',name:'Malphite',role:'top',class:'Tank',color:'#7f8c8d'},
+  {id:'morgana',name:'Morgana',role:'support',class:'Mage',color:'#6c3483'},
+  {id:'nami',name:'Nami',role:'support',class:'Enchanter',color:'#2e86c1'},
+  {id:'nautilus',name:'Nautilus',role:'support',class:'Tank',color:'#1a5276'},
+  {id:'orianna',name:'Orianna',role:'mid',class:'Mage',color:'#9b59b6'},
+  {id:'pyke',name:'Pyke',role:'support',class:'Assassin',color:'#1abc9c'},
+  {id:'riven',name:'Riven',role:'top',class:'Assassin',color:'#fff'},
+  {id:'syndra',name:'Syndra',role:'mid',class:'Mage',color:'#8e44ad'},
+  {id:'thresh',name:'Thresh',role:'support',class:'Tank',color:'#1abc9c'},
+  {id:'vayne',name:'Vayne',role:'adc',class:'Marksman',color:'#2c3e50'},
+  {id:'vi',name:'Vi',role:'jungle',class:'Assassin',color:'#e91e63'},
+  {id:'yasuo',name:'Yasuo',role:'mid',class:'Assassin',color:'#7f8c8d'},
+  {id:'zed',name:'Zed',role:'mid',class:'Assassin',color:'#2c3e50'},
+];
+
+const ROLES = ['top','jungle','mid','adc','support'];
+const ROLE_LABELS = {top:'Top',jungle:'Jungle',mid:'Mid',adc:'ADC',support:'Support'};
+const ROLE_COLORS = {top:'#e74c3c',jungle:'#27ae60',mid:'#3498db',adc:'#f39c12',support:'#9b59b6'};
+
+// Champion Picker Modal
+function ChampionPicker({ role, onSelect, onClose }) {
+  const [search, setSearch] = useState('');
+  const [classFilter, setClassFilter] = useState('all');
+
+  const filtered = useMemo(() => {
+    return CHAMPIONS
+      .filter(c => c.role === role)
+      .filter(c => classFilter === 'all' || c.class === classFilter)
+      .filter(c => c.name.toLowerCase().includes(search.toLowerCase()))
+      .sort((a,b) => a.name.localeCompare(b.name));
+  }, [role, search, classFilter]);
+
+  const classes = [...new Set(CHAMPIONS.filter(c => c.role === role).map(c => c.class))];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background:'rgba(0,0,0,0.9)' }} onClick={onClose}>
+      <div className="w-full max-w-xl mx-4 rounded-2xl overflow-hidden shadow-2xl animate-fadeInScale" style={{ background:'#0a0a0a', border:'1px solid rgba(220,20,60,0.3)' }} onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4" style={{ background:'rgba(220,20,60,0.1)', borderBottom:'1px solid rgba(220,20,60,0.2)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: ROLE_COLORS[role]+'20', border:`1.5px solid ${ROLE_COLORS[role]}55` }}>
+              <span className="text-sm font-bebas font-bold" style={{ color: ROLE_COLORS[role] }}>{ROLE_LABELS[role]}</span>
+            </div>
             <div>
-                <h1><span>TL</span>INEUP</h1>
-                <p style="color: #888; font-size: 0.875rem;">Créez vos compositions 5v5</p>
+              <h3 className="text-sm font-bebas tracking-widest text-white">
+                SÉLECTIONNER {ROLE_LABELS[role].toUpperCase()}
+              </h3>
+              <p className="text-xs text-gray-600">{filtered.length} champions disponibles</p>
             </div>
-            <button class="btn btn-secondary" onclick="resetAll()">
-                🔄 Reset
-            </button>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-red-900 hover:bg-opacity-20 transition-colors">
+            <X className="w-5 h-5 text-gray-500 hover:text-red-400"/>
+          </button>
         </div>
 
-        <!-- Save Bar -->
-        <div class="save-bar">
-            <input type="text" id="lineupName" placeholder="Nom du lineup...">
-            <button class="btn" onclick="saveLineup()">
-                💾 Sauvegarder
-            </button>
+        {/* Search + Filters */}
+        <div className="px-6 pt-5 pb-3 space-y-3">
+          <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Chercher un champion..."
+            className="w-full bg-black border border-gray-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:border-red-600 focus:outline-none transition-colors" autoFocus/>
+          
+          <div className="flex gap-2 flex-wrap">
+            {['all',...classes].map(c => (
+              <button key={c} onClick={() => setClassFilter(c)}
+                className="text-xs px-3 py-1.5 rounded-full transition-all duration-200 font-semibold"
+                style={{
+                  background: classFilter===c ? 'rgba(220,20,60,0.25)' : 'rgba(255,255,255,0.04)',
+                  border: classFilter===c ? '1px solid rgba(220,20,60,0.5)' : '1px solid rgba(255,255,255,0.08)',
+                  color: classFilter===c ? '#f87171' : '#888'
+                }}>
+                {c === 'all' ? 'Tous' : c}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <!-- Lineups Grid -->
-        <div class="lineups-grid">
-            <!-- Blue Side -->
-            <div class="team-panel blue">
-                <div class="team-header">
-                    <span style="font-size: 1.5rem;">👥</span>
-                    <h2>BLUE SIDE</h2>
+        {/* Champions Grid */}
+        <div className="px-6 pb-6" style={{ maxHeight:'400px', overflowY:'auto' }}>
+          <div className="grid grid-cols-2 gap-2">
+            {filtered.map(champ => (
+              <button key={champ.id} onClick={() => onSelect(champ)}
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200 hover:-translate-y-1 group"
+                style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = champ.color+'88'; e.currentTarget.style.background = champ.color+'0d'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+                  style={{ background: champ.color+'20', border:`2px solid ${champ.color}66` }}>
+                  <span className="text-lg font-bebas text-white font-bold">{champ.name[0]}</span>
                 </div>
-                <div id="blueTeam"></div>
-            </div>
-
-            <!-- Red Side -->
-            <div class="team-panel red">
-                <div class="team-header">
-                    <span style="font-size: 1.5rem;">👥</span>
-                    <h2>RED SIDE</h2>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-bold text-white truncate">{champ.name}</div>
+                  <div className="text-xs px-2 py-0.5 rounded-full inline-block mt-1" style={{ color: champ.color, background: champ.color+'18', border:`1px solid ${champ.color}33` }}>
+                    {champ.class}
+                  </div>
                 </div>
-                <div id="redTeam"></div>
-            </div>
+              </button>
+            ))}
+            {filtered.length === 0 && (
+              <div className="col-span-2 text-center py-12 text-sm text-gray-600">
+                Aucun champion trouvé
+              </div>
+            )}
+          </div>
         </div>
-
-        <!-- Analysis -->
-        <div class="analysis-section" id="analysisSection" style="display: none;">
-            <h3>📈 ANALYSE MATCHUP</h3>
-            <div class="stats-grid" id="statsGrid"></div>
-        </div>
+      </div>
     </div>
+  );
+}
 
-    <!-- Champion Picker Modal -->
-    <div class="modal" id="championModal">
-        <div class="modal-content">
-            <div class="modal-header">
+// Main Component
+export default function TLineup({ onBack }) {
+  const [blueTeam, setBlueTeam] = useState({ top:null, jungle:null, mid:null, adc:null, support:null });
+  const [redTeam, setRedTeam] = useState({ top:null, jungle:null, mid:null, adc:null, support:null });
+  const [pickingSlot, setPickingSlot] = useState(null);
+  const [savedLineups, setSavedLineups] = useState([]);
+  const [lineupName, setLineupName] = useState('');
+
+  const handlePickChampion = (champ) => {
+    if (!pickingSlot) return;
+    const { side, role } = pickingSlot;
+    if (side === 'blue') setBlueTeam(prev => ({ ...prev, [role]: champ }));
+    else setRedTeam(prev => ({ ...prev, [role]: champ }));
+    setPickingSlot(null);
+  };
+
+  const clearSlot = (side, role) => {
+    if (side === 'blue') setBlueTeam(prev => ({ ...prev, [role]: null }));
+    else setRedTeam(prev => ({ ...prev, [role]: null }));
+  };
+
+  const saveLineup = () => {
+    if (!lineupName.trim()) return;
+    setSavedLineups(prev => [...prev, { id: Date.now(), name: lineupName.trim(), blue: { ...blueTeam }, red: { ...redTeam } }]);
+    setLineupName('');
+  };
+
+  const loadLineup = (lineup) => {
+    setBlueTeam(lineup.blue);
+    setRedTeam(lineup.red);
+  };
+
+  const resetAll = () => {
+    setBlueTeam({ top:null, jungle:null, mid:null, adc:null, support:null });
+    setRedTeam({ top:null, jungle:null, mid:null, adc:null, support:null });
+  };
+
+  const blueCount = Object.values(blueTeam).filter(Boolean).length;
+  const redCount = Object.values(redTeam).filter(Boolean).length;
+  const showAnalysis = blueCount >= 3 && redCount >= 3;
+
+  return (
+    <div className="min-h-screen text-white" style={{ background:'#080808' }}>
+      {/* Header */}
+      <div className="px-6 py-4 flex items-center justify-between border-b" style={{ borderColor:'rgba(255,255,255,0.06)', background:'rgba(0,0,0,0.6)', backdropFilter:'blur(12px)' }}>
+        <div className="flex items-center gap-4">
+          {onBack && (
+            <button onClick={onBack} className="text-gray-500 hover:text-red-400 transition-colors">← </button>
+          )}
+          <div>
+            <h1 className="text-2xl font-bebas tracking-widest">
+              <span style={{ color:'#DC143C' }}>TL</span>INEUP
+            </h1>
+            <p className="text-xs text-gray-600">Créez vos compositions 5v5</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={resetAll} className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg hover:bg-gray-900 transition-colors text-gray-500 hover:text-red-400">
+            <RotateCcw className="w-3.5 h-3.5"/> Reset
+          </button>
+        </div>
+      </div>
+
+      {/* Save/Load Bar */}
+      <div className="px-6 py-4 flex items-center gap-3 flex-wrap border-b" style={{ borderColor:'rgba(255,255,255,0.06)', background:'rgba(0,0,0,0.3)' }}>
+        <input type="text" value={lineupName} onChange={e => setLineupName(e.target.value)} placeholder="Nom du lineup..."
+          className="flex-1 min-w-0 bg-black border border-gray-800 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:border-red-600 focus:outline-none transition-colors"
+          style={{ minWidth:'200px', maxWidth:'300px' }}/>
+        <button onClick={saveLineup} disabled={!lineupName.trim()}
+          className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-lg transition-all hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed"
+          style={{ background:'rgba(220,20,60,0.15)', border:'1px solid rgba(220,20,60,0.4)', color:'#f87171' }}>
+          <Save className="w-3.5 h-3.5"/> Sauvegarder
+        </button>
+        {savedLineups.length > 0 && (
+          <div className="flex gap-2 flex-wrap">
+            {savedLineups.map(l => (
+              <button key={l.id} onClick={() => loadLineup(l)}
+                className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-full transition-all hover:bg-gray-800 group"
+                style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)', color:'#aaa' }}>
+                📋 {l.name}
+                <button onClick={(e) => { e.stopPropagation(); setSavedLineups(prev => prev.filter(s => s.id !== l.id)); }}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity">
+                  <X className="w-3 h-3 text-gray-600 hover:text-red-400"/>
+                </button>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Main Lineup */}
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            {/* BLUE SIDE */}
+            <div className="rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1"
+              style={{ background:'rgba(52,152,219,0.08)', border:'1.5px solid rgba(52,152,219,0.25)', backdropFilter:'blur(12px)' }}>
+              <div className="flex items-center gap-3 mb-6">
+                <Users className="w-6 h-6 text-blue-400"/>
                 <div>
-                    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem;">
-                        SÉLECTIONNER <span id="modalRoleLabel"></span>
-                    </h3>
+                  <h2 className="text-xl font-bebas tracking-wider text-white" style={{ color:'#3498db' }}>
+                    BLUE SIDE
+                  </h2>
+                  <p className="text-xs text-gray-600">{blueCount}/5 champions sélectionnés</p>
                 </div>
-                <button class="btn-remove" onclick="closeModal()">✕</button>
+              </div>
+
+              <div className="space-y-3">
+                {ROLES.map(role => {
+                  const champ = blueTeam[role];
+                  return (
+                    <div key={role} className="flex items-center gap-3 rounded-xl p-3 transition-all duration-200 hover:bg-white hover:bg-opacity-5"
+                      style={{ background:'rgba(0,0,0,0.2)', border:'1px solid rgba(255,255,255,0.06)' }}>
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                        style={{ background: ROLE_COLORS[role]+'18', border:`1.5px solid ${ROLE_COLORS[role]}44` }}>
+                        <span className="text-xs font-bebas font-bold" style={{ color: ROLE_COLORS[role] }}>
+                          {ROLE_LABELS[role].substring(0,3)}
+                        </span>
+                      </div>
+
+                      {champ ? (
+                        <div className="flex-1 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+                              style={{ background: champ.color+'25', border:`1.5px solid ${champ.color}66` }}>
+                              <span className="text-sm font-bebas text-white font-bold">{champ.name[0]}</span>
+                            </div>
+                            <div>
+                              <div className="text-sm font-bold text-white">{champ.name}</div>
+                              <div className="text-xs px-2 py-0.5 rounded-full inline-block" style={{ color: champ.color, background: champ.color+'15', border:`1px solid ${champ.color}33` }}>
+                                {champ.class}
+                              </div>
+                            </div>
+                          </div>
+                          <button onClick={() => clearSlot('blue', role)}
+                            className="p-2 rounded-lg hover:bg-red-900 hover:bg-opacity-20 transition-colors">
+                            <X className="w-4 h-4 text-gray-600 hover:text-red-400"/>
+                          </button>
+                        </div>
+                      ) : (
+                        <button onClick={() => setPickingSlot({ side:'blue', role })}
+                          className="flex-1 flex items-center gap-2 text-sm text-gray-600 hover:text-gray-400 transition-colors py-2">
+                          <Plus className="w-4 h-4"/> Choisir {ROLE_LABELS[role]}
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div class="modal-body">
-                <input type="text" class="search-input" id="searchInput" placeholder="Chercher un champion...">
-                <div class="champions-grid" id="championsGrid"></div>
+
+            {/* RED SIDE */}
+            <div className="rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1"
+              style={{ background:'rgba(231,76,60,0.08)', border:'1.5px solid rgba(231,76,60,0.25)', backdropFilter:'blur(12px)' }}>
+              <div className="flex items-center gap-3 mb-6">
+                <Users className="w-6 h-6 text-red-400"/>
+                <div>
+                  <h2 className="text-xl font-bebas tracking-wider text-white" style={{ color:'#e74c3c' }}>
+                    RED SIDE
+                  </h2>
+                  <p className="text-xs text-gray-600">{redCount}/5 champions sélectionnés</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {ROLES.map(role => {
+                  const champ = redTeam[role];
+                  return (
+                    <div key={role} className="flex items-center gap-3 rounded-xl p-3 transition-all duration-200 hover:bg-white hover:bg-opacity-5"
+                      style={{ background:'rgba(0,0,0,0.2)', border:'1px solid rgba(255,255,255,0.06)' }}>
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                        style={{ background: ROLE_COLORS[role]+'18', border:`1.5px solid ${ROLE_COLORS[role]}44` }}>
+                        <span className="text-xs font-bebas font-bold" style={{ color: ROLE_COLORS[role] }}>
+                          {ROLE_LABELS[role].substring(0,3)}
+                        </span>
+                      </div>
+
+                      {champ ? (
+                        <div className="flex-1 flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+                              style={{ background: champ.color+'25', border:`1.5px solid ${champ.color}66` }}>
+                              <span className="text-sm font-bebas text-white font-bold">{champ.name[0]}</span>
+                            </div>
+                            <div>
+                              <div className="text-sm font-bold text-white">{champ.name}</div>
+                              <div className="text-xs px-2 py-0.5 rounded-full inline-block" style={{ color: champ.color, background: champ.color+'15', border:`1px solid ${champ.color}33` }}>
+                                {champ.class}
+                              </div>
+                            </div>
+                          </div>
+                          <button onClick={() => clearSlot('red', role)}
+                            className="p-2 rounded-lg hover:bg-red-900 hover:bg-opacity-20 transition-colors">
+                            <X className="w-4 h-4 text-gray-600 hover:text-red-400"/>
+                          </button>
+                        </div>
+                      ) : (
+                        <button onClick={() => setPickingSlot({ side:'red', role })}
+                          className="flex-1 flex items-center gap-2 text-sm text-gray-600 hover:text-gray-400 transition-colors py-2">
+                          <Plus className="w-4 h-4"/> Choisir {ROLE_LABELS[role]}
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
+          </div>
+
+          {/* MATCHUP ANALYSIS */}
+          {showAnalysis && (
+            <div className="mt-8 rounded-2xl p-6 animate-fadeInScale" style={{ background:'rgba(0,0,0,0.4)', border:'1px solid rgba(255,255,255,0.06)' }}>
+              <div className="flex items-center gap-2 mb-6">
+                <TrendingUp className="w-5 h-5 text-red-400"/>
+                <h3 className="text-lg font-bebas tracking-wide text-white">
+                  ANALYSE MATCHUP
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[
+                  { icon: Zap, label:'Engage', blueVal:65, redVal:35, color:'#e74c3c' },
+                  { icon: Shield, label:'Tankiness', blueVal:45, redVal:55, color:'#3498db' },
+                  { icon: TrendingUp, label:'Burst Damage', blueVal:70, redVal:30, color:'#f39c12' },
+                  { icon: Users, label:'Team Fight', blueVal:55, redVal:45, color:'#9b59b6' },
+                  { icon: Zap, label:'Mobilité', blueVal:50, redVal:50, color:'#27ae60' },
+                  { icon: Shield, label:'Sustain', blueVal:40, redVal:60, color:'#1abc9c' }
+                ].map((stat, i) => {
+                  const Icon = stat.icon;
+                  const winner = stat.blueVal > stat.redVal ? 'blue' : stat.blueVal < stat.redVal ? 'red' : 'tie';
+                  return (
+                    <div key={i} className="rounded-xl p-4" style={{ background:'rgba(255,255,255,0.02)', border:'1px solid rgba(255,255,255,0.06)' }}>
+                      <div className="flex items-center gap-2 mb-3">
+                        <Icon className="w-4 h-4" style={{ color: stat.color }}/>
+                        <span className="text-xs text-gray-500 flex-1">{stat.label}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold w-10 text-right" style={{ color: winner==='blue' ? '#3498db' : '#666' }}>
+                          {stat.blueVal}%
+                        </span>
+                        <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background:'rgba(255,255,255,0.05)' }}>
+                          <div className="h-full rounded-full transition-all duration-500" style={{ 
+                            width:`${stat.blueVal}%`, 
+                            background: winner==='blue' ? '#3498db' : winner==='red' ? '#e74c3c' : '#888' 
+                          }}></div>
+                        </div>
+                        <span className="text-sm font-bold w-10" style={{ color: winner==='red' ? '#e74c3c' : '#666' }}>
+                          {stat.redVal}%
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
+      </div>
+
+      {/* Champion Picker Modal */}
+      {pickingSlot && (
+        <ChampionPicker 
+          role={pickingSlot.role} 
+          onSelect={handlePickChampion} 
+          onClose={() => setPickingSlot(null)}
+        />
+      )}
     </div>
-
-    <script>
-        // Champions data (simplified - 35 champions)
-        const CHAMPIONS = [
-            {id:'aatrox',name:'Aatrox',role:'top',class:'Juggernaut',color:'#c0392b'},
-            {id:'ahri',name:'Ahri',role:'mid',class:'Mage',color:'#e91e8c'},
-            {id:'ashe',name:'Ashe',role:'adc',class:'Marksman',color:'#3498db'},
-            {id:'braum',name:'Braum',role:'support',class:'Tank',color:'#3498db'},
-            {id:'caitlyn',name:'Caitlyn',role:'adc',class:'Marksman',color:'#2980b9'},
-            {id:'darius',name:'Darius',role:'top',class:'Juggernaut',color:'#c0392b'},
-            {id:'diana',name:'Diana',role:'jungle',class:'Assassin',color:'#1a5276'},
-            {id:'ekko',name:'Ekko',role:'jungle',class:'Assassin',color:'#1abc9c'},
-            {id:'ezreal',name:'Ezreal',role:'adc',class:'Marksman',color:'#f39c12'},
-            {id:'fiora',name:'Fiora',role:'top',class:'Assassin',color:'#27ae60'},
-            {id:'garen',name:'Garen',role:'top',class:'Juggernaut',color:'#c0392b'},
-            {id:'graves',name:'Graves',role:'jungle',class:'Marksman',color:'#d35400'},
-            {id:'irelia',name:'Irelia',role:'top',class:'Assassin',color:'#2c3e50'},
-            {id:'janna',name:'Janna',role:'support',class:'Enchanter',color:'#3498db'},
-            {id:'jax',name:'Jax',role:'top',class:'Assassin',color:'#d4ac0d'},
-            {id:'jhin',name:'Jhin',role:'adc',class:'Marksman',color:'#922b21'},
-            {id:'jinx',name:'Jinx',role:'adc',class:'Marksman',color:'#1abc9c'},
-            {id:'kaisa',name:"Kai'Sa",role:'adc',class:'Marksman',color:'#1a5276'},
-            {id:'katarina',name:'Katarina',role:'mid',class:'Assassin',color:'#c0392b'},
-            {id:'leesin',name:'Lee Sin',role:'jungle',class:'Assassin',color:'#c0392b'},
-            {id:'leona',name:'Leona',role:'support',class:'Tank',color:'#f39c12'},
-            {id:'lux',name:'Lux',role:'mid',class:'Mage',color:'#f39c12'},
-            {id:'malphite',name:'Malphite',role:'top',class:'Tank',color:'#7f8c8d'},
-            {id:'morgana',name:'Morgana',role:'support',class:'Mage',color:'#6c3483'},
-            {id:'nami',name:'Nami',role:'support',class:'Enchanter',color:'#2e86c1'},
-            {id:'nautilus',name:'Nautilus',role:'support',class:'Tank',color:'#1a5276'},
-            {id:'orianna',name:'Orianna',role:'mid',class:'Mage',color:'#9b59b6'},
-            {id:'pyke',name:'Pyke',role:'support',class:'Assassin',color:'#1abc9c'},
-            {id:'riven',name:'Riven',role:'top',class:'Assassin',color:'#fff'},
-            {id:'syndra',name:'Syndra',role:'mid',class:'Mage',color:'#8e44ad'},
-            {id:'thresh',name:'Thresh',role:'support',class:'Tank',color:'#1abc9c'},
-            {id:'vayne',name:'Vayne',role:'adc',class:'Marksman',color:'#2c3e50'},
-            {id:'vi',name:'Vi',role:'jungle',class:'Assassin',color:'#e91e63'},
-            {id:'yasuo',name:'Yasuo',role:'mid',class:'Assassin',color:'#7f8c8d'},
-            {id:'zed',name:'Zed',role:'mid',class:'Assassin',color:'#2c3e50'},
-        ];
-
-        const ROLES = ['top','jungle','mid','adc','support'];
-        const ROLE_LABELS = {top:'Top',jungle:'Jungle',mid:'Mid',adc:'ADC',support:'Support'};
-        const ROLE_COLORS = {top:'#e74c3c',jungle:'#27ae60',mid:'#3498db',adc:'#f39c12',support:'#9b59b6'};
-
-        let blueTeam = {top:null,jungle:null,mid:null,adc:null,support:null};
-        let redTeam = {top:null,jungle:null,mid:null,adc:null,support:null};
-        let currentPick = null;
-
-        // Initialize
-        renderTeams();
-
-        function renderTeams() {
-            renderTeam('blue', blueTeam, document.getElementById('blueTeam'));
-            renderTeam('red', redTeam, document.getElementById('redTeam'));
-            updateAnalysis();
-        }
-
-        function renderTeam(side, team, container) {
-            container.innerHTML = ROLES.map(role => {
-                const champ = team[role];
-                return `
-                    <div class="role-slot">
-                        <div class="role-icon" style="background: ${ROLE_COLORS[role]}22; border: 1.5px solid ${ROLE_COLORS[role]}55; color: ${ROLE_COLORS[role]}">
-                            ${ROLE_LABELS[role].substring(0,3)}
-                        </div>
-                        ${champ ? `
-                            <div class="champion-info">
-                                <div class="champion-avatar" style="background: ${champ.color}33; border: 1.5px solid ${champ.color}88">
-                                    ${champ.name[0]}
-                                </div>
-                                <div style="flex: 1;">
-                                    <div class="champion-name">${champ.name}</div>
-                                    <span class="champion-class" style="background: ${champ.color}20; color: ${champ.color}; border: 1px solid ${champ.color}44">
-                                        ${champ.class}
-                                    </span>
-                                </div>
-                            </div>
-                            <button class="btn-remove" onclick="clearSlot('${side}', '${role}')">✕</button>
-                        ` : `
-                            <button class="btn-pick" onclick="pickChampion('${side}', '${role}')">
-                                + Choisir ${ROLE_LABELS[role]}
-                            </button>
-                        `}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function pickChampion(side, role) {
-            currentPick = {side, role};
-            document.getElementById('modalRoleLabel').textContent = ROLE_LABELS[role].toUpperCase();
-            showChampions(role);
-            document.getElementById('championModal').classList.add('active');
-        }
-
-        function showChampions(role) {
-            const filtered = CHAMPIONS.filter(c => c.role === role);
-            const grid = document.getElementById('championsGrid');
-            grid.innerHTML = filtered.map(champ => `
-                <div class="champion-card" onclick="selectChampion('${champ.id}')">
-                    <div class="champion-avatar" style="background: ${champ.color}33; border: 1.5px solid ${champ.color}88">
-                        ${champ.name[0]}
-                    </div>
-                    <div>
-                        <div style="font-weight: 700;">${champ.name}</div>
-                        <div style="font-size: 0.75rem; color: #888;">${champ.class}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function selectChampion(champId) {
-            const champ = CHAMPIONS.find(c => c.id === champId);
-            if (currentPick.side === 'blue') {
-                blueTeam[currentPick.role] = champ;
-            } else {
-                redTeam[currentPick.role] = champ;
-            }
-            closeModal();
-            renderTeams();
-        }
-
-        function clearSlot(side, role) {
-            if (side === 'blue') blueTeam[role] = null;
-            else redTeam[role] = null;
-            renderTeams();
-        }
-
-        function closeModal() {
-            document.getElementById('championModal').classList.remove('active');
-        }
-
-        function resetAll() {
-            blueTeam = {top:null,jungle:null,mid:null,adc:null,support:null};
-            redTeam = {top:null,jungle:null,mid:null,adc:null,support:null};
-            renderTeams();
-        }
-
-        function saveLineup() {
-            const name = document.getElementById('lineupName').value;
-            if (!name) return alert('Entrez un nom pour le lineup');
-            const lineup = {name, blue: blueTeam, red: redTeam};
-            console.log('Saved:', lineup);
-            alert(`Lineup "${name}" sauvegardé !`);
-        }
-
-        function updateAnalysis() {
-            const blueCount = Object.values(blueTeam).filter(Boolean).length;
-            const redCount = Object.values(redTeam).filter(Boolean).length;
-            
-            if (blueCount >= 3 && redCount >= 3) {
-                document.getElementById('analysisSection').style.display = 'block';
-                const stats = [
-                    {label:'Engage',blue:65,red:35},
-                    {label:'Tankiness',blue:45,red:55},
-                    {label:'Burst Damage',blue:70,red:30},
-                    {label:'Team Fight',blue:55,red:45},
-                    {label:'Mobilité',blue:50,red:50},
-                    {label:'Sustain',blue:40,red:60}
-                ];
-                
-                document.getElementById('statsGrid').innerHTML = stats.map(stat => {
-                    const winner = stat.blue > stat.red ? 'blue' : stat.blue < stat.red ? 'red' : 'tie';
-                    const barColor = winner === 'blue' ? '#3498db' : winner === 'red' ? '#e74c3c' : '#888';
-                    return `
-                        <div class="stat-item">
-                            <div class="stat-label">${stat.label}</div>
-                            <div class="stat-bar">
-                                <span class="stat-value" style="color: ${winner === 'blue' ? '#3498db' : '#666'}">${stat.blue}%</span>
-                                <div class="bar-container">
-                                    <div class="bar-fill" style="width: ${stat.blue}%; background: ${barColor}"></div>
-                                </div>
-                                <span class="stat-value" style="color: ${winner === 'red' ? '#e74c3c' : '#666'}">${stat.red}%</span>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } else {
-                document.getElementById('analysisSection').style.display = 'none';
-            }
-        }
-
-        // Search
-        document.getElementById('searchInput')?.addEventListener('input', (e) => {
-            const search = e.target.value.toLowerCase();
-            const role = currentPick?.role;
-            if (!role) return;
-            
-            const filtered = CHAMPIONS.filter(c => 
-                c.role === role && c.name.toLowerCase().includes(search)
-            );
-            
-            const grid = document.getElementById('championsGrid');
-            grid.innerHTML = filtered.map(champ => `
-                <div class="champion-card" onclick="selectChampion('${champ.id}')">
-                    <div class="champion-avatar" style="background: ${champ.color}33; border: 1.5px solid ${champ.color}88">
-                        ${champ.name[0]}
-                    </div>
-                    <div>
-                        <div style="font-weight: 700;">${champ.name}</div>
-                        <div style="font-size: 0.75rem; color: #888;">${champ.class}</div>
-                    </div>
-                </div>
-            `).join('');
-        });
-    </script>
-</body>
-</html>
+  );
+}
