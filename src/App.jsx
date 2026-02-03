@@ -8,47 +8,37 @@ import Dashboard from './components/Dashboard';
 // ============================================================
 
 const SPONSORS = [
-  { id: 1, name: 'Red Bull', logo: '🔴', tier: 'GOLD' },
-  { id: 2, name: 'Logitech', logo: '🖱️', tier: 'GOLD' },
-  { id: 3, name: 'HyperX', logo: '🎧', tier: 'SILVER' },
-  { id: 4, name: 'ASUS ROG', logo: '💻', tier: 'GOLD' },
-  { id: 5, name: 'Monster Energy', logo: '⚡', tier: 'SILVER' },
+  { id: 1, name: 'Vous?', logo: '🔴', tier: 'GOLD' },
+  { id: 2, name: 'Vous?', logo: '🖱️', tier: 'GOLD' },
+  { id: 3, name: 'Vous?', logo: '🎧', tier: 'SILVER' },
+  { id: 4, name: 'Vous?', logo: '💻', tier: 'GOLD' },
+  { id: 5, name: 'Vous?', logo: '⚡', tier: 'SILVER' },
 ];
 
 const NEWS_FEED = [
   {
     id: 1,
-    title: 'Mount X remporte le Nexus Tour !',
-    date: '2 Février 2026',
-    category: 'Victoire',
+    title: 'Mount X lance son nouveau roster!',
+    date: '4 Février 2026',
+    category: 'Roster',
     emoji: '🏆',
-    excerpt: 'Mount X domine la finale 3-1 et décroche le titre du Nexus Tour Saison 2026.',
-    content: 'Dans une finale épique, Mount X a prouvé sa supériorité en écrasant ses adversaires 3-1. Une performance exceptionnelle de toute l\'équipe qui confirme leur statut de favoris pour la saison à venir.',
+    excerpt: 'Mount X prépare son roster.',
+    content: 'Une nouvelle équipe arrive bientôt sur la faille.',
     color: '#00FF88',
     image: '🖼️'
   },
   {
     id: 2,
-    title: 'Nouveau joueur : ShadowBlade rejoint Flux',
-    date: '1 Février 2026',
+    title: 'Test en adc, ils cherchent la perle rare',
+    date: '4 Février 2026',
     category: 'Roster',
     emoji: '🔥',
-    excerpt: 'Le midlaner Challenger ShadowBlade signe avec Flux pour le Split 2.',
-    content: 'Flux renforce son roster avec l\'arrivée du prodige ShadowBlade, classé Challenger avec un winrate de 68% sur 200 games. Une recrue prometteuse qui apporte un nouveau souffle à l\'équipe.',
+    excerpt: 'Qui va signé chez TL FLux?.',
+    content: 'Flux cherche à dynamisé son équipe grace à un nouvelle adc.',
     color: '#FF6B35',
     image: '🖼️'
   },
-  {
-    id: 3,
-    title: 'MymétiC en finale de Prime League',
-    date: '31 Janvier 2026',
-    category: 'Compétition',
-    emoji: '⚔️',
-    excerpt: 'MymétiC se qualifie pour la finale après une série de BO5 intense.',
-    content: 'Après avoir renversé 3-2 les favoris en demi-finale, MymétiC affrontera les champions en titre en finale. Un parcours exceptionnel pour cette équipe qui ne cesse de surprendre.',
-    color: '#FF1493',
-    image: '🖼️'
-  },
+  
   {
     id: 4,
     title: 'Froz\'nLégion domine le Winter Classic',
@@ -60,6 +50,7 @@ const NEWS_FEED = [
     color: '#00D9FF',
     image: '🖼️'
   },
+  
   {
     id: 5,
     title: 'VisionaRY recrute un nouveau coach',
