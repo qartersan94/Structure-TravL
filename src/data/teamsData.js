@@ -3,7 +3,7 @@
 // Couleurs corrigées: Froz'nLéGion (blanc), MymétiC (noir/gris)
 // ============================================================
 
-const TEAMS = [
+export const TEAMS = [
     {
         id: 1,
         name: 'Mount X',
@@ -48,7 +48,7 @@ const TEAMS = [
     },
     {
         id: 3,
-        name: "Froz'nLéGion",
+        name: "Froz'nLégion",
         shortName: 'FRZ',
         rank: 'Diamond',
         color: '#FFFFFF',  // ← CORRIGÉ: Blanc
@@ -152,54 +152,3 @@ const TEAMS = [
         achievements: []
     }
 ];
-
-// Sessions de planning (exemple)
-const SESSIONS = [
-    {
-        id: 1,
-        teamId: 1, // Mount X
-        type: 'entrainement',
-        title: 'Scrims vs Flux',
-        day: 'Lundi',
-        time: '19:00',
-        mandatory: true,
-        participants: {
-            confirmed: [],
-            absent: [],
-            pending: []
-        }
-    },
-    {
-        id: 2,
-        teamId: 1,
-        type: 'match',
-        title: 'Match Nexus Tour',
-        day: 'Mercredi',
-        time: '20:00',
-        mandatory: true,
-        participants: {
-            confirmed: [],
-            absent: [],
-            pending: []
-        }
-    },
-    {
-        id: 3,
-        teamId: 2, // Flux
-        type: 'entrainement',
-        title: 'Team Review VOD',
-        day: 'Mardi',
-        time: '18:30',
-        mandatory: false,
-        participants: {
-            confirmed: [],
-            absent: [],
-            pending: []
-        }
-    }
-];
-
-// Export pour utilisation dans les autres fichiers
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { TEAMS, SESSIONS };
-}
