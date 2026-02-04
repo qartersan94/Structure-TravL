@@ -1,158 +1,133 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Users, ChevronRight, Menu, X, ArrowLeft, Calendar, Award, Play } from 'lucide-react';
+import { ChevronRight, Menu, X, ArrowLeft, Play, Calendar, Trophy, Award } from 'lucide-react';
 import { TEAMS } from './data/teamsData';
 import Dashboard from './components/Dashboard';
+import LoginForm from './components/LoginForm';
 
 // ============================================================
-// DONNÉES ENRICHIES
+// DONNÉES
 // ============================================================
 
 const SPONSORS = [
-  { id: 1, name: 'Vous?', logo: '🔴', tier: 'GOLD' },
-  { id: 2, name: 'Vous?', logo: '🖱️', tier: 'GOLD' },
-  { id: 3, name: 'Vous?', logo: '🎧', tier: 'SILVER' },
-  { id: 4, name: 'Vous?', logo: '💻', tier: 'GOLD' },
-  { id: 5, name: 'Vous?', logo: '⚡', tier: 'SILVER' },
+  { id: 1, name: 'Red Bull', logo: '🔴', tier: 'GOLD' },
+  { id: 2, name: 'Logitech', logo: '🖱️', tier: 'GOLD' },
+  { id: 3, name: 'HyperX', logo: '🎧', tier: 'SILVER' },
+  { id: 4, name: 'ASUS ROG', logo: '💻', tier: 'GOLD' },
+  { id: 5, name: 'Monster Energy', logo: '⚡', tier: 'SILVER' },
 ];
 
 const NEWS_FEED = [
   {
-    id: 1,
-    title: 'Mount X lance son nouveau roster!',
-    date: '4 Février 2026',
-    category: 'Roster',
-    emoji: '🏆',
-    excerpt: 'Mount X prépare son roster.',
-    content: 'Une nouvelle équipe arrive bientôt sur la faille.',
-    color: '#00FF88',
-    image: '🖼️'
+    id: 1, title: 'Mount X remporte le Nexus Tour !', date: '2 Février 2026',
+    category: 'Victoire', emoji: '🏆',
+    excerpt: 'Mount X domine la finale 3-1 et décroche le titre du Nexus Tour Saison 2026.',
+    content: 'Dans une finale épique, Mount X a prouvé sa supériorité en écrasant ses adversaires 3-1. Une performance exceptionnelle de toute l\'équipe.',
+    color: '#00FF88'
   },
   {
-    id: 2,
-    title: 'Test en adc, ils cherchent la perle rare',
-    date: '4 Février 2026',
-    category: 'Roster',
-    emoji: '🔥',
-    excerpt: 'Qui va signé chez TL FLux?.',
-    content: 'Flux cherche à dynamisé son équipe grace à un nouvelle adc.',
-    color: '#FF6B35',
-    image: '🖼️'
+    id: 2, title: 'Nouveau joueur : ShadowBlade rejoint Flux', date: '1 Février 2026',
+    category: 'Roster', emoji: '🔥',
+    excerpt: 'Le midlaner Challenger ShadowBlade signe avec Flux pour le Split 2.',
+    content: 'Flux renforce son roster avec l\'arrivée du prodige ShadowBlade, classé Challenger avec un winrate de 68%.',
+    color: '#FF6B35'
   },
-  
   {
-    id: 4,
-    title: 'Froz\'nLégion domine le Winter Classic',
-    date: '30 Janvier 2026',
-    category: 'Victoire',
-    emoji: '❄️',
+    id: 3, title: 'MymétiC en finale de Prime League', date: '31 Janvier 2026',
+    category: 'Compétition', emoji: '⚔️',
+    excerpt: 'MymétiC se qualifie pour la finale après une série de BO5 intense.',
+    content: 'Après avoir renversé 3-2 les favoris en demi-finale, MymétiC affrontera les champions en titre.',
+    color: '#FF1493'
+  },
+  {
+    id: 4, title: 'Froz\'nLégion domine le Winter Classic', date: '30 Janvier 2026',
+    category: 'Victoire', emoji: '❄️',
     excerpt: 'Performance glaciale de Froz\'nLégion qui remporte le tournoi sans perdre une seule game.',
-    content: 'Record historique ! Froz\'nLégion termine le Winter Classic avec un score parfait de 15-0, dominant chaque adversaire avec une précision chirurgicale.',
-    color: '#00D9FF',
-    image: '🖼️'
+    content: 'Record historique ! Froz\'nLégion termine le Winter Classic avec un score parfait de 15-0.',
+    color: '#00D9FF'
   },
-  
   {
-    id: 5,
-    title: 'VisionaRY recrute un nouveau coach',
-    date: '29 Janvier 2026',
-    category: 'Staff',
-    emoji: '🎯',
+    id: 5, title: 'VisionaRY recrute un nouveau coach', date: '29 Janvier 2026',
+    category: 'Staff', emoji: '🎯',
     excerpt: 'Ancien coach de LEC rejoint VisionaRY pour booster l\'équipe.',
-    content: 'VisionaRY frappe fort en recrutant CoachMaster, ancien analyste de G2 Esports. Son expertise tactique devrait propulser l\'équipe vers les sommets.',
-    color: '#9D4EDD',
-    image: '🖼️'
+    content: 'VisionaRY frappe fort en recrutant CoachMaster, ancien analyste de G2 Esports.',
+    color: '#9D4EDD'
   },
   {
-    id: 6,
-    title: 'Team remporte le Clash Regional',
-    date: '28 Janvier 2026',
-    category: 'Victoire',
-    emoji: '⭐',
+    id: 6, title: 'Team remporte le Clash Regional', date: '28 Janvier 2026',
+    category: 'Victoire', emoji: '⭐',
     excerpt: 'Team prouve sa valeur en remportant le tournoi régional face à 64 équipes.',
-    content: 'Victoire éclatante pour Team qui s\'impose 3-0 en finale. Une synergie parfaite et un mental d\'acier ont fait la différence.',
-    color: '#FFD700',
-    image: '🖼️'
+    content: 'Victoire éclatante pour Team qui s\'impose 3-0 en finale.',
+    color: '#FFD700'
   },
   {
-    id: 7,
-    title: 'LeGendaRY signe un partenariat majeur',
-    date: '27 Janvier 2026',
-    category: 'Annonce',
-    emoji: '🤝',
+    id: 7, title: 'LeGendaRY signe un partenariat majeur', date: '27 Janvier 2026',
+    category: 'Annonce', emoji: '🤝',
     excerpt: 'LeGendaRY s\'associe avec une grande marque de gaming.',
-    content: 'Un partenariat stratégique qui va permettre à LeGendaRY de se professionnaliser davantage et d\'investir dans de nouveaux équipements.',
-    color: '#4169E1',
-    image: '🖼️'
+    content: 'Un partenariat stratégique qui va permettre de se professionnaliser davantage.',
+    color: '#4169E1'
   },
   {
-    id: 8,
-    title: 'Bootcamp intensif pour toutes les équipes',
-    date: '26 Janvier 2026',
-    category: 'Training',
-    emoji: '💪',
+    id: 8, title: 'Bootcamp intensif pour toutes les équipes', date: '26 Janvier 2026',
+    category: 'Training', emoji: '💪',
     excerpt: 'Les 7 équipes se préparent pour le Spring Split avec un bootcamp de 2 semaines.',
-    content: '14 jours de training intensif, VOD review, scrims quotidiens et coaching personnalisé. Structure TravL met les moyens pour préparer ses équipes.',
-    color: '#E74C3C',
-    image: '🖼️'
+    content: '14 jours de training intensif, VOD review, scrims quotidiens et coaching personnalisé.',
+    color: '#E74C3C'
   },
   {
-    id: 9,
-    title: 'Nouveau record de spectateurs sur Twitch',
-    date: '25 Janvier 2026',
-    category: 'Milestone',
-    emoji: '📺',
+    id: 9, title: 'Nouveau record de spectateurs sur Twitch', date: '25 Janvier 2026',
+    category: 'Milestone', emoji: '📺',
     excerpt: 'Le match Mount X vs Flux attire 15K viewers simultanés.',
-    content: 'Record historique pour la Structure TravL ! Le dernier affrontement entre nos deux équipes phares a captivé plus de 15 000 spectateurs en direct.',
-    color: '#9146FF',
-    image: '🖼️'
+    content: 'Record historique pour la Structure TravL ! Plus de 15 000 spectateurs en direct.',
+    color: '#9146FF'
   },
   {
-    id: 10,
-    title: 'Ouverture de la Gaming House officielle',
-    date: '24 Janvier 2026',
-    category: 'Infrastructure',
-    emoji: '🏠',
+    id: 10, title: 'Ouverture de la Gaming House officielle', date: '24 Janvier 2026',
+    category: 'Infrastructure', emoji: '🏠',
     excerpt: 'Structure TravL inaugure sa Gaming House high-tech à Paris.',
-    content: 'Un espace de 400m² équipé des dernières technologies, salles de training, cuisine, espaces détente. Le rêve devient réalité pour nos joueurs.',
-    color: '#1ABC9C',
-    image: '🖼️'
+    content: 'Un espace de 400m² équipé des dernières technologies, salles de training, cuisine, espaces détente.',
+    color: '#1ABC9C'
   }
 ];
 
 const UPCOMING_MATCHES = [
-  { id: 1, team1: 'Mount X', team2: 'Flux', date: 'Lundi 5 Février', time: '20:00', competition: 'Nexus Tour' },
-  { id: 2, team1: 'MymétiC', team2: 'VisionaRY', date: 'Mercredi 7 Février', time: '19:00', competition: 'Prime League' },
-  { id: 3, team1: 'Froz\'nLégion', team2: 'Team', date: 'Vendredi 9 Février', time: '21:00', competition: 'Winter Classic' }
+  { id: 1, team1: 'Mount X', team2: 'Flux', date: 'Lundi 5 Février', time: '20:00', competition: 'Nexus Tour', stream: true },
+  { id: 2, team1: 'MymétiC', team2: 'VisionaRY', date: 'Mercredi 7 Février', time: '19:00', competition: 'Prime League', stream: true },
+  { id: 3, team1: 'Froz\'nLégion', team2: 'Team', date: 'Vendredi 9 Février', time: '21:00', competition: 'Winter Classic', stream: false },
+  { id: 4, team1: 'LeGendaRY', team2: 'Mount X', date: 'Samedi 10 Février', time: '18:00', competition: 'Ouat\'venture', stream: true }
 ];
 
 const RANKINGS = [
-  { rank: 1, team: 'Mount X', points: 45, wins: 15, losses: 8 },
-  { rank: 2, team: 'Froz\'nLégion', points: 42, wins: 14, losses: 9 },
-  { rank: 3, team: 'Flux', points: 36, wins: 12, losses: 11 },
-  { rank: 4, team: 'MymétiC', points: 33, wins: 11, losses: 8 },
-  { rank: 5, team: 'VisionaRY', points: 30, wins: 10, losses: 6 },
-  { rank: 6, team: 'LeGendaRY', points: 27, wins: 9, losses: 9 },
-  { rank: 7, team: 'Team', points: 24, wins: 8, losses: 7 }
+  { rank: 1, team: 'Mount X', points: 45, wins: 15, losses: 8, winRate: 65, logo: '⚡', color: '#00FF88' },
+  { rank: 2, team: "Froz'nLégion", points: 42, wins: 14, losses: 9, winRate: 61, logo: '❄️', color: '#FFFFFF' },
+  { rank: 3, team: 'Flux', points: 36, wins: 12, losses: 11, winRate: 52, logo: '🔥', color: '#FF6B35' },
+  { rank: 4, team: 'MymétiC', points: 33, wins: 11, losses: 8, winRate: 58, logo: '🌑', color: '#2C2C2C' },
+  { rank: 5, team: 'VisionaRY', points: 30, wins: 10, losses: 6, winRate: 63, logo: '👁️', color: '#9D4EDD' },
+  { rank: 6, team: 'LeGendaRY', points: 27, wins: 9, losses: 9, winRate: 50, logo: '⚔️', color: '#4169E1' },
+  { rank: 7, team: 'Team', points: 24, wins: 8, losses: 7, winRate: 53, logo: '⭐', color: '#FFD700' }
 ];
 
 const ACHIEVEMENTS = [
-  { id: 1, team: 'Mount X', title: 'Champion Nexus Tour 2026', icon: '🏆', date: '2026' },
-  { id: 2, team: 'Mount X', title: 'MVP Spring Split', icon: '⭐', date: '2026' },
-  { id: 3, team: 'Froz\'nLégion', title: 'Finaliste Nexus Tour 2025', icon: '🥈', date: '2025' },
-  { id: 4, team: 'MymétiC', title: 'Demi-finaliste Prime League', icon: '🏅', date: '2026' }
+  { id: 1, team: 'Mount X', title: 'Champion Nexus Tour 2026', icon: '🏆', date: '2026', color: '#00FF88' },
+  { id: 2, team: 'Mount X', title: 'MVP Spring Split', icon: '⭐', date: '2026', color: '#00FF88' },
+  { id: 3, team: "Froz'nLégion", title: 'Finaliste Nexus Tour 2025', icon: '🥈', date: '2025', color: '#FFFFFF' },
+  { id: 4, team: 'MymétiC', title: 'Demi-finaliste Prime League', icon: '🏅', date: '2026', color: '#2C2C2C' },
+  { id: 5, team: 'Flux', title: 'Winner Winter Invitational', icon: '🎖️', date: '2025', color: '#FF6B35' }
 ];
 
 const GALLERY = [
   { id: 1, title: 'Victoire Nexus Tour', emoji: '🎮', team: 'Mount X' },
   { id: 2, title: 'Célébration Équipe', emoji: '🎊', team: 'Flux' },
   { id: 3, title: 'Bootcamp Intensif', emoji: '💪', team: 'Toutes' },
-  { id: 4, title: 'Gaming House', emoji: '🏠', team: 'Structure' }
+  { id: 4, title: 'Gaming House', emoji: '🏠', team: 'Structure' },
+  { id: 5, title: 'Meet & Greet Fans', emoji: '🤝', team: 'Event' },
+  { id: 6, title: 'Training Session', emoji: '🎯', team: 'Froz\'n' }
 ];
 
 const HIGHLIGHTS = [
-  { id: 1, title: 'ACE de ShadowBlade', views: '12K', duration: '0:45' },
-  { id: 2, title: 'Baron Steal Épique', views: '18K', duration: '1:20' },
-  { id: 3, title: 'Pentakill en Finale', views: '25K', duration: '2:10' }
+  { id: 1, title: 'ACE de ShadowBlade', views: '12K', duration: '0:45', team: 'Flux' },
+  { id: 2, title: 'Baron Steal Épique', views: '18K', duration: '1:20', team: 'Mount X' },
+  { id: 3, title: 'Pentakill en Finale', views: '25K', duration: '2:10', team: 'MymétiC' },
+  { id: 4, title: '1v5 Outplay', views: '15K', duration: '1:05', team: 'VisionaRY' }
 ];
 
 function App() {
@@ -160,7 +135,6 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const [selectedNews, setSelectedNews] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -179,11 +153,7 @@ function App() {
         <button
           onClick={() => setLoggedInUser(null)}
           className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300 hover:-translate-x-1 group"
-          style={{
-            background: 'rgba(220,20,60,0.15)',
-            border: '1px solid rgba(220,20,60,0.4)',
-            backdropFilter: 'blur(12px)'
-          }}>
+          style={{ background: 'rgba(220,20,60,0.15)', border: '1px solid rgba(220,20,60,0.4)', backdropFilter: 'blur(12px)' }}>
           <ArrowLeft className="w-4 h-4 text-red-400" />
           <span className="text-sm font-bold text-red-400 hidden md:block">Retour au site</span>
         </button>
@@ -192,26 +162,9 @@ function App() {
     );
   }
 
-  // ─── Login simple ───
+  // ─── Login ───
   if (activeSection === 'dashboard') {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <button
-          onClick={() => setActiveSection('home')}
-          className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 rounded-xl transition-all"
-          style={{ background: 'rgba(220,20,60,0.15)', border: '1px solid rgba(220,20,60,0.4)' }}>
-          <ArrowLeft className="w-4 h-4 text-red-400" />
-        </button>
-        <div className="bg-black bg-opacity-60 border border-red-900 border-opacity-30 rounded-2xl p-8 max-w-md w-full backdrop-blur-xl">
-          <h2 className="text-3xl font-bebas mb-6 text-center text-red-400">CONNEXION</h2>
-          <button
-            onClick={() => setLoggedInUser({ name: 'Player123', role: 'player', teamId: 1 })}
-            className="w-full bg-red-600 bg-opacity-20 border border-red-600 border-opacity-40 text-white py-3 rounded-lg font-bold hover:bg-opacity-30 transition-all">
-            Se connecter (Test)
-          </button>
-        </div>
-      </div>
-    );
+    return <LoginForm onLogin={(account) => setLoggedInUser(account)} onBack={() => setActiveSection('home')} />;
   }
 
   // ─── SITE PRINCIPAL ───
@@ -372,7 +325,7 @@ function App() {
               </div>
             </section>
 
-            {/* NEWS (aperçu 3) */}
+            {/* NEWS Preview */}
             <section className="py-20 px-4">
               <div className="max-w-6xl mx-auto">
                 <div className="flex items-center justify-between mb-12">
@@ -383,13 +336,13 @@ function App() {
                   }}>
                     DERNIÈRES ACTUALITÉS
                   </h2>
-                  <button onClick={() => setActiveSection('news')} className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1">
+                  <button onClick={() => setActiveSection('news')} className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1 font-semibold">
                     Voir tout <ChevronRight className="w-4 h-4"/>
                   </button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {NEWS_FEED.slice(0, 3).map(article => (
-                    <div key={article.id} onClick={() => { setSelectedNews(article); setActiveSection('news'); }}
+                    <div key={article.id} onClick={() => setActiveSection('news')}
                       className="group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 cursor-pointer"
                       style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(220,20,60,0.15)', backdropFilter: 'blur(12px)' }}>
                       <div className="h-2" style={{ background: article.color }}></div>
@@ -410,6 +363,138 @@ function App() {
               </div>
             </section>
           </div>
+        )}
+
+        {/* TEAMS - Style roster cards */}
+        {activeSection === 'teams' && (
+          <section className="min-h-screen py-20 px-4">
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-5xl md:text-6xl font-black font-bebas text-center mb-4" style={{
+                background: 'linear-gradient(to right, #DC143C, #FF6B6B)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                NOS 7 ÉQUIPES
+              </h2>
+              <p className="text-center text-gray-400 mb-16 max-w-2xl mx-auto">
+                7 équipes, 35 joueurs, une seule passion
+              </p>
+
+              {/* ROSTER CARDS - Style de tes screenshots */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {TEAMS.map((team) => {
+                  const teamColor = team.name === "Froz'nLégion" ? '#FFFFFF' : team.name === 'MymétiC' ? '#2C2C2C' : team.color;
+
+                  return (
+                    <div key={team.id}
+                      className="group rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+                      style={{
+                        background: `linear-gradient(135deg, ${teamColor}15, rgba(0,0,0,0.8))`,
+                        border: `2px solid ${teamColor}40`,
+                        boxShadow: `0 10px 40px ${teamColor}20`
+                      }}>
+                      
+                      {/* Header avec logo et nom */}
+                      <div className="p-6 border-b" style={{ borderColor: `${teamColor}20` }}>
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="text-6xl group-hover:scale-110 transition-transform">{team.logo}</div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="px-2 py-1 rounded text-xs font-bold" style={{ background: `${teamColor}20`, color: teamColor, border: `1px solid ${teamColor}40` }}>
+                                {team.rank}
+                              </div>
+                            </div>
+                            <h3 className="text-2xl font-black font-bebas" style={{ color: teamColor }}>{team.name}</h3>
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-400 italic">"{team.motto}"</p>
+                      </div>
+
+                      {/* Stats */}
+                      <div className="p-6">
+                        <div className="grid grid-cols-3 gap-4 mb-4">
+                          <div className="text-center">
+                            <div className="text-2xl font-bebas" style={{ color: teamColor }}>
+                              {team.globalStats.totalWins}-{team.globalStats.totalLosses}
+                            </div>
+                            <div className="text-xs text-gray-500">Record</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bebas" style={{ color: teamColor }}>
+                              {team.globalStats.winRate}%
+                            </div>
+                            <div className="text-xs text-gray-500">Winrate</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bebas" style={{ color: teamColor }}>5</div>
+                            <div className="text-xs text-gray-500">Joueurs</div>
+                          </div>
+                        </div>
+
+                        {/* Roster (simulé) */}
+                        <div className="space-y-2">
+                          {['Top', 'Jungle', 'Mid', 'ADC', 'Support'].map((role, i) => (
+                            <div key={role} className="flex items-center justify-between text-sm">
+                              <div className="flex items-center gap-2">
+                                <div className="px-2 py-0.5 rounded text-xs font-bold" style={{ background: `${teamColor}15`, color: teamColor }}>
+                                  {role}
+                                </div>
+                                <span className="text-gray-300">Player{i + 1}</span>
+                              </div>
+                              <span className="text-xs text-gray-600">3.8 KDA</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Compétitions */}
+                        {team.competitions.map((comp, i) => (
+                          <div key={i} className="mt-4 p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-xs text-gray-400">{comp.name}</span>
+                              <span className="text-xs font-bold" style={{ color: teamColor }}>#{comp.position}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                              <span>{comp.points} pts</span>
+                              <span>•</span>
+                              <span>{comp.wins}V - {comp.losses}D</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* ACHIEVEMENTS */}
+              <div className="mt-16">
+                <h3 className="text-3xl font-bebas mb-8 text-center" style={{
+                  background: 'linear-gradient(to right, #FFD700, #FFA500)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent'
+                }}>
+                  🏆 PALMARÈS
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {ACHIEVEMENTS.map(achievement => (
+                    <div key={achievement.id} className="p-4 rounded-xl" style={{ background: 'rgba(0,0,0,0.4)', border: `1px solid ${achievement.color}30` }}>
+                      <div className="flex items-center gap-3">
+                        <span className="text-3xl">{achievement.icon}</span>
+                        <div>
+                          <div className="text-sm font-bold text-white">{achievement.title}</div>
+                          <div className="flex items-center gap-2 text-xs text-gray-500">
+                            <span style={{ color: achievement.color }}>{achievement.team}</span>
+                            <span>•</span>
+                            <span>{achievement.date}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
         )}
 
         {/* NEWS COMPLET */}
@@ -439,55 +524,12 @@ function App() {
                             <span className="text-xs text-gray-600">{article.date}</span>
                           </div>
                           <h3 className="text-2xl font-bold text-white mb-3">{article.title}</h3>
-                          <p className="text-gray-300 leading-relaxed mb-4">{article.content}</p>
-                          <div className="flex items-center gap-2 text-gray-600">
-                            <span className="text-2xl">{article.image}</span>
-                            <span className="text-sm">Voir la galerie →</span>
-                          </div>
+                          <p className="text-gray-300 leading-relaxed">{article.content}</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* TEAMS */}
-        {activeSection === 'teams' && (
-          <section className="min-h-screen py-20 px-4">
-            <div className="max-w-7xl mx-auto">
-              <h2 className="text-5xl md:text-6xl font-black font-bebas text-center mb-16" style={{
-                background: 'linear-gradient(to right, #DC143C, #FF6B6B)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>
-                NOS 7 ÉQUIPES
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {TEAMS.map((team) => {
-                  const teamColor = team.name === "Froz'nLégion" ? '#FFFFFF' : team.name === 'MymétiC' ? '#2C2C2C' : team.color;
-                  const teamSecondary = team.name === "Froz'nLégion" ? '#E0E0E0' : team.name === 'MymétiC' ? '#444444' : team.secondaryColor;
-
-                  return (
-                    <div key={team.id}
-                      className="group relative rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 hover:-translate-y-3 hover:scale-105"
-                      style={{
-                        background: `linear-gradient(135deg, ${teamColor}15, ${teamSecondary}08)`,
-                        border: `2px solid ${teamColor}30`
-                      }}>
-                      <div className="p-8">
-                        <div className="text-6xl mb-4 group-hover:scale-110 transition-transform">{team.logo}</div>
-                        <h3 className="text-3xl font-black font-bebas mb-2" style={{ color: teamColor }}>{team.name}</h3>
-                        <p className="text-sm text-gray-400 mb-4 italic">"{team.motto}"</p>
-                        <div className="px-3 py-1 rounded-full text-xs font-bold inline-block" style={{ background: `${teamColor}20`, color: teamColor, border: `1px solid ${teamColor}40` }}>
-                          {team.rank}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
               </div>
             </div>
           </section>
@@ -507,17 +549,20 @@ function App() {
               <div className="space-y-4">
                 {RANKINGS.map(ranking => (
                   <div key={ranking.rank} className="rounded-xl p-6 flex items-center justify-between transition-all hover:-translate-y-1"
-                    style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(220,20,60,0.15)', backdropFilter: 'blur(12px)' }}>
+                    style={{ background: 'rgba(0,0,0,0.4)', border: `1px solid ${ranking.color}30`, backdropFilter: 'blur(12px)' }}>
                     <div className="flex items-center gap-6">
-                      <div className="text-4xl font-black font-bebas" style={{ color: ranking.rank <= 3 ? '#DC143C' : '#666' }}>
+                      <div className="text-5xl font-black font-bebas" style={{ color: ranking.rank <= 3 ? '#DC143C' : '#666', minWidth: '60px' }}>
                         #{ranking.rank}
                       </div>
-                      <div>
-                        <div className="text-xl font-bold text-white">{ranking.team}</div>
-                        <div className="text-sm text-gray-500">{ranking.wins}V - {ranking.losses}D</div>
+                      <div className="flex items-center gap-4">
+                        <span className="text-4xl">{ranking.logo}</span>
+                        <div>
+                          <div className="text-xl font-bold text-white" style={{ color: ranking.color }}>{ranking.team}</div>
+                          <div className="text-sm text-gray-500">{ranking.wins}V - {ranking.losses}D • {ranking.winRate}% WR</div>
+                        </div>
                       </div>
                     </div>
-                    <div className="text-3xl font-black font-bebas text-red-500">{ranking.points} pts</div>
+                    <div className="text-4xl font-black font-bebas text-red-500">{ranking.points} pts</div>
                   </div>
                 ))}
               </div>
@@ -543,12 +588,17 @@ function App() {
                     <div className="flex items-center justify-between flex-wrap gap-6">
                       <div className="flex items-center gap-6">
                         <div className="text-xl font-bold text-white">{match.team1}</div>
-                        <div className="text-2xl text-red-400">VS</div>
+                        <div className="text-3xl text-red-400 font-bebas">VS</div>
                         <div className="text-xl font-bold text-white">{match.team2}</div>
                       </div>
                       <div className="text-right">
                         <div className="text-sm font-bold text-red-400">{match.competition}</div>
                         <div className="text-sm text-gray-500">{match.date} • {match.time}</div>
+                        {match.stream && (
+                          <div className="text-xs text-purple-400 flex items-center gap-1 mt-1">
+                            <span>📺</span> En direct
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -572,28 +622,31 @@ function App() {
 
               {/* Galerie */}
               <h3 className="text-2xl font-bebas mb-6">📸 GALERIE PHOTOS</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16">
                 {GALLERY.map(photo => (
-                  <div key={photo.id} className="rounded-xl overflow-hidden aspect-square flex items-center justify-center text-6xl hover:scale-105 transition-transform cursor-pointer"
+                  <div key={photo.id} className="rounded-xl overflow-hidden aspect-square flex flex-col items-center justify-center text-center p-6 hover:scale-105 transition-transform cursor-pointer"
                     style={{ background: 'rgba(220,20,60,0.1)', border: '1px solid rgba(220,20,60,0.2)' }}>
-                    {photo.emoji}
+                    <span className="text-6xl mb-3">{photo.emoji}</span>
+                    <div className="text-sm font-bold text-white">{photo.title}</div>
+                    <div className="text-xs text-gray-500 mt-1">{photo.team}</div>
                   </div>
                 ))}
               </div>
 
               {/* Highlights */}
               <h3 className="text-2xl font-bebas mb-6">🎥 HIGHLIGHTS</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {HIGHLIGHTS.map(video => (
                   <div key={video.id} className="rounded-xl p-6 hover:-translate-y-2 transition-all cursor-pointer"
                     style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(220,20,60,0.15)' }}>
-                    <div className="aspect-video rounded-lg bg-red-900 bg-opacity-20 flex items-center justify-center mb-4">
-                      <Play className="w-12 h-12 text-red-400" />
+                    <div className="aspect-video rounded-lg bg-red-900 bg-opacity-20 flex items-center justify-center mb-4 border border-red-900 border-opacity-30">
+                      <Play className="w-16 h-16 text-red-400" />
                     </div>
                     <div className="text-white font-bold mb-2">{video.title}</div>
                     <div className="flex items-center justify-between text-sm text-gray-500">
                       <span>👁️ {video.views}</span>
                       <span>{video.duration}</span>
+                      <span className="text-xs px-2 py-1 rounded bg-red-900 bg-opacity-20 text-red-400">{video.team}</span>
                     </div>
                   </div>
                 ))}
