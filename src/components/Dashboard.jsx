@@ -1,206 +1,297 @@
 import React, { useState } from 'react';
-import { 
-  Users, Trophy, Calendar, TrendingUp, MessageSquare, 
-  Settings, LogOut, Award, Target, Clock, CheckCircle,
-  AlertCircle, BarChart3, Shield, Edit, Save, X
-} from 'lucide-react';
-import { TEAMS } from '../data/teamsData';
-import { SCHEDULE } from '../data/scheduleData';
 
-function Dashboard({ user, onLogout }) {
+export default function Dashboard({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('overview');
-  const [notes, setNotes] = useState({});
-  const [editingNote, setEditingNote] = useState(null);
-  const [noteText, setNoteText] = useState('');
+  const [sessionStatus, setSessionStatus] = useState({});
 
-  // Filtrer les données selon le rôle
-  const isStaff = ['Coach', 'Manager', 'Staff'].includes(user.role);
-  const isCaptain = user.role === 'Capitaine';
-  
-  // Données filtrées pour les capitaines
-  const userTeam = isCaptain ? TEAMS.find(t => t.id === user.teamId) : null;
-  const visibleTeams = isStaff ? TEAMS : [userTeam];
-  const visibleSessions = isStaff 
-    ? SCHEDULE 
-    : SCHEDULE.filter(s => s.teamId === user.teamId || s.teamId === null);
-
-  // Stats globales
-  const totalPlayers = visibleTeams.reduce((acc, team) => acc + team.roster.length, 0);
-  const totalMatches = visibleSessions.filter(s => s.type.id === 'match').length;
-  const upcomingSessions = visibleSessions.filter(s => new Date(s.date) >= new Date()).length;
-  const avgWinrate = Math.floor(visibleTeams.reduce((acc, team) => acc + team.globalStats.winRate, 0) / visibleTeams.length);
-
-  // Gestion des notes
-  const handleSaveNote = (playerId) => {
-    setNotes({ ...notes, [playerId]: noteText });
-    setEditingNote(null);
-    setNoteText('');
+  const currentUser = {
+    name: user?.name || 'Coach',
+    role: user?.role || 'staff',
+    teamId: user?.teamId || 1,
+    teamName: 'Structure TravL'
   };
 
-  const handleEditNote = (playerId) => {
-    setEditingNote(playerId);
-    setNoteText(notes[playerId] || '');
+  // Mock sessions data
+  const SESSIONS = [
+    { 
+      id: 1, 
+      type: 'training', 
+      title: 'Scrims vs équipe externe', 
+      day: 'Lundi', 
+      time: '18:00',
+      team: 'Mount X',
+      details: 'Discord - Salon Mount X',
+      roles: 'Top, Jungle, Mid, ADC, Support',
+      coach: 'Staff TravL',
+      mandatory: true
+    },
+    { 
+      id: 2, 
+      type: 'match', 
+      title: 'VOD Review - Dernier match', 
+      day: 'Lundi', 
+      time: '20:00',
+      team: 'Flux',
+      details: 'Discord - Salon Flux',
+      roles: 'Toute l\'équipe',
+      coach: 'Coach Flux',
+      mandatory: false
+    },
+    { 
+      id: 3, 
+      type: 'training', 
+      title: 'Solo Queue collectif', 
+      day: 'Lundi', 
+      time: '21:00',
+      team: 'VisionaRY',
+      details: 'EUW Solo Queue',
+      roles: 'Tout le roster',
+      coach: 'Coach VisionaRY',
+      mandatory: true
+    },
+    { 
+      id: 4, 
+      type: 'match', 
+      title: 'Match officiel', 
+      day: 'Mardi', 
+      time: '19:00',
+      team: 'Nexus',
+      details: 'Tournament Realm',
+      roles: 'Titulaires + Remplaçants',
+      coach: 'Nexus Tour',
+      competition: 'vs Flux',
+      mandatory: true
+    },
+    { 
+      id: 5, 
+      type: 'training', 
+      title: 'Préparation tactique', 
+      day: 'Mardi', 
+      time: '18:00',
+      team: 'Froz\'nLégion',
+      details: 'Discord - Salon Froz\'nLégion',
+      roles: 'Top, Jungle, Mid, ADC, Support',
+      coach: 'Coach FRZ',
+      mandatory: true
+    }
+  ];
+
+  const handleValidatePresence = (sessionId, status) => {
+    setSessionStatus(prev => ({ ...prev, [sessionId]: status }));
+  };
+
+  const confirmedCount = Object.values(sessionStatus).filter(s => s === 'confirmed').length;
+  const totalSessions = SESSIONS.length;
+
+  // Type colors
+  const getTypeColor = (type) => {
+    switch(type) {
+      case 'training': return '#16a34a'; // vert
+      case 'match': return '#dc2626'; // rouge
+      case 'review': return '#9333ea'; // violet
+      default: return '#6366f1';
+    }
+  };
+
+  const getTypeIcon = (type) => {
+    switch(type) {
+      case 'training': return '🎯';
+      case 'match': return '⚔️';
+      case 'review': return '📊';
+      default: return '📅';
+    }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      
-      {/* Header */}
-      <div className="bg-gradient-to-r from-gray-900 to-black border-b border-red-900 border-opacity-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-red-600 bg-opacity-20 border-2 border-red-600 border-opacity-50 rounded-xl flex items-center justify-center">
-                <Shield className="w-6 h-6 text-red-500" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-black font-bebas tracking-tight">
-                  <span className="bg-gradient-to-r from-red-500 to-red-700 bg-clip-text text-transparent">
-                    DASHBOARD {user.role.toUpperCase()}
-                  </span>
-                </h1>
-                <p className="text-sm text-gray-400">
-                  {user.name} {isCaptain && `• ${user.teamName}`}
-                </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-950 text-white flex">
+      {/* Sidebar */}
+      <aside className="w-64 bg-gradient-to-b from-gray-900/50 to-black/50 border-r border-red-900/20 backdrop-blur-xl fixed h-screen">
+        <div className="p-6 border-b border-gray-800/50">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
+              <span className="text-lg">🛡️</span>
+            </div>
+            <h2 className="font-bebas text-xl tracking-wider text-red-500">TRAVL</h2>
+          </div>
+        </div>
+
+        <nav className="p-4">
+          {[
+            { id: 'overview', icon: '📊', label: 'Vue d\'ensemble' },
+            { id: 'planning', icon: '📅', label: 'Planning' },
+            { id: 'equipes', icon: '👥', label: 'Équipes' },
+            { id: 'actualites', icon: '📰', label: 'Actualités' },
+            { id: 'notes', icon: '📝', label: 'Notes' },
+            { id: 'objectifs', icon: '🎯', label: 'Objectifs' }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all mb-1 ${
+                activeTab === tab.id
+                  ? 'bg-red-600/20 text-red-400 font-semibold'
+                  : 'text-gray-400 hover:bg-gray-800/30 hover:text-white'
+              }`}>
+              <span>{tab.icon}</span>
+              <span className="text-sm">{tab.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800/50">
+          <div className="flex items-center gap-2 mb-3 px-2">
+            <div className="w-8 h-8 rounded-full bg-red-600/20 flex items-center justify-center text-xs">
+              {currentUser.name[0]}
+            </div>
+            <div className="flex-1">
+              <div className="text-sm font-semibold">{currentUser.name}</div>
+              <div className="text-xs text-gray-500">
+                {currentUser.role === 'staff' ? 'Staff' : currentUser.role === 'captain' ? 'Capitaine' : 'Coach'}
               </div>
             </div>
-            
-            <button
-              onClick={onLogout}
-              className="flex items-center space-x-2 px-4 py-2 bg-red-600 bg-opacity-20 hover:bg-opacity-30 border border-red-600 border-opacity-50 rounded-lg transition-all"
-            >
-              <LogOut className="w-4 h-4" />
-              <span className="text-sm font-bold">Déconnexion</span>
-            </button>
           </div>
+          <button
+            onClick={onLogout}
+            className="w-full bg-red-600/10 hover:bg-red-600/20 border border-red-600/30 text-red-400 py-2 rounded-lg text-sm font-semibold transition-all">
+            🚪 Déconnexion
+          </button>
         </div>
-      </div>
-
-      {/* Navigation Tabs */}
-      <div className="bg-black bg-opacity-50 border-b border-red-900 border-opacity-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-1 overflow-x-auto">
-            {[
-              { id: 'overview', label: 'Vue d\'ensemble', icon: BarChart3 },
-              { id: 'teams', label: isStaff ? 'Équipes' : 'Mon Équipe', icon: Users },
-              { id: 'schedule', label: 'Planning', icon: Calendar },
-              { id: 'notes', label: 'Notes', icon: MessageSquare },
-              { id: 'goals', label: 'Objectifs', icon: Target }
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center space-x-2 px-6 py-4 font-bold transition-all ${
-                  activeTab === tab.id
-                    ? 'text-red-500 border-b-2 border-red-600'
-                    : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                <tab.icon className="w-4 h-4" />
-                <span>{tab.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+      </aside>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        {/* VUE D'ENSEMBLE */}
+      <main className="flex-1 ml-64 p-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bebas tracking-wider mb-1">
+            DASHBOARD {currentUser.role === 'staff' ? 'MANAGER' : 'STAFF'}
+          </h1>
+          <p className="text-sm text-gray-500">Manager Structure</p>
+        </div>
+
+        {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
-          <div className="space-y-6">
-            
+          <div>
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              
-              <div className="bg-gradient-to-br from-gray-900 to-black border border-red-900 border-opacity-20 rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Users className="w-8 h-8 text-blue-500" />
-                  <div className="text-right">
-                    <div className="text-3xl font-black font-bebas text-blue-500">{totalPlayers}</div>
+            <div className="grid grid-cols-4 gap-6 mb-8">
+              <div className="bg-gradient-to-br from-blue-900/20 to-blue-950/10 border border-blue-800/30 rounded-xl p-6 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 bg-blue-600/20 rounded-lg flex items-center justify-center">
+                    <span className="text-2xl">👥</span>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bebas text-blue-400">35</div>
                     <div className="text-xs text-gray-400">Joueurs</div>
                   </div>
                 </div>
-                <div className="text-sm text-gray-400">
-                  {isStaff ? '7 équipes actives' : 'Roster complet'}
-                </div>
+                <div className="text-xs text-gray-500">7 équipes actives</div>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-900 to-black border border-red-900 border-opacity-20 rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Trophy className="w-8 h-8 text-yellow-500" />
-                  <div className="text-right">
-                    <div className="text-3xl font-black font-bebas text-yellow-500">{avgWinrate}%</div>
+              <div className="bg-gradient-to-br from-yellow-900/20 to-yellow-950/10 border border-yellow-800/30 rounded-xl p-6 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 bg-yellow-600/20 rounded-lg flex items-center justify-center">
+                    <span className="text-2xl">🏆</span>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bebas text-yellow-400">61%</div>
                     <div className="text-xs text-gray-400">Winrate</div>
                   </div>
                 </div>
-                <div className="text-sm text-gray-400">
-                  {isStaff ? 'Moyenne globale' : 'Performance équipe'}
-                </div>
+                <div className="text-xs text-gray-500">Moyenne globale</div>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-900 to-black border border-red-900 border-opacity-20 rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Calendar className="w-8 h-8 text-purple-500" />
-                  <div className="text-right">
-                    <div className="text-3xl font-black font-bebas text-purple-500">{upcomingSessions}</div>
+              <div className="bg-gradient-to-br from-purple-900/20 to-purple-950/10 border border-purple-800/30 rounded-xl p-6 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 bg-purple-600/20 rounded-lg flex items-center justify-center">
+                    <span className="text-2xl">📅</span>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bebas text-purple-400">21</div>
                     <div className="text-xs text-gray-400">Sessions</div>
                   </div>
                 </div>
-                <div className="text-sm text-gray-400">
-                  À venir cette semaine
-                </div>
+                <div className="text-xs text-gray-500">À venir cette semaine</div>
               </div>
 
-              <div className="bg-gradient-to-br from-gray-900 to-black border border-red-900 border-opacity-20 rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <TrendingUp className="w-8 h-8 text-green-500" />
-                  <div className="text-right">
-                    <div className="text-3xl font-black font-bebas text-green-500">{totalMatches}</div>
+              <div className="bg-gradient-to-br from-green-900/20 to-green-950/10 border border-green-800/30 rounded-xl p-6 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 bg-green-600/20 rounded-lg flex items-center justify-center">
+                    <span className="text-2xl">📈</span>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bebas text-green-400">5</div>
                     <div className="text-xs text-gray-400">Matchs</div>
                   </div>
                 </div>
-                <div className="text-sm text-gray-400">
-                  Compétitions officielles
-                </div>
+                <div className="text-xs text-gray-500">Compétitions officielles</div>
               </div>
             </div>
 
-            {/* Prochaines sessions */}
-            <div className="bg-gradient-to-br from-gray-900 to-black border border-red-900 border-opacity-20 rounded-2xl p-6">
-              <h3 className="text-xl font-black font-bebas mb-4 flex items-center">
-                <Clock className="w-5 h-5 mr-2 text-red-500" />
-                PROCHAINES SESSIONS
-              </h3>
-              <div className="space-y-3">
-                {visibleSessions.slice(0, 5).map((session, idx) => (
+            {/* Prochaines Sessions */}
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bebas tracking-wider flex items-center gap-2">
+                  <span className="text-red-500">⏰</span> PROCHAINES SESSIONS
+                </h2>
+                <button className="text-sm text-red-400 hover:text-red-300 font-semibold">
+                  Créer une session
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {SESSIONS.slice(0, 4).map(session => (
                   <div 
-                    key={idx}
-                    className="flex items-center justify-between bg-black bg-opacity-50 rounded-lg p-4 border border-red-900 border-opacity-10"
-                  >
-                    <div className="flex items-center space-x-4">
+                    key={session.id}
+                    className="bg-gradient-to-r from-gray-900/50 to-gray-950/30 border border-gray-800/50 rounded-xl p-6 backdrop-blur-sm hover:border-gray-700/50 transition-all">
+                    <div className="flex items-start gap-4">
                       <div 
-                        className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl"
-                        style={{ 
-                          background: `linear-gradient(135deg, ${session.type.color}30, ${session.type.color}10)`,
-                          border: `2px solid ${session.type.color}30`
-                        }}
-                      >
-                        {session.type.emoji}
+                        className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: getTypeColor(session.type) + '20', border: `2px solid ${getTypeColor(session.type)}40` }}>
+                        <span className="text-2xl">{getTypeIcon(session.type)}</span>
                       </div>
-                      <div>
-                        <div className="font-bold">{session.title}</div>
-                        <div className="text-sm text-gray-400">
-                          {session.dayName} • {session.time} • {session.teamName}
+
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span 
+                                className="text-xs font-bold px-2 py-0.5 rounded"
+                                style={{ backgroundColor: getTypeColor(session.type) + '30', color: getTypeColor(session.type) }}>
+                                {session.type === 'training' ? 'Training' : session.type === 'match' ? 'Match' : 'Review'}
+                              </span>
+                              {session.mandatory && (
+                                <span className="text-xs bg-red-600/20 text-red-400 px-2 py-0.5 rounded font-semibold">
+                                  Obligatoire
+                                </span>
+                              )}
+                            </div>
+                            <h3 className="text-lg font-bold text-white">{session.title}</h3>
+                            <div className="flex items-center gap-4 mt-2 text-sm text-gray-400">
+                              <span>📅 {session.day} • 🕐 {session.time}</span>
+                            </div>
+                          </div>
+                          <button className="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-600/40 text-red-400 rounded-lg text-sm font-semibold transition-all">
+                            Obligatoire
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-4 mt-4 text-sm">
+                          <div>
+                            <div className="text-xs text-gray-500 mb-1">🎯 Discord</div>
+                            <div className="text-gray-300">{session.details}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-gray-500 mb-1">👥 {session.roles}</div>
+                            <div className="text-gray-300">Coach: {session.coach}</div>
+                          </div>
+                          {session.competition && (
+                            <div>
+                              <div className="text-xs text-gray-500 mb-1">⚔️ {session.competition}</div>
+                              <div className="text-gray-300">{session.competition}</div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
-                    {session.mandatory && (
-                      <span className="bg-red-600 bg-opacity-20 border border-red-600 border-opacity-50 text-red-400 text-xs font-bold px-3 py-1 rounded-full">
-                        Obligatoire
-                      </span>
-                    )}
                   </div>
                 ))}
               </div>
@@ -208,316 +299,111 @@ function Dashboard({ user, onLogout }) {
           </div>
         )}
 
-        {/* ÉQUIPES */}
-        {activeTab === 'teams' && (
-          <div className="space-y-6">
-            <h2 className="text-3xl font-black font-bebas">
-              {isStaff ? 'GESTION DES ÉQUIPES' : 'MON ÉQUIPE'}
-            </h2>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {visibleTeams.map(team => (
-                <div 
-                  key={team.id}
-                  className="bg-gradient-to-br from-gray-900 to-black border-2 border-red-900 border-opacity-20 rounded-2xl p-6"
-                  style={{
-                    background: `linear-gradient(135deg, ${team.color}10 0%, transparent 100%)`
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h3 className="text-2xl font-black font-bebas" style={{ color: team.color }}>
-                        {team.name}
-                      </h3>
-                      <p className="text-sm text-gray-400">{team.rank} • {team.motto}</p>
-                    </div>
-                    <div className="text-4xl">{team.logo}</div>
-                  </div>
-
-                  {/* Stats équipe */}
-                  <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="text-center">
-                      <div className="text-2xl font-black font-bebas" style={{ color: team.color }}>
-                        {team.globalStats.totalWins}-{team.globalStats.totalLosses}
-                      </div>
-                      <div className="text-xs text-gray-400">Record</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-black font-bebas text-green-500">
-                        {team.globalStats.winRate}%
-                      </div>
-                      <div className="text-xs text-gray-400">Winrate</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-black font-bebas text-blue-500">
-                        {team.roster.length}
-                      </div>
-                      <div className="text-xs text-gray-400">Joueurs</div>
-                    </div>
-                  </div>
-
-                  {/* Roster */}
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-bold text-gray-400 mb-3">ROSTER</h4>
-                    {team.roster.map((player, pIdx) => (
-                      <div 
-                        key={pIdx}
-                        className="flex items-center justify-between bg-black bg-opacity-50 rounded-lg p-3"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div 
-                            className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
-                            style={{ 
-                              background: `linear-gradient(135deg, ${team.color}30, ${team.color}10)`,
-                              border: `2px solid ${team.color}30`,
-                              color: team.color
-                            }}
-                          >
-                            {player.role}
-                          </div>
-                          <div>
-                            <div className="font-bold">{player.pseudo}</div>
-                            <div className="text-xs text-gray-400">{player.realName}</div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-sm font-bold" style={{ color: team.color }}>
-                            {player.kda} KDA
-                          </div>
-                          <div className="text-xs text-gray-400">
-                            {player.winRate}% WR
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+        {/* PLANNING TAB - AVEC VALIDATION PRÉSENCES */}
+        {activeTab === 'planning' && (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bebas tracking-wider">PLANNING</h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  {confirmedCount} / {totalSessions} sessions validées
+                </p>
+              </div>
             </div>
-          </div>
-        )}
 
-        {/* PLANNING */}
-        {activeTab === 'schedule' && (
-          <div className="space-y-6">
-            <h2 className="text-3xl font-black font-bebas">PLANNING DE LA SEMAINE</h2>
-            
-            <div className="space-y-4">
-              {visibleSessions.map((session, idx) => (
-                <div 
-                  key={idx}
-                  className="bg-gradient-to-br from-gray-900 to-black border border-red-900 border-opacity-20 rounded-2xl p-6"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div 
-                        className="w-16 h-16 rounded-xl flex items-center justify-center text-3xl"
-                        style={{ 
-                          background: `linear-gradient(135deg, ${session.type.color}30, ${session.type.color}10)`,
-                          border: `2px solid ${session.type.color}30`
-                        }}
-                      >
-                        {session.type.emoji}
-                      </div>
-                      <div>
-                        <div className="text-xl font-bold">{session.title}</div>
-                        <div className="text-sm text-gray-400">
-                          {session.dayName} {session.time} • {session.duration} • {session.teamName}
-                        </div>
-                        <div className="text-sm text-gray-500 mt-1">{session.description}</div>
-                      </div>
+            {/* Sessions par jour */}
+            {['Lundi', 'Mardi'].map(day => {
+              const daySessions = SESSIONS.filter(s => s.day === day);
+              return (
+                <div key={day} className="mb-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="px-3 py-1 bg-red-600/20 border border-red-600/40 rounded-lg">
+                      <span className="text-sm font-bebas text-red-400">{day}</span>
                     </div>
-                    <div className="flex flex-col items-end space-y-2">
-                      {session.mandatory && (
-                        <span className="bg-red-600 bg-opacity-20 border border-red-600 border-opacity-50 text-red-400 text-xs font-bold px-3 py-1 rounded-full">
-                          Obligatoire
-                        </span>
-                      )}
-                      {session.important && (
-                        <span className="bg-yellow-600 bg-opacity-20 border border-yellow-600 border-opacity-50 text-yellow-400 text-xs font-bold px-3 py-1 rounded-full">
-                          Important
-                        </span>
-                      )}
-                    </div>
+                    <div className="text-sm text-gray-500">{daySessions.length} sessions</div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
-        {/* NOTES */}
-        {activeTab === 'notes' && (
-          <div className="space-y-6">
-            <h2 className="text-3xl font-black font-bebas">NOTES SUR LES JOUEURS</h2>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {visibleTeams.map(team => (
-                <div key={team.id}>
-                  <h3 className="text-xl font-black font-bebas mb-4" style={{ color: team.color }}>
-                    {team.name}
-                  </h3>
                   <div className="space-y-3">
-                    {team.roster.map((player, pIdx) => {
-                      const playerId = `${team.id}-${pIdx}`;
-                      const isEditing = editingNote === playerId;
-                      
+                    {daySessions.map(session => {
+                      const status = sessionStatus[session.id] || 'pending';
                       return (
                         <div 
-                          key={pIdx}
-                          className="bg-gradient-to-br from-gray-900 to-black border border-red-900 border-opacity-20 rounded-xl p-4"
-                        >
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center space-x-3">
+                          key={session.id}
+                          className="bg-gradient-to-r from-gray-900/50 to-gray-950/30 border border-gray-800/50 rounded-xl p-5 backdrop-blur-sm">
+                          
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-start gap-4">
                               <div 
-                                className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold"
-                                style={{ 
-                                  background: `linear-gradient(135deg, ${team.color}30, ${team.color}10)`,
-                                  border: `2px solid ${team.color}30`,
-                                  color: team.color
-                                }}
-                              >
-                                {player.role}
+                                className="w-12 h-12 rounded-lg flex items-center justify-center"
+                                style={{ backgroundColor: getTypeColor(session.type) + '20' }}>
+                                <span className="text-xl">{getTypeIcon(session.type)}</span>
                               </div>
                               <div>
-                                <div className="font-bold">{player.pseudo}</div>
-                                <div className="text-xs text-gray-400">{player.realName}</div>
+                                <h3 className="text-lg font-bold mb-1">{session.title}</h3>
+                                <div className="flex items-center gap-3 text-sm text-gray-400">
+                                  <span>🕐 {session.time}</span>
+                                  <span>•</span>
+                                  <span>{session.team}</span>
+                                </div>
                               </div>
                             </div>
-                            
-                            {!isEditing ? (
-                              <button
-                                onClick={() => handleEditNote(playerId)}
-                                className="p-2 hover:bg-red-900 hover:bg-opacity-20 rounded-lg transition-all"
-                              >
-                                <Edit className="w-4 h-4 text-gray-400" />
-                              </button>
-                            ) : (
-                              <div className="flex space-x-2">
-                                <button
-                                  onClick={() => handleSaveNote(playerId)}
-                                  className="p-2 bg-green-600 bg-opacity-20 hover:bg-opacity-30 rounded-lg transition-all"
-                                >
-                                  <Save className="w-4 h-4 text-green-500" />
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    setEditingNote(null);
-                                    setNoteText('');
-                                  }}
-                                  className="p-2 bg-red-600 bg-opacity-20 hover:bg-opacity-30 rounded-lg transition-all"
-                                >
-                                  <X className="w-4 h-4 text-red-500" />
-                                </button>
-                              </div>
-                            )}
                           </div>
-                          
-                          {isEditing ? (
-                            <textarea
-                              value={noteText}
-                              onChange={(e) => setNoteText(e.target.value)}
-                              placeholder="Ajouter une note sur ce joueur..."
-                              className="w-full bg-black bg-opacity-50 border border-red-900 border-opacity-30 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:border-red-600 focus:outline-none resize-none"
-                              rows="3"
-                            />
-                          ) : (
-                            <div className="text-sm text-gray-400">
-                              {notes[playerId] || 'Aucune note pour le moment...'}
-                            </div>
-                          )}
+
+                          {/* BOUTONS VALIDATION */}
+                          <div className="grid grid-cols-3 gap-3 mt-4">
+                            <button
+                              onClick={() => handleValidatePresence(session.id, 'confirmed')}
+                              className={`flex items-center justify-center gap-2 py-3 rounded-lg font-bold text-sm transition-all ${
+                                status === 'confirmed'
+                                  ? 'bg-green-600/30 border-2 border-green-500 text-green-400 scale-105'
+                                  : 'bg-green-600/10 border border-green-600/30 text-green-600 hover:bg-green-600/20'
+                              }`}>
+                              ✓ Confirmé
+                            </button>
+
+                            <button
+                              onClick={() => handleValidatePresence(session.id, 'absent')}
+                              className={`flex items-center justify-center gap-2 py-3 rounded-lg font-bold text-sm transition-all ${
+                                status === 'absent'
+                                  ? 'bg-red-600/30 border-2 border-red-500 text-red-400 scale-105'
+                                  : 'bg-red-600/10 border border-red-600/30 text-red-600 hover:bg-red-600/20'
+                              }`}>
+                              ✗ Absent
+                            </button>
+
+                            <button
+                              onClick={() => handleValidatePresence(session.id, 'pending')}
+                              className={`flex items-center justify-center gap-2 py-3 rounded-lg font-bold text-sm transition-all ${
+                                status === 'pending'
+                                  ? 'bg-yellow-600/30 border-2 border-yellow-500 text-yellow-400 scale-105'
+                                  : 'bg-yellow-600/10 border border-yellow-600/30 text-yellow-600 hover:bg-yellow-600/20'
+                              }`}>
+                              ⏳ En attente
+                            </button>
+                          </div>
                         </div>
                       );
                     })}
                   </div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
         )}
 
-        {/* OBJECTIFS */}
-        {activeTab === 'goals' && (
-          <div className="space-y-6">
-            <h2 className="text-3xl font-black font-bebas">OBJECTIFS</h2>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {visibleTeams.map(team => (
-                <div 
-                  key={team.id}
-                  className="bg-gradient-to-br from-gray-900 to-black border-2 border-red-900 border-opacity-20 rounded-2xl p-6"
-                  style={{
-                    background: `linear-gradient(135deg, ${team.color}10 0%, transparent 100%)`
-                  }}
-                >
-                  <h3 className="text-2xl font-black font-bebas mb-4" style={{ color: team.color }}>
-                    {team.name}
-                  </h3>
-                  
-                  <div className="space-y-4">
-                    <div className="bg-black bg-opacity-50 rounded-xl p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-bold text-gray-400">Winrate cible</span>
-                        <CheckCircle className="w-5 h-5 text-green-500" />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="text-2xl font-black font-bebas" style={{ color: team.color }}>
-                          {team.globalStats.winRate}%
-                        </div>
-                        <span className="text-sm text-gray-400">/ 60%</span>
-                      </div>
-                      <div className="h-2 bg-gray-900 rounded-full overflow-hidden mt-3">
-                        <div 
-                          className="h-full rounded-full transition-all duration-1000"
-                          style={{ 
-                            width: `${(team.globalStats.winRate / 60) * 100}%`,
-                            backgroundColor: team.color
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-
-                    <div className="bg-black bg-opacity-50 rounded-xl p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-bold text-gray-400">Matchs joués</span>
-                        <AlertCircle className="w-5 h-5 text-yellow-500" />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="text-2xl font-black font-bebas" style={{ color: team.color }}>
-                          {team.globalStats.totalWins + team.globalStats.totalLosses}
-                        </div>
-                        <span className="text-sm text-gray-400">/ 50</span>
-                      </div>
-                      <div className="h-2 bg-gray-900 rounded-full overflow-hidden mt-3">
-                        <div 
-                          className="h-full rounded-full transition-all duration-1000"
-                          style={{ 
-                            width: `${((team.globalStats.totalWins + team.globalStats.totalLosses) / 50) * 100}%`,
-                            backgroundColor: team.color
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-
-                    <div className="bg-black bg-opacity-50 rounded-xl p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-bold text-gray-400">Position compétition</span>
-                        <Trophy className="w-5 h-5 text-yellow-500" />
-                      </div>
-                      <div className="text-2xl font-black font-bebas" style={{ color: team.color }}>
-                        #{team.competitions[0].position} {team.competitions[0].name}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* AUTRES TABS (placeholder) */}
+        {activeTab !== 'overview' && activeTab !== 'planning' && (
+          <div className="bg-gradient-to-r from-gray-900/50 to-gray-950/30 border border-gray-800/50 rounded-xl p-8 backdrop-blur-sm text-center">
+            <h2 className="text-2xl font-bebas tracking-wider mb-2">
+              {activeTab === 'equipes' && 'ÉQUIPES'}
+              {activeTab === 'actualites' && 'ACTUALITÉS'}
+              {activeTab === 'notes' && 'NOTES'}
+              {activeTab === 'objectifs' && 'OBJECTIFS'}
+            </h2>
+            <p className="text-gray-500">Section à venir...</p>
           </div>
         )}
-
-      </div>
+      </main>
     </div>
   );
 }
-
-export default Dashboard;
