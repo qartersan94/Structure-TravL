@@ -134,8 +134,12 @@ function App() {
           <div className="flex items-center justify-between h-24">
             <div className="flex items-center space-x-4 cursor-pointer group" onClick={() => setActiveSection('home')}>
               <div className="w-20 h-20 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-12"
-                style={{ background: 'linear-gradient(135deg, #DC143C 0%, #8B0000 100%)', boxShadow: '0 0 30px rgba(220, 20, 60, 0.8)', border: '3px solid rgba(220, 20, 60, 0.4)' }}>
-                <span className="text-4xl font-black font-bebas text-white">TL</span>
+                style={{ 
+                  background: '#000000', 
+                  boxShadow: '0 0 30px rgba(220, 20, 60, 0.8), 0 0 60px rgba(220, 20, 60, 0.4)', 
+                  border: '4px solid #DC143C' 
+                }}>
+                <span className="text-4xl font-black font-bebas text-white" style={{ textShadow: '0 0 20px rgba(220, 20, 60, 0.8)' }}>TL</span>
               </div>
               <div>
                 <h1 className="text-3xl md:text-4xl font-black font-bebas" style={{
