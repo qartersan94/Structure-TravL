@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Menu, X, ArrowLeft, Search } from 'lucide-react';
+import { ChevronRight, X, ArrowLeft, Search } from 'lucide-react';
 import { TEAMS } from './data/teamsData';
 import Dashboard from './components/Dashboard';
 import LoginForm from './components/LoginForm';
@@ -7,22 +7,19 @@ import LoginForm from './components/LoginForm';
 const PLAYERS_DB = {
   1: [
     { id: 1, role: 'Top', name: 'MountainKing', kda: 3.8, winRate: 68, rank: 'Master 280LP', status: 'online' },
-    { id: 2, role: 'Jungle', name: 'XPredator', kda: 4.2, winRate: 72, rank: 'Master 310LP', status: 'online' },
+    { id: 2, role: 'Jgl', name: 'XPredator', kda: 4.2, winRate: 72, rank: 'Master 310LP', status: 'online' },
     { id: 3, role: 'Mid', name: 'NexusCore', kda: 5.1, winRate: 74, rank: 'GM 120LP', status: 'online' },
     { id: 4, role: 'ADC', name: 'ArrowStorm', kda: 6.5, winRate: 76, rank: 'Master 290LP', status: 'online' },
-    { id: 5, role: 'Support', name: 'ShieldMaster', kda: 3.5, winRate: 65, rank: 'Master 250LP', status: 'online' }
+    { id: 5, role: 'Sup', name: 'ShieldMaster', kda: 3.5, winRate: 65, rank: 'Master 250LP', status: 'online' }
   ],
   2: [
     { id: 6, role: 'Top', name: 'FlameWave', kda: 3.2, winRate: 62, rank: 'Diamond I', status: 'online' },
-    { id: 7, role: 'Jungle', name: 'TidalBreaker', kda: 3.9, winRate: 64, rank: 'Diamond I', status: 'offline' },
+    { id: 7, role: 'Jgl', name: 'TidalBreaker', kda: 3.9, winRate: 64, rank: 'Diamond I', status: 'offline' },
     { id: 8, role: 'Mid', name: 'StormCaller', kda: 4.8, winRate: 70, rank: 'Master', status: 'online' },
     { id: 9, role: 'ADC', name: 'BlizzardShot', kda: 4.1, winRate: 58, rank: 'Diamond I', status: 'online' },
-    { id: 10, role: 'Support', name: 'FrostBite', kda: 2.8, winRate: 55, rank: 'Diamond I', status: 'online' }
+    { id: 10, role: 'Sup', name: 'FrostBite', kda: 2.8, winRate: 55, rank: 'Diamond I', status: 'online' }
   ]
 };
-
-const TEAM_ICONS = { 1: '⚡', 2: '🔥', 3: '❄️', 4: '👁️', 5: '🌑', 6: '⭐', 7: '⚔️' };
-const ROLE_ICONS = { Top: '🛡️', Jungle: '🌲', Mid: '⚡', ADC: '🎯', Support: '💚' };
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
@@ -68,7 +65,7 @@ function App() {
       <div className="fixed inset-0 z-0 bg-gradient-to-br from-black via-gray-950 to-black"></div>
 
       {/* Nav */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all ${scrollY > 50 ? 'bg-black bg-opacity-95 backdrop-blur-xl border-b border-red-900/30' : ''}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all ${scrollY > 50 ? 'bg-black/95 backdrop-blur-xl border-b border-red-900/30' : ''}`}>
         <div className="max-w-7xl mx-auto px-4 h-24 flex items-center justify-between">
           <div className="flex items-center gap-4 cursor-pointer" onClick={() => setActiveSection('home')}>
             <div className="w-20 h-20 rounded-full flex items-center justify-center transition-all hover:scale-110 hover:rotate-12"
@@ -97,34 +94,32 @@ function App() {
       <div className="relative z-10 pt-24">
         {/* HOME */}
         {activeSection === 'home' && (
-          <div>
-            <section className="min-h-screen flex items-center justify-center px-4">
-              <div className="max-w-6xl mx-auto text-center">
-                <div className="inline-block mb-6 px-6 py-2 rounded-full bg-red-900/30 border border-red-600/50 animate-pulse">
-                  <span className="text-sm font-bold text-red-400">STRUCTURE ESPORTS</span>
-                </div>
-                <h1 className="text-8xl font-black mb-6 font-bebas" style={{ background: 'linear-gradient(to bottom, #FFF, #DC143C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  Structure TravL<br />E-SPORTS
-                </h1>
-                <p className="text-2xl text-gray-300 mb-12">Commence ton voyage avec nous</p>
-                <button onClick={() => setActiveSection('teams')}
-                  className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold text-lg hover:scale-105 transition-all"
-                  style={{ boxShadow: '0 0 40px rgba(220,20,60,0.6)' }}>
-                  Découvrir nos équipes <ChevronRight className="inline ml-2" />
-                </button>
+          <section className="min-h-screen flex items-center justify-center px-4">
+            <div className="max-w-6xl mx-auto text-center">
+              <div className="inline-block mb-6 px-6 py-2 rounded-full bg-red-900/30 border border-red-600/50 animate-pulse">
+                <span className="text-sm font-bold text-red-400">STRUCTURE ESPORTS</span>
               </div>
-            </section>
-          </div>
+              <h1 className="text-8xl font-black mb-6 font-bebas" style={{ background: 'linear-gradient(to bottom, #FFF, #DC143C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                Structure TravL<br />E-SPORTS
+              </h1>
+              <p className="text-2xl text-gray-300 mb-12">Commence ton voyage avec nous</p>
+              <button onClick={() => setActiveSection('teams')}
+                className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                style={{ boxShadow: '0 0 40px rgba(220,20,60,0.6)' }}>
+                Découvrir nos équipes <ChevronRight className="inline ml-2" />
+              </button>
+            </div>
+          </section>
         )}
 
-        {/* TEAMS */}
+        {/* TEAMS - CARTES ULTRA COMPACTES */}
         {activeSection === 'teams' && (
           <section className="min-h-screen py-20 px-4">
             <div className="max-w-7xl mx-auto">
               <h2 className="text-6xl font-black font-bebas text-center mb-4" style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 NOS ÉQUIPES
               </h2>
-              <p className="text-center text-gray-400 mb-8">Click sur une carte pour voir les détails</p>
+              <p className="text-center text-gray-400 mb-8">Click pour voir les détails</p>
 
               <div className="mb-8 max-w-md mx-auto">
                 <div className="relative">
@@ -134,6 +129,7 @@ function App() {
                 </div>
               </div>
 
+              {/* CARTES ULTRA COMPACTES */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredTeams.map((team) => {
                   const teamColor = team.name === "Froz'nLégion" ? '#FFF' : team.name === 'MymétiC' ? '#2C2C2C' : team.color;
@@ -142,110 +138,123 @@ function App() {
 
                   return (
                     <div key={team.id} onClick={() => handleFlipCard(team.id)}
-                      className="relative h-[480px] cursor-pointer" style={{ perspective: '1000px' }}>
+                      className="relative h-[380px] cursor-pointer group" style={{ perspective: '1000px' }}>
                       
-                      <div className={`relative w-full h-full transition-transform duration-700 ${isFlipped ? 'rotate-y-180' : ''}`}
+                      <div className={`relative w-full h-full transition-all duration-700 ${isFlipped ? 'rotate-y-180' : ''}`}
                         style={{ transformStyle: 'preserve-3d' }}>
                         
                         {/* RECTO */}
-                        <div className="absolute inset-0 rounded-2xl overflow-hidden backdrop-blur-xl hover:scale-[1.02] transition-all"
+                        <div className="absolute inset-0 rounded-xl overflow-hidden backdrop-blur-xl transition-all group-hover:scale-[1.03]"
                           style={{
-                            background: `linear-gradient(135deg, ${teamColor}12, rgba(0,0,0,0.95))`,
+                            background: `linear-gradient(135deg, ${teamColor}15, rgba(0,0,0,0.97))`,
                             border: `2px solid ${teamColor}`,
-                            boxShadow: `0 8px 32px ${teamColor}40, inset 0 0 80px ${teamColor}08`,
-                            backfaceVisibility: 'hidden'
+                            boxShadow: `0 4px 24px ${teamColor}50, inset 0 0 60px ${teamColor}05`,
+                            backfaceVisibility: 'hidden',
+                            clipPath: 'polygon(0 0, 100% 0, 100% 94%, 94% 100%, 0 100%)'
                           }}>
                           
-                          <div className="p-5 h-full flex flex-col">
-                            {/* Header */}
-                            <div className="flex items-center justify-between mb-4">
+                          <div className="relative p-4 h-full flex flex-col">
+                            {/* Header inline */}
+                            <div className="flex items-center justify-between mb-3 pb-3 border-b border-white/10">
                               <div className="flex items-center gap-2">
-                                <div className="text-3xl">{team.logo}</div>
-                                <div className="text-xs font-bold px-2 py-0.5 rounded-md" style={{ background: `${teamColor}25`, color: teamColor }}>
+                                <div className="text-xs font-bold px-2 py-1 rounded" style={{ background: `${teamColor}30`, color: teamColor }}>
                                   {team.rank}
                                 </div>
+                                <h3 className="text-lg font-black font-bebas tracking-wide" style={{ color: teamColor }}>{team.name}</h3>
                               </div>
-                              <div className="text-6xl opacity-20">{TEAM_ICONS[team.id]}</div>
+                              <div className="text-3xl opacity-30">{team.logo}</div>
                             </div>
 
-                            {/* Nom */}
-                            <div className="mb-4 text-center">
-                              <h3 className="text-2xl font-black font-bebas" style={{ color: teamColor }}>{team.name}</h3>
-                              <p className="text-xs text-gray-500 italic">"{team.motto}"</p>
-                            </div>
-
-                            {/* Stats */}
-                            <div className="grid grid-cols-2 gap-3 mb-4">
-                              <div className="text-center p-2 rounded-lg" style={{ background: `${teamColor}08`, border: `1px solid ${teamColor}30` }}>
-                                <div className="text-xl font-bebas" style={{ color: teamColor }}>{team.globalStats.totalWins}-{team.globalStats.totalLosses}</div>
-                                <div className="text-xs text-gray-500">Record</div>
+                            {/* Stats 3 colonnes */}
+                            <div className="grid grid-cols-3 gap-2 mb-3">
+                              <div className="text-center py-1.5 rounded" style={{ background: `${teamColor}08` }}>
+                                <div className="text-base font-bebas" style={{ color: teamColor }}>{team.globalStats.totalWins}-{team.globalStats.totalLosses}</div>
+                                <div className="text-[10px] text-gray-600 uppercase">Record</div>
                               </div>
-                              <div className="text-center p-2 rounded-lg" style={{ background: `${teamColor}08`, border: `1px solid ${teamColor}30` }}>
-                                <div className="text-xl font-bebas" style={{ color: teamColor }}>{team.globalStats.winRate}%</div>
-                                <div className="text-xs text-gray-500">Winrate</div>
+                              <div className="text-center py-1.5 rounded" style={{ background: `${teamColor}08` }}>
+                                <div className="text-base font-bebas" style={{ color: teamColor }}>{team.globalStats.winRate}%</div>
+                                <div className="text-[10px] text-gray-600 uppercase">WR</div>
+                              </div>
+                              <div className="text-center py-1.5 rounded" style={{ background: `${teamColor}08` }}>
+                                <div className="text-base font-bebas" style={{ color: teamColor }}>{team.globalStats.totalGames}</div>
+                                <div className="text-[10px] text-gray-600 uppercase">Games</div>
                               </div>
                             </div>
 
-                            {/* Roster */}
-                            <div className="flex-1 space-y-1.5 mb-4">
+                            {/* Roster compact */}
+                            <div className="flex-1 space-y-1 mb-3">
                               {roster.slice(0, 5).map((player) => (
                                 <button key={player.id} onClick={(e) => { e.stopPropagation(); handlePlayerClick(player); }}
-                                  className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-all text-sm">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-sm">{ROLE_ICONS[player.role]}</span>
-                                    <span className="text-xs text-gray-400">{player.role}</span>
-                                    <span className="text-gray-300 font-semibold">{player.name}</span>
+                                  className="w-full flex items-center justify-between px-2 py-1 rounded hover:bg-white/5 transition-all">
+                                  <div className="flex items-center gap-2 text-xs">
+                                    <span className="text-gray-600 w-8">{player.role}</span>
+                                    <span className="text-gray-300 font-medium truncate">{player.name}</span>
                                   </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-xs" style={{ color: teamColor }}>{player.kda}</span>
-                                    <span className={`w-1.5 h-1.5 rounded-full ${selectedPlayer.status === 'online' ? 'bg-green-500 animate-pulse' : 'bg-gray-600'}`}></span>
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-xs font-mono" style={{ color: teamColor }}>{player.kda}</span>
+                                    <span className={`w-1 h-1 rounded-full flex-shrink-0 ${player.status === 'online' ? 'bg-green-500' : 'bg-gray-700'}`}></span>
                                   </div>
                                 </button>
                               ))}
                             </div>
 
-                            {/* Progress */}
+                            {/* Barre progress */}
                             <div className="mb-3">
-                              <div className="flex justify-between text-xs mb-1.5">
-                                <span className="text-gray-500">Performance</span>
-                                <span className="font-bold" style={{ color: teamColor }}>{team.globalStats.winRate}%</span>
+                              <div className="relative w-full h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                                <div className="absolute inset-0 h-full rounded-full transition-all duration-1000" 
+                                  style={{ 
+                                    width: `${team.globalStats.winRate}%`, 
+                                    background: `linear-gradient(90deg, ${teamColor}, ${teamColor}AA)`,
+                                    boxShadow: `0 0 8px ${teamColor}`
+                                  }}></div>
                               </div>
-                              <div className="relative w-full h-1.5 rounded-full overflow-hidden bg-white/10">
-                                <div className="h-full rounded-full transition-all duration-1000" 
-                                  style={{ width: `${team.globalStats.winRate}%`, background: `linear-gradient(90deg, ${teamColor}, ${teamColor}CC)`, boxShadow: `0 0 10px ${teamColor}80` }}></div>
+                              <div className="flex justify-between items-center mt-1">
+                                <span className="text-[10px] text-gray-600 uppercase">Performance</span>
+                                <span className="text-xs font-bold" style={{ color: teamColor }}>{team.globalStats.winRate}%</span>
                               </div>
                             </div>
 
                             {/* Badges */}
-                            <div className="flex gap-2 flex-wrap">
-                              {team.competitions.slice(0, 2).map((comp, i) => (
-                                <div key={i} className="text-xs font-bold px-2 py-1 rounded" 
-                                  style={{ background: `${teamColor}15`, color: teamColor, border: `1px solid ${teamColor}30` }}>
-                                  #{comp.position} {comp.name.split(' ')[0]}
-                                </div>
-                              ))}
+                            <div className="flex gap-1.5 items-center justify-between">
+                              <div className="flex gap-1.5 flex-wrap">
+                                {team.competitions.slice(0, 2).map((comp, i) => (
+                                  <div key={i} className="text-[10px] font-bold px-1.5 py-0.5 rounded" 
+                                    style={{ background: `${teamColor}20`, color: teamColor }}>
+                                    #{comp.position} {comp.name.split(' ')[0]}
+                                  </div>
+                                ))}
+                              </div>
+                              <span className="text-[9px] text-gray-700 uppercase">Click ↻</span>
                             </div>
-
-                            <p className="text-xs text-center text-gray-600 mt-3">Click pour plus</p>
                           </div>
+
+                          {/* Glow hover */}
+                          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                            style={{ boxShadow: `inset 0 0 40px ${teamColor}20` }}></div>
                         </div>
 
                         {/* VERSO */}
-                        <div className="absolute inset-0 rounded-2xl backdrop-blur-xl p-5"
-                          style={{ background: `linear-gradient(135deg, ${teamColor}15, rgba(0,0,0,0.95))`, border: `2px solid ${teamColor}`, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
-                          <h3 className="text-xl font-bebas mb-4 text-center" style={{ color: teamColor }}>STATS</h3>
-                          <div className="space-y-3">
+                        <div className="absolute inset-0 rounded-xl backdrop-blur-xl p-4"
+                          style={{ 
+                            background: `linear-gradient(135deg, ${teamColor}20, rgba(0,0,0,0.97))`, 
+                            border: `2px solid ${teamColor}`, 
+                            backfaceVisibility: 'hidden', 
+                            transform: 'rotateY(180deg)',
+                            clipPath: 'polygon(0 0, 100% 0, 100% 94%, 94% 100%, 0 100%)'
+                          }}>
+                          <h3 className="text-lg font-bebas mb-3 text-center" style={{ color: teamColor }}>STATISTIQUES</h3>
+                          <div className="space-y-2">
                             {team.competitions.map((comp, i) => (
-                              <div key={i} className="p-3 rounded-lg bg-white/5">
-                                <div className="text-sm font-bold mb-1">{comp.name}</div>
-                                <div className="flex justify-between text-xs text-gray-500">
+                              <div key={i} className="p-2 rounded bg-white/5 border-l-2" style={{ borderColor: teamColor }}>
+                                <div className="text-xs font-bold mb-0.5">{comp.name}</div>
+                                <div className="flex justify-between text-[10px] text-gray-500">
                                   <span>#{comp.position}</span>
-                                  <span>{comp.points} pts</span>
+                                  <span>{comp.points} pts • {comp.wins}V-{comp.losses}D</span>
                                 </div>
                               </div>
                             ))}
                           </div>
-                          <p className="text-xs text-center text-gray-600 mt-4">Click pour retourner</p>
+                          <p className="text-[9px] text-center text-gray-700 mt-3 uppercase">Click retour</p>
                         </div>
                       </div>
                     </div>
@@ -294,7 +303,7 @@ function App() {
                 <div className="text-xs text-gray-500">WR</div>
               </div>
               <div className="text-center p-3 rounded-lg bg-blue-600/10">
-                <div className="text-2xl font-bebas text-blue-400 text-sm">{selectedPlayer.status === 'online' ? 'Online' : 'Offline'}</div>
+                <div className="text-sm font-bebas text-blue-400">{selectedPlayer.status === 'online' ? 'Online' : 'Offline'}</div>
                 <div className="text-xs text-gray-500">Status</div>
               </div>
             </div>
