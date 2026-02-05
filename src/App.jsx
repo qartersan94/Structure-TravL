@@ -1,24 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, X, ArrowLeft, Search } from 'lucide-react';
+import { ChevronRight, X, ArrowLeft, Search, UserPlus } from 'lucide-react';
 import { TEAMS } from './data/teamsData';
 import Dashboard from './components/Dashboard';
 import LoginForm from './components/LoginForm';
 
-const PLAYERS_DB = {
-  1: [
-    { id: 1, role: 'Top', name: 'MountainKing', kda: 3.8, winRate: 68, rank: 'Master 280LP', status: 'online' },
-    { id: 2, role: 'Jgl', name: 'XPredator', kda: 4.2, winRate: 72, rank: 'Master 310LP', status: 'online' },
-    { id: 3, role: 'Mid', name: 'NexusCore', kda: 5.1, winRate: 74, rank: 'GM 120LP', status: 'online' },
-    { id: 4, role: 'ADC', name: 'ArrowStorm', kda: 6.5, winRate: 76, rank: 'Master 290LP', status: 'online' },
-    { id: 5, role: 'Sup', name: 'ShieldMaster', kda: 3.5, winRate: 65, rank: 'Master 250LP', status: 'online' }
-  ],
-  2: [
-    { id: 6, role: 'Top', name: 'FlameWave', kda: 3.2, winRate: 62, rank: 'Diamond I', status: 'online' },
-    { id: 7, role: 'Jgl', name: 'TidalBreaker', kda: 3.9, winRate: 64, rank: 'Diamond I', status: 'offline' },
-    { id: 8, role: 'Mid', name: 'StormCaller', kda: 4.8, winRate: 70, rank: 'Master', status: 'online' },
-    { id: 9, role: 'ADC', name: 'BlizzardShot', kda: 4.1, winRate: 58, rank: 'Diamond I', status: 'online' },
-    { id: 10, role: 'Sup', name: 'FrostBite', kda: 2.8, winRate: 55, rank: 'Diamond I', status: 'online' }
-  ]
+// Import getPlayers depuis PlayerManager
+const getPlayers = () => {
+  const stored = localStorage.getItem('travl_players');
+  return stored ? JSON.parse(stored) : [];
 };
 
 function App() {
@@ -28,6 +17,23 @@ function App() {
   const [flippedCards, setFlippedCards] = useState({});
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [players, setPlayers] = useState(getPlayers());
+
+  // Rafraîchir les joueurs depuis localStorage
+  useEffect(() => {
+    const handleStorage = () => setPlayers(getPlayers());
+    window.addEventListener('storage', handleStorage);
+    
+    // Check toutes les 500ms si les joueurs ont changé
+    const interval = setInterval(() => {
+      setPlayers(getPlayers());
+    }, 500);
+
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -38,9 +44,14 @@ function App() {
   const handleFlipCard = (teamId) => setFlippedCards(prev => ({ ...prev, [teamId]: !prev[teamId] }));
   const handlePlayerClick = (player) => setSelectedPlayer(player);
 
+  // Obtenir les joueurs d'une équipe
+  const getTeamPlayers = (teamId) => {
+    return players.filter(p => p.teamId === teamId).slice(0, 5);
+  };
+
   const filteredTeams = TEAMS.filter(t => 
     !searchQuery || t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (PLAYERS_DB[t.id] || []).some(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    players.some(p => p.teamId === t.id && p.name.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   if (loggedInUser) {
@@ -112,14 +123,17 @@ function App() {
           </section>
         )}
 
-        {/* TEAMS - CARTES ULTRA COMPACTES */}
+        {/* TEAMS */}
         {activeSection === 'teams' && (
           <section className="min-h-screen py-20 px-4">
             <div className="max-w-7xl mx-auto">
               <h2 className="text-6xl font-black font-bebas text-center mb-4" style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 NOS ÉQUIPES
               </h2>
-              <p className="text-center text-gray-400 mb-8">Click pour voir les détails</p>
+              <p className="text-center text-gray-400 mb-2">Click pour voir les détails</p>
+              <p className="text-center text-sm text-gray-600 mb-8">
+                {players.length} joueurs inscrits • Connectez-vous au Dashboard pour gérer les rosters
+              </p>
 
               <div className="mb-8 max-w-md mx-auto">
                 <div className="relative">
@@ -129,11 +143,11 @@ function App() {
                 </div>
               </div>
 
-              {/* CARTES ULTRA COMPACTES */}
+              {/* CARTES ROSTER DYNAMIQUES */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredTeams.map((team) => {
                   const teamColor = team.name === "Froz'nLégion" ? '#FFF' : team.name === 'MymétiC' ? '#2C2C2C' : team.color;
-                  const roster = PLAYERS_DB[team.id] || [];
+                  const roster = getTeamPlayers(team.id);
                   const isFlipped = flippedCards[team.id];
 
                   return (
@@ -154,7 +168,7 @@ function App() {
                           }}>
                           
                           <div className="relative p-4 h-full flex flex-col">
-                            {/* Header inline */}
+                            {/* Header */}
                             <div className="flex items-center justify-between mb-3 pb-3 border-b border-white/10">
                               <div className="flex items-center gap-2">
                                 <div className="text-xs font-bold px-2 py-1 rounded" style={{ background: `${teamColor}30`, color: teamColor }}>
@@ -165,7 +179,7 @@ function App() {
                               <div className="text-3xl opacity-30">{team.logo}</div>
                             </div>
 
-                            {/* Stats 3 colonnes */}
+                            {/* Stats */}
                             <div className="grid grid-cols-3 gap-2 mb-3">
                               <div className="text-center py-1.5 rounded" style={{ background: `${teamColor}08` }}>
                                 <div className="text-base font-bebas" style={{ color: teamColor }}>{team.globalStats.totalWins}-{team.globalStats.totalLosses}</div>
@@ -176,29 +190,37 @@ function App() {
                                 <div className="text-[10px] text-gray-600 uppercase">WR</div>
                               </div>
                               <div className="text-center py-1.5 rounded" style={{ background: `${teamColor}08` }}>
-                                <div className="text-base font-bebas" style={{ color: teamColor }}>{team.globalStats.totalGames}</div>
-                                <div className="text-[10px] text-gray-600 uppercase">Games</div>
+                                <div className="text-base font-bebas" style={{ color: teamColor }}>{roster.length}/5</div>
+                                <div className="text-[10px] text-gray-600 uppercase">Roster</div>
                               </div>
                             </div>
 
-                            {/* Roster compact */}
+                            {/* Roster DYNAMIQUE */}
                             <div className="flex-1 space-y-1 mb-3">
-                              {roster.slice(0, 5).map((player) => (
-                                <button key={player.id} onClick={(e) => { e.stopPropagation(); handlePlayerClick(player); }}
-                                  className="w-full flex items-center justify-between px-2 py-1 rounded hover:bg-white/5 transition-all">
-                                  <div className="flex items-center gap-2 text-xs">
-                                    <span className="text-gray-600 w-8">{player.role}</span>
-                                    <span className="text-gray-300 font-medium truncate">{player.name}</span>
-                                  </div>
-                                  <div className="flex items-center gap-1.5">
-                                    <span className="text-xs font-mono" style={{ color: teamColor }}>{player.kda}</span>
-                                    <span className={`w-1 h-1 rounded-full flex-shrink-0 ${player.status === 'online' ? 'bg-green-500' : 'bg-gray-700'}`}></span>
-                                  </div>
-                                </button>
-                              ))}
+                              {roster.length > 0 ? (
+                                roster.map((player) => (
+                                  <button key={player.id} onClick={(e) => { e.stopPropagation(); handlePlayerClick(player); }}
+                                    className="w-full flex items-center justify-between px-2 py-1 rounded hover:bg-white/5 transition-all">
+                                    <div className="flex items-center gap-2 text-xs">
+                                      <span className="text-gray-600 w-8">{player.role}</span>
+                                      <span className="text-gray-300 font-medium truncate">{player.name}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="text-xs font-mono" style={{ color: teamColor }}>{player.kda || 0}</span>
+                                      <span className={`w-1 h-1 rounded-full flex-shrink-0 ${player.status === 'online' ? 'bg-green-500' : 'bg-gray-700'}`}></span>
+                                    </div>
+                                  </button>
+                                ))
+                              ) : (
+                                <div className="flex-1 flex flex-col items-center justify-center py-8">
+                                  <UserPlus className="w-8 h-8 text-gray-700 mb-2" />
+                                  <p className="text-xs text-gray-600 text-center">Aucun joueur inscrit</p>
+                                  <p className="text-[10px] text-gray-700 mt-1">Ajoutez des joueurs via le Dashboard</p>
+                                </div>
+                              )}
                             </div>
 
-                            {/* Barre progress */}
+                            {/* Progress */}
                             <div className="mb-3">
                               <div className="relative w-full h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
                                 <div className="absolute inset-0 h-full rounded-full transition-all duration-1000" 
@@ -228,7 +250,6 @@ function App() {
                             </div>
                           </div>
 
-                          {/* Glow hover */}
                           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
                             style={{ boxShadow: `inset 0 0 40px ${teamColor}20` }}></div>
                         </div>
@@ -278,7 +299,7 @@ function App() {
         )}
       </div>
 
-      {/* MODAL */}
+      {/* MODAL JOUEUR */}
       {selectedPlayer && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90" onClick={() => setSelectedPlayer(null)}>
           <div className="bg-gradient-to-br from-gray-900 to-black border border-red-900/30 rounded-2xl p-8 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
@@ -291,22 +312,33 @@ function App() {
                 {selectedPlayer.name[0]}
               </div>
               <h4 className="text-2xl font-bold">{selectedPlayer.name}</h4>
-              <p className="text-xs text-gray-600">{selectedPlayer.role} • {selectedPlayer.rank}</p>
+              {selectedPlayer.realName && <p className="text-sm text-gray-500">{selectedPlayer.realName}</p>}
+              <p className="text-xs text-gray-600 mt-1">{selectedPlayer.role} • {selectedPlayer.rank}</p>
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center p-3 rounded-lg bg-red-600/10">
-                <div className="text-2xl font-bebas text-red-400">{selectedPlayer.kda}</div>
+                <div className="text-2xl font-bebas text-red-400">{selectedPlayer.kda || 0}</div>
                 <div className="text-xs text-gray-500">KDA</div>
               </div>
               <div className="text-center p-3 rounded-lg bg-green-600/10">
-                <div className="text-2xl font-bebas text-green-400">{selectedPlayer.winRate}%</div>
+                <div className="text-2xl font-bebas text-green-400">{selectedPlayer.winRate || 0}%</div>
                 <div className="text-xs text-gray-500">WR</div>
               </div>
               <div className="text-center p-3 rounded-lg bg-blue-600/10">
-                <div className="text-sm font-bebas text-blue-400">{selectedPlayer.status === 'online' ? 'Online' : 'Offline'}</div>
-                <div className="text-xs text-gray-500">Status</div>
+                <div className="text-sm font-bebas text-blue-400">{selectedPlayer.gamesPlayed || 0}</div>
+                <div className="text-xs text-gray-500">Games</div>
               </div>
             </div>
+            {selectedPlayer.champions && selectedPlayer.champions.some(c => c) && (
+              <div className="mt-4">
+                <div className="text-xs text-gray-500 mb-2">Champions</div>
+                <div className="flex gap-2">
+                  {selectedPlayer.champions.filter(c => c).map((champ, i) => (
+                    <div key={i} className="flex-1 text-xs text-center py-2 rounded bg-white/5">{champ}</div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
