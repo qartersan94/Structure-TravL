@@ -1,117 +1,150 @@
-// teamsData.js - Données des équipes Structure TravL
+// teamsData.js - Compatible avec App.jsx existant
 
-const teamsData = [
+export const TEAMS = [
   {
     id: 'flux',
     name: 'FLUX',
     rank: 'Master',
     league: 'Flux Ignition',
-    record: '28-14',
-    winrate: 67,
     color: '#ff6b35', // Orange
-    iconName: 'Flame',
-    competitions: ['#1 Prime League', '#2 Duel Virtuel']
+    logo: '🔥',
+    globalStats: {
+      totalWins: 28,
+      totalLosses: 14,
+      winRate: 67
+    },
+    competitions: [
+      { name: 'Prime League', position: 1, points: 145, wins: 15, losses: 3 },
+      { name: 'Duel Virtuel', position: 2, points: 98, wins: 13, losses: 11 }
+    ]
   },
   {
     id: 'mymetic',
-    name: 'MYMETIC',
+    name: 'MymétiC',
     rank: 'Master',
     league: 'Shadows We Strike',
-    record: '26-15',
-    winrate: 63,
-    color: '#1a1a1a', // Noir
-    textColor: '#ffffff', // Blanc pour le texte
-    iconName: 'Shield',
-    competitions: ['#2 Prime League', '#1 Nexus Tour']
+    color: '#2C2C2C', // Noir
+    logo: '🛡️',
+    globalStats: {
+      totalWins: 26,
+      totalLosses: 15,
+      winRate: 63
+    },
+    competitions: [
+      { name: 'Prime League', position: 2, points: 132, wins: 14, losses: 5 },
+      { name: 'Nexus Tour', position: 1, points: 110, wins: 12, losses: 10 }
+    ]
   },
   {
     id: 'froznlegion',
-    name: "FROZ'NLÉGION",
+    name: "Froz'nLégion",
     rank: 'Low Master',
     league: 'Frost Guardians',
-    record: '24-16',
-    winrate: 60,
-    color: '#ffffff', // Blanc
-    textColor: '#1a1a1a', // Noir pour le texte
-    iconName: 'Snowflake',
-    competitions: ['#3 Prime League']
+    color: '#FFFFFF', // Blanc
+    logo: '❄️',
+    globalStats: {
+      totalWins: 24,
+      totalLosses: 16,
+      winRate: 60
+    },
+    competitions: [
+      { name: 'Prime League', position: 3, points: 118, wins: 13, losses: 7 }
+    ]
   },
   {
     id: 'mount-x',
     name: 'MOUNT X',
     rank: 'High Diamond',
     league: 'Paris Performance',
-    record: '22-13',
-    winrate: 63,
     color: '#10b981', // Vert
-    iconName: 'Zap',
-    competitions: ['#1 Nexus Tour']
+    logo: '⚡',
+    globalStats: {
+      totalWins: 22,
+      totalLosses: 13,
+      winRate: 63
+    },
+    competitions: [
+      { name: 'Nexus Tour', position: 1, points: 105, wins: 12, losses: 8 }
+    ]
   },
   {
     id: 'visionary',
     name: 'VISIONARY',
     rank: 'Diamond',
     league: 'Arcane Vision',
-    record: '20-15',
-    winrate: 57,
     color: '#8b5cf6', // Violet
-    iconName: 'Eye',
-    competitions: ['#3 Duel Virtuel']
+    logo: '👁️',
+    globalStats: {
+      totalWins: 20,
+      totalLosses: 15,
+      winRate: 57
+    },
+    competitions: [
+      { name: 'Duel Virtuel', position: 3, points: 87, wins: 10, losses: 12 }
+    ]
   },
   {
     id: 'team',
     name: 'TEAM',
     rank: 'Diamond',
     league: 'Never Look Back',
-    record: '18-17',
-    winrate: 51,
-    color: '#fbbf24', // Jaune/Or
-    iconName: 'Star',
-    competitions: ['#2 Elven League']
+    color: '#fbbf24', // Jaune
+    logo: '⭐',
+    globalStats: {
+      totalWins: 18,
+      totalLosses: 17,
+      winRate: 51
+    },
+    competitions: [
+      { name: 'Elven League', position: 2, points: 76, wins: 9, losses: 8 }
+    ]
   },
   {
     id: 'legendary',
     name: 'LEGENDARY',
     rank: 'Diamond',
     league: 'Legends Never Die',
-    record: '16-19',
-    winrate: 46,
     color: '#3b82f6', // Bleu
-    iconName: 'Trophy',
-    competitions: ['#4 Duel Virtuel']
+    logo: '🏆',
+    globalStats: {
+      totalWins: 16,
+      totalLosses: 19,
+      winRate: 46
+    },
+    competitions: [
+      { name: 'Duel Virtuel', position: 4, points: 65, wins: 8, losses: 11 }
+    ]
   }
 ];
 
 // Helper pour récupérer une équipe par ID
 export const getTeamById = (teamId) => {
-  return teamsData.find(team => team.id === teamId);
+  return TEAMS.find(team => team.id === teamId);
 };
 
 // Helper pour récupérer toutes les équipes d'un certain rang
 export const getTeamsByRank = (rank) => {
-  return teamsData.filter(team => team.rank === rank);
+  return TEAMS.filter(team => team.rank === rank);
 };
 
 // Helper pour calculer les stats globales
 export const getGlobalStats = () => {
-  const totalGames = teamsData.reduce((sum, team) => {
-    const [wins, losses] = team.record.split('-').map(Number);
-    return sum + wins + losses;
-  }, 0);
+  const totalGames = TEAMS.reduce((sum, team) => 
+    sum + team.globalStats.totalWins + team.globalStats.totalLosses, 0
+  );
   
-  const totalWins = teamsData.reduce((sum, team) => {
-    const [wins] = team.record.split('-').map(Number);
-    return sum + wins;
-  }, 0);
+  const totalWins = TEAMS.reduce((sum, team) => 
+    sum + team.globalStats.totalWins, 0
+  );
   
   const globalWinrate = Math.round((totalWins / totalGames) * 100);
   
   return {
-    totalTeams: teamsData.length,
+    totalTeams: TEAMS.length,
     totalGames,
     totalWins,
     globalWinrate
   };
 };
 
-export default teamsData;
+export default TEAMS;
