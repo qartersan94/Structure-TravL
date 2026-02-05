@@ -1,6 +1,6 @@
 // teamsData.js - Données des équipes Structure TravL
 
-export const teamsData = [
+const teamsData = [
   {
     id: 'flux',
     name: 'FLUX',
