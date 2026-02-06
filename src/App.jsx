@@ -103,23 +103,121 @@ function App() {
       <div className="relative z-10 pt-24">
         {/* HOME */}
         {activeSection === 'home' && (
-          <section className="min-h-screen flex items-center justify-center px-4">
-            <div className="max-w-6xl mx-auto text-center">
-              <div className="inline-block mb-6 px-6 py-2 rounded-full bg-red-900/30 border border-red-600/50 animate-pulse">
-                <span className="text-sm font-bold text-red-400">STRUCTURE ESPORTS</span>
+  <>
+    {/* Hero Section */}
+    <section className="min-h-screen flex items-center justify-center px-4">
+      <div className="max-w-6xl mx-auto text-center">
+        <div className="inline-block mb-6 px-6 py-2 rounded-full bg-red-900/30 border border-red-600/50 animate-pulse">
+          <span className="text-sm font-bold text-red-400">STRUCTURE ESPORTS</span>
+        </div>
+        <h1 className="text-8xl font-black mb-6 font-bebas" style={{ background: 'linear-gradient(to bottom, #FFF, #DC143C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Structure TravL<br />E-SPORTS
+        </h1>
+        <p className="text-2xl text-gray-300 mb-12">Commence ton voyage avec nous</p>
+        <button onClick={() => setActiveSection('teams')}
+          className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+          style={{ boxShadow: '0 0 40px rgba(220,20,60,0.6)' }}>
+          Découvrir nos équipes <ChevronRight className="inline ml-2" />
+        </button>
+      </div>
+    </section>
+
+    {/* Section Actualités sur Home - NOUVEAU */}
+    <section className="py-20 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-5xl font-black font-bebas mb-4" 
+            style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            DERNIÈRES ACTUALITÉS
+          </h2>
+          <p className="text-gray-400">Suivez nos performances et victoires</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Actu 1 - Victoire */}
+          <div className="group relative overflow-hidden rounded-xl bg-black/40 border border-red-500/30 hover:border-red-500/60 transition-all cursor-pointer">
+            <div className="aspect-video overflow-hidden bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
+              <span className="text-6xl">🏆</span>
+            </div>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="px-2 py-1 rounded text-xs font-bold uppercase bg-red-500/20 text-red-400 border border-red-500/30">
+                  VICTOIRE
+                </span>
+                <span className="text-xs text-gray-500">Il y a 2 jours</span>
               </div>
-              <h1 className="text-8xl font-black mb-6 font-bebas" style={{ background: 'linear-gradient(to bottom, #FFF, #DC143C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                Structure TravL<br />E-SPORTS
-              </h1>
-              <p className="text-2xl text-gray-300 mb-12">Commence ton voyage avec nous</p>
-              <button onClick={() => setActiveSection('teams')}
-                className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold text-lg hover:scale-105 transition-all"
-                style={{ boxShadow: '0 0 40px rgba(220,20,60,0.6)' }}>
-                Découvrir nos équipes <ChevronRight className="inline ml-2" />
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors">
+                FLUX remporte la Prime League !
+              </h3>
+              <p className="text-sm text-gray-400 mb-4">
+                Performance exceptionnelle face aux meilleures équipes européennes.
+              </p>
+              <button className="flex items-center gap-2 text-red-400 font-semibold text-sm group-hover:gap-3 transition-all">
+                Lire la suite <ExternalLink className="w-4 h-4" />
               </button>
             </div>
-          </section>
-        )}
+          </div>
+
+          {/* Actu 2 - Roster */}
+          <div className="group relative overflow-hidden rounded-xl bg-black/40 border border-green-500/30 hover:border-green-500/60 transition-all cursor-pointer">
+            <div className="aspect-video overflow-hidden bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center">
+              <span className="text-6xl">👤</span>
+            </div>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="px-2 py-1 rounded text-xs font-bold uppercase bg-green-500/20 text-green-400 border border-green-500/30">
+                  ROSTER
+                </span>
+                <span className="text-xs text-gray-500">Il y a 1 semaine</span>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">
+                Nouveau talent rejoint MymétiC
+              </h3>
+              <p className="text-sm text-gray-400 mb-4">
+                Un joueur prometteur vient renforcer notre roster Master.
+              </p>
+              <button className="flex items-center gap-2 text-green-400 font-semibold text-sm group-hover:gap-3 transition-all">
+                Lire la suite <ExternalLink className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Actu 3 - Événement */}
+          <div className="group relative overflow-hidden rounded-xl bg-black/40 border border-blue-500/30 hover:border-blue-500/60 transition-all cursor-pointer">
+            <div className="aspect-video overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
+              <span className="text-6xl">📅</span>
+            </div>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="px-2 py-1 rounded text-xs font-bold uppercase bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                  ÉVÉNEMENT
+                </span>
+                <span className="text-xs text-gray-500">Dans 3 jours</span>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
+                LAN Finals à venir
+              </h3>
+              <p className="text-sm text-gray-400 mb-4">
+                Nos équipes se préparent pour les finales en présentiel à Paris.
+              </p>
+              <button className="flex items-center gap-2 text-blue-400 font-semibold text-sm group-hover:gap-3 transition-all">
+                Lire la suite <ExternalLink className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center mt-12">
+          <button 
+            onClick={() => setActiveSection('news')}
+            className="px-8 py-3 bg-red-500/20 border border-red-500/50 text-red-400 font-bold rounded-xl hover:bg-red-500/30 transition-all">
+            Voir toutes les actualités
+          </button>
+        </div>
+      </div>
+    </section>
+  </>
+)}
 
         {/* TEAMS - NOUVEAU DESIGN COMPACT ET PRO */}
         {activeSection === 'teams' && (
@@ -430,6 +528,53 @@ function App() {
         </div>
       )}
 
+<div className="fixed bottom-0 left-0 right-0 z-40 bg-black/90 backdrop-blur-xl border-t border-red-500/30 py-4 overflow-hidden">
+  <div className="text-center mb-2">
+    <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Nos Partenaires</span>
+  </div>
+  <div className="sponsor-scroll-container overflow-hidden">
+    <div className="sponsor-scroll flex gap-8 items-center">
+      {/* Répété 2 fois pour l'effet infini */}
+      {[...Array(2)].map((_, idx) => (
+        <React.Fragment key={idx}>
+          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
+            <span className="text-2xl">🔴</span>
+            <span className="text-white font-bold whitespace-nowrap">Red Bull</span>
+          </div>
+          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
+            <span className="text-2xl">🖱️</span>
+            <span className="text-white font-bold whitespace-nowrap">Razer</span>
+          </div>
+          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
+            <span className="text-2xl">⌨️</span>
+            <span className="text-white font-bold whitespace-nowrap">Logitech</span>
+          </div>
+          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
+            <span className="text-2xl">💬</span>
+            <span className="text-white font-bold whitespace-nowrap">Discord</span>
+          </div>
+          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
+            <span className="text-2xl">📺</span>
+            <span className="text-white font-bold whitespace-nowrap">Twitch</span>
+          </div>
+          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
+            <span className="text-2xl">💻</span>
+            <span className="text-white font-bold whitespace-nowrap">Intel</span>
+          </div>
+          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
+            <span className="text-2xl">🎮</span>
+            <span className="text-white font-bold whitespace-nowrap">NVIDIA</span>
+          </div>
+          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
+            <span className="text-2xl">🎧</span>
+            <span className="text-white font-bold whitespace-nowrap">HyperX</span>
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  </div>
+</div>
+      
       <footer className="relative z-10 border-t border-red-900/30 mt-20 py-12 text-center text-sm text-gray-600">
         <p>© 2026 Structure TravL E-sports • Tous droits réservés</p>
       </footer>
