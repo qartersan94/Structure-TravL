@@ -1,4 +1,4 @@
-// teamsData.js - Compatible avec App.jsx existant
+// teamsData.js - COULEURS OPTIMISÉES POUR VISIBILITÉ MAXIMALE
 
 export const TEAMS = [
   {
@@ -6,7 +6,7 @@ export const TEAMS = [
     name: 'FLUX',
     rank: 'Master',
     league: 'Flux Ignition',
-    color: '#ff6b35', // Orange
+    color: '#ff9966', // Orange lumineux - TOUJOURS VISIBLE
     logo: '🔥',
     globalStats: {
       totalWins: 28,
@@ -23,7 +23,7 @@ export const TEAMS = [
     name: 'MymétiC',
     rank: 'Master',
     league: 'Shadows We Strike',
-    color: '#2C2C2C', // Noir
+    color: '#cccccc', // Gris très clair - TOUJOURS VISIBLE
     logo: '🛡️',
     globalStats: {
       totalWins: 26,
@@ -40,7 +40,7 @@ export const TEAMS = [
     name: "Froz'nLégion",
     rank: 'Low Master',
     league: 'Frost Guardians',
-    color: '#FFFFFF', // Blanc
+    color: '#e8e8e8', // Blanc grisé - TOUJOURS VISIBLE
     logo: '❄️',
     globalStats: {
       totalWins: 24,
@@ -56,7 +56,7 @@ export const TEAMS = [
     name: 'MOUNT X',
     rank: 'High Diamond',
     league: 'Paris Performance',
-    color: '#10b981', // Vert
+    color: '#33ff99', // Vert très lumineux - TOUJOURS VISIBLE
     logo: '⚡',
     globalStats: {
       totalWins: 22,
@@ -72,7 +72,7 @@ export const TEAMS = [
     name: 'VISIONARY',
     rank: 'Diamond',
     league: 'Arcane Vision',
-    color: '#8b5cf6', // Violet
+    color: '#bb99ff', // Violet lumineux - TOUJOURS VISIBLE
     logo: '👁️',
     globalStats: {
       totalWins: 20,
@@ -88,7 +88,7 @@ export const TEAMS = [
     name: 'TEAM',
     rank: 'Diamond',
     league: 'Never Look Back',
-    color: '#fbbf24', // Jaune
+    color: '#ffdd66', // Jaune très lumineux - TOUJOURS VISIBLE
     logo: '⭐',
     globalStats: {
       totalWins: 18,
@@ -104,7 +104,7 @@ export const TEAMS = [
     name: 'LEGENDARY',
     rank: 'Diamond',
     league: 'Legends Never Die',
-    color: '#3b82f6', // Bleu
+    color: '#66b3ff', // Bleu lumineux - TOUJOURS VISIBLE
     logo: '🏆',
     globalStats: {
       totalWins: 16,
