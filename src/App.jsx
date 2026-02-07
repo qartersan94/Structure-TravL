@@ -223,8 +223,8 @@ function App() {
                 </div>
               </div>
 
-              {/* CARTES ROSTER FUTURISTES */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* CARTES ROSTER - ULTRA COMPACT PRO */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                 {filteredTeams.map((team) => {
                   const teamColor = team.color;
                   const roster = getTeamPlayers(team.id);
@@ -232,80 +232,78 @@ function App() {
 
                   return (
                     <div key={team.id} onClick={() => handleFlipCard(team.id)}
-                      className="group relative h-[320px] cursor-pointer" style={{ perspective: '1000px' }}>
+                      className="group relative h-[260px] cursor-pointer" style={{ perspective: '1000px' }}>
                       
-                      {/* Glow effect */}
-                      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl" 
-                        style={{ background: `${teamColor}40` }}></div>
+                      {/* Glow subtil */}
+                      <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" 
+                        style={{ background: `${teamColor}30` }}></div>
                       
                       <div className={`relative w-full h-full transition-all duration-700 ${isFlipped ? 'rotate-y-180' : ''}`}
                         style={{ transformStyle: 'preserve-3d' }}>
                         
-                        {/* RECTO - VERSION FUTURISTE */}
-                        <div className="absolute inset-0 rounded-2xl overflow-hidden backdrop-blur-xl transition-all group-hover:scale-[1.02]"
+                        {/* RECTO - ULTRA COMPACT */}
+                        <div className="absolute inset-0 rounded-xl overflow-hidden backdrop-blur-sm transition-all"
                           style={{
-                            background: `linear-gradient(135deg, ${teamColor}15, rgba(10,10,10,0.98))`,
-                            border: `1px solid ${teamColor}30`,
-                            boxShadow: `0 10px 40px ${teamColor}20, inset 0 1px 0 ${teamColor}20`,
+                            background: `linear-gradient(135deg, ${teamColor}12, rgba(8,8,8,0.98))`,
+                            border: `1px solid ${teamColor}25`,
+                            boxShadow: `0 4px 20px ${teamColor}15`,
                             backfaceVisibility: 'hidden'
                           }}>
                           
-                          {/* Ligne déco top */}
-                          <div className="absolute top-0 left-0 right-0 h-0.5" 
-                            style={{ background: `linear-gradient(90deg, transparent, ${teamColor}, transparent)` }}></div>
+                          {/* Ligne accent top */}
+                          <div className="absolute top-0 left-0 right-0 h-px" 
+                            style={{ background: `linear-gradient(90deg, transparent, ${teamColor}60, transparent)` }}></div>
                           
-                          <div className="relative p-5 h-full flex flex-col">
-                            {/* Header ultra compact */}
-                            <div className="flex items-center justify-between mb-4">
-                              <div className="flex items-center gap-2">
-                                <div className="text-2xl">{team.logo}</div>
+                          <div className="relative p-3 h-full flex flex-col">
+                            {/* Header minimal */}
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-lg">{team.logo}</span>
                                 <div>
-                                  <h3 className="text-xl font-black font-bebas leading-none" style={{ color: teamColor }}>
+                                  <h3 className="text-sm font-black font-bebas leading-none" style={{ color: teamColor }}>
                                     {team.name}
                                   </h3>
-                                  <p className="text-[9px] text-gray-600 uppercase tracking-wider">{team.rank}</p>
+                                  <p className="text-[7px] text-gray-700 uppercase tracking-wide">{team.rank}</p>
                                 </div>
                               </div>
-                              <div className="px-2 py-1 rounded-md text-[9px] font-bold" 
-                                style={{ background: `${teamColor}20`, color: teamColor }}>
+                              <div className="px-1.5 py-0.5 rounded text-[8px] font-bold" 
+                                style={{ background: `${teamColor}18`, color: teamColor }}>
                                 {roster.length}/5
                               </div>
                             </div>
 
-                            {/* Stats bar compact */}
-                            <div className="grid grid-cols-2 gap-2 mb-4">
-                              <div className="text-center py-1.5 rounded-lg bg-black/30 border border-white/5">
-                                <div className="text-sm font-bold" style={{ color: teamColor }}>
+                            {/* Stats inline ultra compact */}
+                            <div className="flex gap-1.5 mb-2">
+                              <div className="flex-1 text-center py-1 rounded bg-black/20 border border-white/5">
+                                <div className="text-xs font-bold leading-none" style={{ color: teamColor }}>
                                   {team.globalStats.totalWins}-{team.globalStats.totalLosses}
                                 </div>
-                                <div className="text-[8px] text-gray-600 uppercase">Record</div>
                               </div>
-                              <div className="text-center py-1.5 rounded-lg bg-black/30 border border-white/5">
-                                <div className="text-sm font-bold" style={{ color: teamColor }}>
+                              <div className="flex-1 text-center py-1 rounded bg-black/20 border border-white/5">
+                                <div className="text-xs font-bold leading-none" style={{ color: teamColor }}>
                                   {team.globalStats.winRate}%
                                 </div>
-                                <div className="text-[8px] text-gray-600 uppercase">Winrate</div>
                               </div>
                             </div>
 
-                            {/* Roster ultra compact */}
-                            <div className="flex-1 space-y-1 mb-3 overflow-y-auto custom-scrollbar">
+                            {/* Roster ultra minimal */}
+                            <div className="flex-1 space-y-0.5 mb-2 overflow-y-auto custom-scrollbar">
                               {roster.length > 0 ? (
                                 roster.map((player) => (
                                   <button key={player.id} 
                                     onClick={(e) => { e.stopPropagation(); handlePlayerClick(player); }}
-                                    className="w-full flex items-center justify-between px-2 py-1 rounded-lg bg-black/20 hover:bg-black/40 transition-all border border-white/5 hover:border-white/10 group/player">
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold bg-white/5" 
+                                    className="w-full flex items-center justify-between px-1.5 py-1 rounded bg-black/15 hover:bg-black/30 transition-all border border-white/3 hover:border-white/10">
+                                    <div className="flex items-center gap-1">
+                                      <div className="w-4 h-4 rounded flex items-center justify-center text-[7px] font-bold bg-white/5" 
                                         style={{ color: teamColor }}>
                                         {player.role[0]}
                                       </div>
-                                      <span className="text-xs font-medium text-white truncate group-hover/player:text-white/90">
+                                      <span className="text-[10px] font-medium text-white truncate max-w-[80px]">
                                         {player.name}
                                       </span>
                                     </div>
-                                    <div className="flex items-center gap-1.5">
-                                      <span className="text-[10px] font-mono font-bold" style={{ color: teamColor }}>
+                                    <div className="flex items-center gap-1">
+                                      <span className="text-[9px] font-mono font-bold" style={{ color: teamColor }}>
                                         {player.kda || '0.0'}
                                       </span>
                                       <div className={`w-1 h-1 rounded-full ${player.status === 'online' ? 'bg-green-400' : 'bg-gray-700'}`}></div>
@@ -313,74 +311,69 @@ function App() {
                                   </button>
                                 ))
                               ) : (
-                                <div className="flex-1 flex flex-col items-center justify-center py-6">
-                                  <UserPlus className="w-8 h-8 text-gray-800 mb-2 opacity-30" />
-                                  <p className="text-[10px] text-gray-700 text-center">Roster vide</p>
+                                <div className="flex-1 flex flex-col items-center justify-center py-4">
+                                  <UserPlus className="w-6 h-6 text-gray-800 mb-1 opacity-20" />
+                                  <p className="text-[8px] text-gray-800">Roster vide</p>
                                 </div>
                               )}
                             </div>
 
                             {/* Progress bar ultra fine */}
-                            <div className="mb-3">
-                              <div className="relative w-full h-1 rounded-full overflow-hidden bg-white/5">
+                            <div className="mb-1.5">
+                              <div className="relative w-full h-0.5 rounded-full overflow-hidden bg-white/5">
                                 <div className="absolute inset-0 h-full rounded-full transition-all duration-1000" 
                                   style={{ 
                                     width: `${team.globalStats.winRate}%`, 
-                                    background: `linear-gradient(90deg, ${teamColor}, ${teamColor}80)`,
-                                    boxShadow: `0 0 10px ${teamColor}80`
+                                    background: teamColor,
+                                    boxShadow: `0 0 8px ${teamColor}60`
                                   }}></div>
                               </div>
                             </div>
 
-                            {/* Footer compact */}
+                            {/* Footer minimal */}
                             <div className="flex items-center justify-between">
-                              <div className="flex gap-1">
+                              <div className="flex gap-0.5">
                                 {team.competitions.slice(0, 2).map((comp, i) => (
-                                  <span key={i} className="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-black/30" 
+                                  <span key={i} className="text-[8px] font-bold px-1 py-0.5 rounded bg-black/20" 
                                     style={{ color: teamColor }}>
                                     #{comp.position}
                                   </span>
                                 ))}
                               </div>
-                              <span className="text-[8px] text-gray-700 uppercase font-semibold">Flip ↻</span>
+                              <span className="text-[7px] text-gray-800 uppercase font-bold">↻</span>
                             </div>
                           </div>
 
-                          {/* Scan line effect */}
-                          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white to-transparent animate-scan"></div>
-                            </div>
+                          {/* Scan line subtil */}
+                          <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent animate-scan"></div>
                           </div>
                         </div>
 
-                        {/* VERSO - Statistiques */}
-                        <div className="absolute inset-0 rounded-2xl backdrop-blur-xl p-5"
+                        {/* VERSO - Compact */}
+                        <div className="absolute inset-0 rounded-xl backdrop-blur-sm p-3"
                           style={{ 
-                            background: `linear-gradient(135deg, ${teamColor}20, rgba(10,10,10,0.98))`, 
-                            border: `1px solid ${teamColor}30`, 
+                            background: `linear-gradient(135deg, ${teamColor}18, rgba(8,8,8,0.98))`, 
+                            border: `1px solid ${teamColor}25`, 
                             backfaceVisibility: 'hidden', 
                             transform: 'rotateY(180deg)'
                           }}>
-                          <h3 className="text-lg font-bebas mb-4 text-center" style={{ color: teamColor }}>
-                            STATISTIQUES
+                          <h3 className="text-sm font-bebas mb-3 text-center" style={{ color: teamColor }}>
+                            STATS
                           </h3>
-                          <div className="space-y-2">
+                          <div className="space-y-1.5">
                             {team.competitions.map((comp, i) => (
-                              <div key={i} className="p-3 rounded-xl bg-black/30 border border-white/5 hover:border-white/10 transition-all" 
-                                style={{ borderLeft: `3px solid ${teamColor}` }}>
-                                <div className="text-xs font-bold mb-1 text-white">{comp.name}</div>
-                                <div className="flex justify-between text-[10px] text-gray-400">
-                                  <span className="font-semibold" style={{ color: teamColor }}>#{comp.position}</span>
-                                  <span>{comp.points} pts</span>
-                                </div>
-                                <div className="text-[10px] text-gray-600 mt-1">
-                                  {comp.wins}V - {comp.losses}D
+                              <div key={i} className="p-2 rounded-lg bg-black/20 border-l-2 hover:bg-black/30 transition-all" 
+                                style={{ borderColor: teamColor }}>
+                                <div className="text-[10px] font-bold mb-0.5 text-white truncate">{comp.name}</div>
+                                <div className="flex justify-between text-[8px] text-gray-500">
+                                  <span className="font-bold" style={{ color: teamColor }}>#{comp.position}</span>
+                                  <span>{comp.points}pts • {comp.wins}V-{comp.losses}D</span>
                                 </div>
                               </div>
                             ))}
                           </div>
-                          <p className="text-[8px] text-center text-gray-700 mt-4 uppercase font-semibold">Click pour retourner</p>
+                          <p className="text-[7px] text-center text-gray-800 mt-2 uppercase font-bold">Click ↻</p>
                         </div>
                       </div>
                     </div>
@@ -391,70 +384,62 @@ function App() {
           </section>
         )}
 
-        {/* RECRUTEMENT */}
+        {/* RECRUTEMENT - ULTRA COMPACT */}
         {activeSection === 'recrutement' && (
-          <section className="min-h-screen py-20 px-4">
-            <div className="max-w-5xl mx-auto">
-              <h2 className="text-6xl font-black font-bebas text-center mb-8" 
+          <section className="min-h-screen py-12 px-4">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-4xl font-black font-bebas text-center mb-2" 
                 style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 RECRUTEMENT
               </h2>
-              <p className="text-center text-gray-400 mb-16">
-                Tu cherches une équipe ou des joueurs ? Poste ton annonce !
-              </p>
+              <p className="text-center text-gray-500 text-sm mb-8">Rejoins une équipe ou recrute des joueurs</p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-                {/* Cherche équipe */}
-                <div className="bg-black/40 backdrop-blur-xl border border-red-500/30 rounded-2xl p-8">
-                  <div className="flex items-center gap-3 mb-6">
-                    <UserPlus className="w-8 h-8 text-red-400" />
-                    <h3 className="text-2xl font-bold text-white">Rejoindre une équipe TL</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                {/* Rejoindre équipe - COMPACT */}
+                <div className="bg-black/40 backdrop-blur-xl border border-red-500/30 rounded-xl p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <UserPlus className="w-5 h-5 text-red-400" />
+                    <h3 className="text-lg font-bold text-white">Rejoindre une équipe TL</h3>
                   </div>
                   
-                  <form className="space-y-4">
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Pseudo in-game</label>
-                      <input type="text" 
-                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none" 
-                        placeholder="Ton pseudo..." />
-                    </div>
+                  <form className="space-y-3">
+                    <input type="text" placeholder="Pseudo in-game *"
+                      className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-red-500/50 outline-none" />
                     
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Équipe souhaitée</label>
-                      <select className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none">
-                        <option>FLUX</option>
-                        <option>MymétiC</option>
-                        <option>Froz'nLégion</option>
-                        <option>MOUNT X</option>
-                        <option>VISIONARY</option>
-                        <option>TEAM</option>
-                        <option>LEGENDARY</option>
-                      </select>
-                    </div>
+                    <select className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-red-500/50 outline-none">
+                      <option>Équipe souhaitée</option>
+                      <option>FLUX</option>
+                      <option>MymétiC</option>
+                      <option>Froz'nLégion</option>
+                      <option>MOUNT X</option>
+                      <option>VISIONARY</option>
+                      <option>TEAM</option>
+                      <option>LEGENDARY</option>
+                    </select>
                     
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Rôle principal</label>
-                      <select className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none">
+                    <div className="grid grid-cols-2 gap-3">
+                      <select className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-red-500/50 outline-none">
+                        <option>Rôle</option>
                         <option>Top</option>
                         <option>Jungle</option>
                         <option>Mid</option>
                         <option>ADC</option>
                         <option>Support</option>
                       </select>
+                      <input type="text" placeholder="Rang"
+                        className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-red-500/50 outline-none" />
                     </div>
 
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Rang actuel</label>
-                      <input type="text" 
-                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none" 
-                        placeholder="Ex: Diamond 2" />
-                    </div>
+                    <textarea rows="3" placeholder="Message..."
+                      className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-red-500/50 outline-none resize-none"></textarea>
 
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Message</label>
-                      <textarea 
-                        rows="4"
-                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none resize-none" 
+                    <button type="submit" 
+                      className="w-full px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 rounded-lg font-bold text-sm hover:scale-105 transition-all"
+                      style={{ boxShadow: '0 0 20px rgba(220,20,60,0.3)' }}>
+                      Envoyer ma candidature
+                    </button>
+                  </form>
+                </div> 
                         placeholder="Présente-toi et explique pourquoi tu veux rejoindre cette équipe..."></textarea>
                     </div>
 
@@ -466,91 +451,84 @@ function App() {
                   </form>
                 </div>
 
-                {/* Cherche joueurs */}
-                <div className="bg-black/40 backdrop-blur-xl border border-green-500/30 rounded-2xl p-8">
-                  <div className="flex items-center gap-3 mb-6">
-                    <Search className="w-8 h-8 text-green-400" />
-                    <h3 className="text-2xl font-bold text-white">Je cherche des joueurs</h3>
+
+                {/* Recruter joueur - COMPACT */}
+                <div className="bg-black/40 backdrop-blur-xl border border-green-500/30 rounded-xl p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Search className="w-5 h-5 text-green-400" />
+                    <h3 className="text-lg font-bold text-white">Recruter des joueurs</h3>
                   </div>
                   
-                  <form className="space-y-4">
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Équipe</label>
-                      <select className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-green-500/50 outline-none">
-                        {TEAMS.map(t => <option key={t.id}>{t.name}</option>)}
-                      </select>
-                    </div>
+                  <form className="space-y-3">
+                    <select className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-green-500/50 outline-none">
+                      <option>Équipe</option>
+                      {TEAMS.map(t => <option key={t.id}>{t.name}</option>)}
+                    </select>
 
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Poste recherché</label>
-                      <select className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-green-500/50 outline-none">
+                    <div className="grid grid-cols-2 gap-3">
+                      <select className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-green-500/50 outline-none">
+                        <option>Poste</option>
                         <option>Top</option>
                         <option>Jungle</option>
                         <option>Mid</option>
                         <option>ADC</option>
                         <option>Support</option>
                       </select>
+                      <input type="text" placeholder="Rang minimum"
+                        className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-green-500/50 outline-none" />
                     </div>
 
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Rang minimum</label>
-                      <input type="text" 
-                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-green-500/50 outline-none" 
-                        placeholder="Ex: Platinum 1+" />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Description</label>
-                      <textarea 
-                        rows="4"
-                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-green-500/50 outline-none resize-none" 
-                        placeholder="Décris le profil..."></textarea>
-                    </div>
+                    <textarea rows="3" placeholder="Description du profil..."
+                      className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-green-500/50 outline-none resize-none"></textarea>
 
                     <button type="submit" 
-                      className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 rounded-xl font-bold hover:scale-105 transition-all"
-                      style={{ boxShadow: '0 0 30px rgba(34,197,94,0.4)' }}>
+                      className="w-full px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 rounded-lg font-bold text-sm hover:scale-105 transition-all"
+                      style={{ boxShadow: '0 0 20px rgba(34,197,94,0.3)' }}>
                       Publier l'offre
                     </button>
                   </form>
                 </div>
               </div>
 
-              {/* Annonces récentes */}
+              {/* Annonces - COMPACT */}
               <div>
-                <h3 className="text-3xl font-bold text-white mb-8">Annonces récentes</h3>
+                <h3 className="text-2xl font-bold text-white mb-4">Annonces récentes</h3>
                 
-                <div className="space-y-4">
-                  <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl p-6 hover:border-red-500/30 transition-all">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="px-3 py-1 rounded-lg bg-red-500/20 text-red-400 text-xs font-bold">CHERCHE ÉQUIPE</span>
-                          <span className="text-white font-bold">ShadowKing</span>
-                          <span className="text-gray-500 text-sm">• Top • Diamond 1</span>
-                        </div>
-                        <p className="text-gray-400 text-sm">
-                          Joueur Top expérimenté cherche équipe Master+. Disponible tous les soirs.
-                        </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:border-red-500/30 transition-all">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-red-500/20 text-red-400 border border-red-500/30">
+                          CHERCHE ÉQUIPE
+                        </span>
+                        <span className="text-xs text-gray-600">2h</span>
                       </div>
-                      <span className="text-xs text-gray-600 whitespace-nowrap">Il y a 2h</span>
                     </div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm font-bold text-white">ShadowKing</span>
+                      <span className="text-xs text-gray-500">• Top • Diamond 1</span>
+                    </div>
+                    <p className="text-xs text-gray-400 line-clamp-2">
+                      Joueur Top expérimenté cherche équipe Master+. Dispo tous les soirs.
+                    </p>
                   </div>
 
-                  <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl p-6 hover:border-green-500/30 transition-all">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="px-3 py-1 rounded-lg bg-green-500/20 text-green-400 text-xs font-bold">CHERCHE JOUEUR</span>
-                          <span className="text-white font-bold">FLUX</span>
-                          <span className="text-gray-500 text-sm">• Jungle • Platinum 1+</span>
-                        </div>
-                        <p className="text-gray-400 text-sm">
-                          Team Master cherche Jungle motivé pour Prime League.
-                        </p>
+                  <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl p-4 hover:border-green-500/30 transition-all">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded text-[9px] font-bold uppercase bg-green-500/20 text-green-400 border border-green-500/30">
+                          CHERCHE JOUEUR
+                        </span>
+                        <span className="text-xs text-gray-600">5h</span>
                       </div>
-                      <span className="text-xs text-gray-600 whitespace-nowrap">Il y a 5h</span>
                     </div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-sm font-bold text-white">FLUX</span>
+                      <span className="text-xs text-gray-500">• Jungle • Plat 1+</span>
+                    </div>
+                    <p className="text-xs text-gray-400 line-clamp-2">
+                      Team Master cherche Jungle motivé pour Prime League.
+                    </p>
                   </div>
                 </div>
               </div>
