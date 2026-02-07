@@ -602,7 +602,7 @@ function App() {
               <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-900/10 border border-purple-500/30 hover:border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300">
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">💬</span>
-                  <span className="text-xs font-bold text-white">Vous ?</span>
+                  <span className="text-xs font-bold text-white">TLeagues</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
@@ -610,7 +610,7 @@ function App() {
               <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-green-400/20 to-green-700/10 border border-green-400/30 hover:border-green-400/60 hover:shadow-lg hover:shadow-green-400/20 transition-all duration-300">
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">🎮</span>
-                  <span className="text-xs font-bold text-white">Vous ?</span>
+                  <span className="text-xs font-bold text-white">Rank HunterS</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-green-400/0 to-green-400/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
