@@ -60,7 +60,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white pb-16">
+    <div className="min-h-screen bg-black text-white pb-14">
       <div className="fixed inset-0 z-0 bg-gradient-to-br from-black via-gray-950 to-black"></div>
 
       {/* Nav - LOGO COMPACT */}
@@ -223,8 +223,8 @@ function App() {
                 </div>
               </div>
 
-              {/* CARTES ROSTER */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {/* CARTES ROSTER FUTURISTES */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredTeams.map((team) => {
                   const teamColor = team.color;
                   const roster = getTeamPlayers(team.id);
@@ -232,142 +232,155 @@ function App() {
 
                   return (
                     <div key={team.id} onClick={() => handleFlipCard(team.id)}
-                      className="relative h-[340px] cursor-pointer group" style={{ perspective: '1000px' }}>
+                      className="group relative h-[320px] cursor-pointer" style={{ perspective: '1000px' }}>
+                      
+                      {/* Glow effect */}
+                      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl" 
+                        style={{ background: `${teamColor}40` }}></div>
                       
                       <div className={`relative w-full h-full transition-all duration-700 ${isFlipped ? 'rotate-y-180' : ''}`}
                         style={{ transformStyle: 'preserve-3d' }}>
                         
-                        {/* RECTO */}
-                        <div className="absolute inset-0 rounded-xl overflow-hidden backdrop-blur-xl transition-all group-hover:scale-[1.02]"
+                        {/* RECTO - VERSION FUTURISTE */}
+                        <div className="absolute inset-0 rounded-2xl overflow-hidden backdrop-blur-xl transition-all group-hover:scale-[1.02]"
                           style={{
-                            background: `linear-gradient(135deg, ${teamColor}20, rgba(20,20,20,0.95))`,
-                            border: `2px solid ${teamColor}40`,
-                            boxShadow: `0 8px 32px ${teamColor}30`,
+                            background: `linear-gradient(135deg, ${teamColor}15, rgba(10,10,10,0.98))`,
+                            border: `1px solid ${teamColor}30`,
+                            boxShadow: `0 10px 40px ${teamColor}20, inset 0 1px 0 ${teamColor}20`,
                             backfaceVisibility: 'hidden'
                           }}>
                           
-                          <div className="relative p-4 h-full flex flex-col">
-                            <div className="flex items-center justify-between mb-3">
+                          {/* Ligne déco top */}
+                          <div className="absolute top-0 left-0 right-0 h-0.5" 
+                            style={{ background: `linear-gradient(90deg, transparent, ${teamColor}, transparent)` }}></div>
+                          
+                          <div className="relative p-5 h-full flex flex-col">
+                            {/* Header ultra compact */}
+                            <div className="flex items-center justify-between mb-4">
                               <div className="flex items-center gap-2">
-                                <div className="text-xs font-bold px-2 py-1 rounded-lg" 
-                                  style={{ background: `${teamColor}30`, color: teamColor }}>
-                                  {team.rank}
+                                <div className="text-2xl">{team.logo}</div>
+                                <div>
+                                  <h3 className="text-xl font-black font-bebas leading-none" style={{ color: teamColor }}>
+                                    {team.name}
+                                  </h3>
+                                  <p className="text-[9px] text-gray-600 uppercase tracking-wider">{team.rank}</p>
                                 </div>
                               </div>
-                              <div className="text-2xl">{team.logo}</div>
+                              <div className="px-2 py-1 rounded-md text-[9px] font-bold" 
+                                style={{ background: `${teamColor}20`, color: teamColor }}>
+                                {roster.length}/5
+                              </div>
                             </div>
 
-                            <h3 className="text-2xl font-black font-bebas mb-1" style={{ color: teamColor }}>
-                              {team.name}
-                            </h3>
-                            <p className="text-xs text-gray-500 mb-4">{team.league}</p>
-
-                            <div className="grid grid-cols-3 gap-2 mb-4">
-                              <div className="text-center py-2 rounded-lg" style={{ background: `${teamColor}10` }}>
-                                <div className="text-lg font-bold" style={{ color: teamColor }}>
+                            {/* Stats bar compact */}
+                            <div className="grid grid-cols-2 gap-2 mb-4">
+                              <div className="text-center py-1.5 rounded-lg bg-black/30 border border-white/5">
+                                <div className="text-sm font-bold" style={{ color: teamColor }}>
                                   {team.globalStats.totalWins}-{team.globalStats.totalLosses}
                                 </div>
-                                <div className="text-[9px] text-gray-600 uppercase">Record</div>
+                                <div className="text-[8px] text-gray-600 uppercase">Record</div>
                               </div>
-                              <div className="text-center py-2 rounded-lg" style={{ background: `${teamColor}10` }}>
-                                <div className="text-lg font-bold" style={{ color: teamColor }}>
+                              <div className="text-center py-1.5 rounded-lg bg-black/30 border border-white/5">
+                                <div className="text-sm font-bold" style={{ color: teamColor }}>
                                   {team.globalStats.winRate}%
                                 </div>
-                                <div className="text-[9px] text-gray-600 uppercase">WR</div>
-                              </div>
-                              <div className="text-center py-2 rounded-lg" style={{ background: `${teamColor}10` }}>
-                                <div className="text-lg font-bold" style={{ color: teamColor }}>
-                                  {roster.length}/5
-                                </div>
-                                <div className="text-[9px] text-gray-600 uppercase">Roster</div>
+                                <div className="text-[8px] text-gray-600 uppercase">Winrate</div>
                               </div>
                             </div>
 
-                            <div className="flex-1 space-y-1.5 mb-3 overflow-y-auto">
+                            {/* Roster ultra compact */}
+                            <div className="flex-1 space-y-1 mb-3 overflow-y-auto custom-scrollbar">
                               {roster.length > 0 ? (
                                 roster.map((player) => (
                                   <button key={player.id} 
                                     onClick={(e) => { e.stopPropagation(); handlePlayerClick(player); }}
-                                    className="w-full flex items-center justify-between px-2 py-1.5 rounded-lg bg-black/30 hover:bg-black/50 transition-all border border-white/5">
-                                    <div className="flex items-center gap-2 text-xs">
-                                      <span className="text-gray-500 w-12 font-bold">{player.role}</span>
-                                      <span className="text-white font-medium truncate">{player.name}</span>
-                                    </div>
+                                    className="w-full flex items-center justify-between px-2 py-1 rounded-lg bg-black/20 hover:bg-black/40 transition-all border border-white/5 hover:border-white/10 group/player">
                                     <div className="flex items-center gap-2">
-                                      <span className="text-xs font-mono" style={{ color: teamColor }}>
+                                      <div className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold bg-white/5" 
+                                        style={{ color: teamColor }}>
+                                        {player.role[0]}
+                                      </div>
+                                      <span className="text-xs font-medium text-white truncate group-hover/player:text-white/90">
+                                        {player.name}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="text-[10px] font-mono font-bold" style={{ color: teamColor }}>
                                         {player.kda || '0.0'}
                                       </span>
-                                      <span className={`w-1.5 h-1.5 rounded-full ${player.status === 'online' ? 'bg-green-500' : 'bg-gray-600'}`}></span>
+                                      <div className={`w-1 h-1 rounded-full ${player.status === 'online' ? 'bg-green-400' : 'bg-gray-700'}`}></div>
                                     </div>
                                   </button>
                                 ))
                               ) : (
                                 <div className="flex-1 flex flex-col items-center justify-center py-6">
-                                  <UserPlus className="w-10 h-10 text-gray-700 mb-2 opacity-50" />
-                                  <p className="text-xs text-gray-600 text-center">Aucun joueur inscrit</p>
-                                  <p className="text-[10px] text-gray-700 mt-1">Dashboard → Ajouter joueurs</p>
+                                  <UserPlus className="w-8 h-8 text-gray-800 mb-2 opacity-30" />
+                                  <p className="text-[10px] text-gray-700 text-center">Roster vide</p>
                                 </div>
                               )}
                             </div>
 
+                            {/* Progress bar ultra fine */}
                             <div className="mb-3">
-                              <div className="relative w-full h-1.5 rounded-full overflow-hidden bg-white/5">
+                              <div className="relative w-full h-1 rounded-full overflow-hidden bg-white/5">
                                 <div className="absolute inset-0 h-full rounded-full transition-all duration-1000" 
                                   style={{ 
                                     width: `${team.globalStats.winRate}%`, 
-                                    background: teamColor,
-                                    boxShadow: `0 0 10px ${teamColor}`
+                                    background: `linear-gradient(90deg, ${teamColor}, ${teamColor}80)`,
+                                    boxShadow: `0 0 10px ${teamColor}80`
                                   }}></div>
-                              </div>
-                              <div className="flex justify-between items-center mt-1">
-                                <span className="text-[9px] text-gray-600 uppercase">Performance</span>
-                                <span className="text-xs font-bold" style={{ color: teamColor }}>
-                                  {team.globalStats.winRate}%
-                                </span>
                               </div>
                             </div>
 
-                            <div className="flex gap-1.5 items-center justify-between">
-                              <div className="flex gap-1 flex-wrap flex-1">
+                            {/* Footer compact */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex gap-1">
                                 {team.competitions.slice(0, 2).map((comp, i) => (
-                                  <span key={i} className="text-[10px] font-bold px-2 py-0.5 rounded-md" 
-                                    style={{ background: `${teamColor}25`, color: teamColor }}>
-                                    #{comp.position} {comp.name.split(' ')[0]}
+                                  <span key={i} className="text-[9px] font-bold px-1.5 py-0.5 rounded-md bg-black/30" 
+                                    style={{ color: teamColor }}>
+                                    #{comp.position}
                                   </span>
                                 ))}
                               </div>
-                              <span className="text-[9px] text-gray-700 uppercase whitespace-nowrap">↻</span>
+                              <span className="text-[8px] text-gray-700 uppercase font-semibold">Flip ↻</span>
+                            </div>
+                          </div>
+
+                          {/* Scan line effect */}
+                          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white to-transparent animate-scan"></div>
                             </div>
                           </div>
                         </div>
 
-                        {/* VERSO */}
-                        <div className="absolute inset-0 rounded-xl backdrop-blur-xl p-4"
+                        {/* VERSO - Statistiques */}
+                        <div className="absolute inset-0 rounded-2xl backdrop-blur-xl p-5"
                           style={{ 
-                            background: `linear-gradient(135deg, ${teamColor}25, rgba(20,20,20,0.95))`, 
-                            border: `2px solid ${teamColor}40`, 
+                            background: `linear-gradient(135deg, ${teamColor}20, rgba(10,10,10,0.98))`, 
+                            border: `1px solid ${teamColor}30`, 
                             backfaceVisibility: 'hidden', 
                             transform: 'rotateY(180deg)'
                           }}>
-                          <h3 className="text-xl font-bebas mb-4 text-center" style={{ color: teamColor }}>
+                          <h3 className="text-lg font-bebas mb-4 text-center" style={{ color: teamColor }}>
                             STATISTIQUES
                           </h3>
                           <div className="space-y-2">
                             {team.competitions.map((comp, i) => (
-                              <div key={i} className="p-3 rounded-lg bg-white/5 border-l-2 hover:bg-white/10 transition-all" 
-                                style={{ borderColor: teamColor }}>
-                                <div className="text-sm font-bold mb-1 text-white">{comp.name}</div>
-                                <div className="flex justify-between text-xs text-gray-400">
+                              <div key={i} className="p-3 rounded-xl bg-black/30 border border-white/5 hover:border-white/10 transition-all" 
+                                style={{ borderLeft: `3px solid ${teamColor}` }}>
+                                <div className="text-xs font-bold mb-1 text-white">{comp.name}</div>
+                                <div className="flex justify-between text-[10px] text-gray-400">
                                   <span className="font-semibold" style={{ color: teamColor }}>#{comp.position}</span>
                                   <span>{comp.points} pts</span>
                                 </div>
-                                <div className="text-xs text-gray-500 mt-1">
+                                <div className="text-[10px] text-gray-600 mt-1">
                                   {comp.wins}V - {comp.losses}D
                                 </div>
                               </div>
                             ))}
                           </div>
-                          <p className="text-[9px] text-center text-gray-700 mt-4 uppercase">Click retour</p>
+                          <p className="text-[8px] text-center text-gray-700 mt-4 uppercase font-semibold">Click pour retourner</p>
                         </div>
                       </div>
                     </div>
@@ -546,73 +559,69 @@ function App() {
         )}
       </div>
 
-      {/* BANNIÈRE SPONSORS - COMPACTE ET STYLÉE */}
+      {/* BANNIÈRE SPONSORS - 3 GAUCHE + 3 DROITE - COMPACT */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-black via-black/98 to-transparent backdrop-blur-xl border-t border-red-500/10">
-        <div className="max-w-7xl mx-auto px-6 py-3">
+        <div className="max-w-7xl mx-auto px-6 py-2.5">
           <div className="flex items-center justify-between">
-            {/* Texte gauche */}
+            {/* 3 Boutons GAUCHE */}
             <div className="flex items-center gap-2">
-              <div className="w-1 h-8 bg-gradient-to-b from-red-600 to-red-400 rounded-full"></div>
-              <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Partenaires Officiels</span>
-            </div>
-
-            {/* Sponsors - Boutons stylés */}
-            <div className="flex items-center gap-3">
-              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-red-600/20 to-red-900/10 border border-red-500/30 hover:border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🔴</span>
-                  <span className="text-xs font-bold text-white">Red Bull</span>
+              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-600/20 to-red-900/10 border border-red-500/30 hover:border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">🔴</span>
+                  <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 to-red-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
 
-              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-green-600/20 to-green-900/10 border border-green-500/30 hover:border-green-500/60 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🐍</span>
-                  <span className="text-xs font-bold text-white">Razer</span>
+              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-green-600/20 to-green-900/10 border border-green-500/30 hover:border-green-500/60 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">🐍</span>
+                  <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 to-green-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
 
-              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-blue-600/20 to-blue-900/10 border border-blue-500/30 hover:border-blue-500/60 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">⌨️</span>
-                  <span className="text-xs font-bold text-white">Logitech</span>
+              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-blue-600/20 to-blue-900/10 border border-blue-500/30 hover:border-blue-500/60 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">⌨️</span>
+                  <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
+            </div>
 
-              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-900/10 border border-purple-500/30 hover:border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">💬</span>
-                  <span className="text-xs font-bold text-white">Discord</span>
+            {/* CENTRE - Texte */}
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-6 bg-gradient-to-b from-red-600 to-red-400 rounded-full"></div>
+              <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Partenaires Officiels</span>
+              <div className="w-1 h-6 bg-gradient-to-b from-red-600 to-red-400 rounded-full"></div>
+            </div>
+
+            {/* 3 Boutons DROITE */}
+            <div className="flex items-center gap-2">
+              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-900/10 border border-purple-500/30 hover:border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">💬</span>
+                  <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
 
-              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-green-400/20 to-green-700/10 border border-green-400/30 hover:border-green-400/60 hover:shadow-lg hover:shadow-green-400/20 transition-all duration-300">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🎮</span>
-                  <span className="text-xs font-bold text-white">NVIDIA</span>
+              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-green-400/20 to-green-700/10 border border-green-400/30 hover:border-green-400/60 hover:shadow-lg hover:shadow-green-400/20 transition-all duration-300">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">🎮</span>
+                  <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-green-400/0 to-green-400/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
 
-              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-red-500/20 to-red-800/10 border border-red-400/30 hover:border-red-400/60 hover:shadow-lg hover:shadow-red-400/20 transition-all duration-300">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">🎧</span>
-                  <span className="text-xs font-bold text-white">HyperX</span>
+              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-500/20 to-red-800/10 border border-red-400/30 hover:border-red-400/60 hover:shadow-lg hover:shadow-red-400/20 transition-all duration-300">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">🎧</span>
+                  <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-red-400/0 to-red-400/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </button>
-            </div>
-
-            {/* Icône droite */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-600">Powered by</span>
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
-                <span className="text-xs font-black text-white">TL</span>
-              </div>
             </div>
           </div>
         </div>
@@ -675,6 +684,39 @@ function App() {
 
       <style jsx>{`
         .rotate-y-180 { transform: rotateY(180deg); }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255,255,255,0.05);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.1);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255,255,255,0.2);
+        }
+        
+        @keyframes scan {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          50% {
+            opacity: 0.5;
+          }
+          100% {
+            transform: translateY(400%);
+            opacity: 0;
+          }
+        }
+        
+        .animate-scan {
+          animation: scan 3s ease-in-out infinite;
+        }
       `}</style>
     </div>
   );
