@@ -408,7 +408,7 @@ function App() {
                 <div className="bg-black/40 backdrop-blur-xl border border-red-500/30 rounded-2xl p-8">
                   <div className="flex items-center gap-3 mb-6">
                     <UserPlus className="w-8 h-8 text-red-400" />
-                    <h3 className="text-2xl font-bold text-white">Je cherche une équipe</h3>
+                    <h3 className="text-2xl font-bold text-white">Rejoindre une équipe TL</h3>
                   </div>
                   
                   <form className="space-y-4">
@@ -417,6 +417,19 @@ function App() {
                       <input type="text" 
                         className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none" 
                         placeholder="Ton pseudo..." />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Équipe souhaitée</label>
+                      <select className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none">
+                        <option>FLUX</option>
+                        <option>MymétiC</option>
+                        <option>Froz'nLégion</option>
+                        <option>MOUNT X</option>
+                        <option>VISIONARY</option>
+                        <option>TEAM</option>
+                        <option>LEGENDARY</option>
+                      </select>
                     </div>
                     
                     <div>
@@ -442,13 +455,13 @@ function App() {
                       <textarea 
                         rows="4"
                         className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none resize-none" 
-                        placeholder="Présente-toi..."></textarea>
+                        placeholder="Présente-toi et explique pourquoi tu veux rejoindre cette équipe..."></textarea>
                     </div>
 
                     <button type="submit" 
                       className="w-full px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold hover:scale-105 transition-all"
                       style={{ boxShadow: '0 0 30px rgba(220,20,60,0.4)' }}>
-                      Publier mon annonce
+                      Envoyer ma candidature
                     </button>
                   </form>
                 </div>
@@ -559,7 +572,7 @@ function App() {
         )}
       </div>
 
-      {/* BANNIÈRE SPONSORS - 3 GAUCHE + 3 DROITE - COMPACT */}
+      {/* BANNIÈRE SPONSORS - EMOJIS PERTINENTS */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-black via-black/98 to-transparent backdrop-blur-xl border-t border-red-500/10">
         <div className="max-w-7xl mx-auto px-6 py-2.5">
           <div className="flex items-center justify-between">
@@ -567,7 +580,7 @@ function App() {
             <div className="flex items-center gap-2">
               <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-600/20 to-red-900/10 border border-red-500/30 hover:border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base">🔴</span>
+                  <span className="text-base">💰</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 to-red-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -575,7 +588,7 @@ function App() {
 
               <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-green-600/20 to-green-900/10 border border-green-500/30 hover:border-green-500/60 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base">🐍</span>
+                  <span className="text-base">🤝</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 to-green-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -583,7 +596,7 @@ function App() {
 
               <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-blue-600/20 to-blue-900/10 border border-blue-500/30 hover:border-blue-500/60 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base">⌨️</span>
+                  <span className="text-base">🎯</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -601,7 +614,7 @@ function App() {
             <div className="flex items-center gap-2">
               <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-900/10 border border-purple-500/30 hover:border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base">💬</span>
+                  <span className="text-base">🏆</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -609,7 +622,7 @@ function App() {
 
               <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-green-400/20 to-green-700/10 border border-green-400/30 hover:border-green-400/60 hover:shadow-lg hover:shadow-green-400/20 transition-all duration-300">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base">🎮</span>
+                  <span className="text-base">⚡</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-green-400/0 to-green-400/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -617,7 +630,7 @@ function App() {
 
               <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-500/20 to-red-800/10 border border-red-400/30 hover:border-red-400/60 hover:shadow-lg hover:shadow-red-400/20 transition-all duration-300">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-base">🎧</span>
+                  <span className="text-base">🎮</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-red-400/0 to-red-400/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
