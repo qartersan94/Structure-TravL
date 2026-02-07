@@ -93,107 +93,107 @@ function App() {
       </nav>
 
       <div className="relative z-10 pt-20">
-        {/* HOME */}
+        {/* HOME - OPTIMISÉ SLIDE */}
         {activeSection === 'home' && (
           <>
-            <section className="min-h-screen flex items-center justify-center px-4">
+            <section className="min-h-[65vh] flex items-center justify-center px-4 py-6">
               <div className="max-w-6xl mx-auto text-center">
-                <div className="inline-block mb-6 px-6 py-2 rounded-full bg-red-900/30 border border-red-600/50 animate-pulse">
-                  <span className="text-sm font-bold text-red-400">STRUCTURE ESPORTS</span>
+                <div className="inline-block mb-3 px-4 py-1 rounded-full bg-red-900/30 border border-red-600/50 animate-pulse">
+                  <span className="text-xs font-bold text-red-400">STRUCTURE ESPORTS</span>
                 </div>
-                <h1 className="text-8xl font-black mb-6 font-bebas" style={{ background: 'linear-gradient(to bottom, #FFF, #DC143C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-3 font-bebas" style={{ background: 'linear-gradient(to bottom, #FFF, #DC143C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Structure TravL<br />E-SPORTS
                 </h1>
-                <p className="text-2xl text-gray-300 mb-12">Commence ton voyage avec nous</p>
+                <p className="text-lg md:text-xl text-gray-300 mb-6">Commence ton voyage avec nous</p>
                 <button onClick={() => setActiveSection('teams')}
-                  className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold text-lg hover:scale-105 transition-all"
-                  style={{ boxShadow: '0 0 40px rgba(220,20,60,0.6)' }}>
-                  Découvrir nos équipes <ChevronRight className="inline ml-2" />
+                  className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold text-base hover:scale-105 transition-all"
+                  style={{ boxShadow: '0 0 30px rgba(220,20,60,0.5)' }}>
+                  Découvrir nos équipes <ChevronRight className="inline ml-2 w-5 h-5" />
                 </button>
               </div>
             </section>
 
-            {/* Actualités SOBRES FUTURISTES */}
-            <section className="py-20 px-4">
+            {/* Actualités - Remonté et compact */}
+            <section className="-mt-12 py-10 px-4">
               <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-16">
-                  <h2 className="text-5xl font-black font-bebas mb-4" style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                    ACTUALITÉS
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl md:text-4xl font-black font-bebas mb-2" style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    DERNIÈRES ACTUALITÉS
                   </h2>
-                  <div className="w-20 h-1 bg-gradient-to-r from-red-600 to-red-400 mx-auto"></div>
+                  <div className="w-16 h-0.5 bg-gradient-to-r from-red-600 to-red-400 mx-auto"></div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Actu 1 */}
                   <div className="group relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
-                    <div className="relative bg-black/60 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-red-500/50 transition-all">
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold uppercase tracking-wider">
+                    <div className="absolute inset-0 bg-gradient-to-br from-red-600/15 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
+                    <div className="relative bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:border-red-500/50 transition-all">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] font-bold uppercase tracking-wider">
                           Victoire
                         </span>
-                        <span className="text-xs text-gray-600">2j</span>
+                        <span className="text-[10px] text-gray-600">2j</span>
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors">
+                      <h3 className="text-base font-bold text-white mb-2 group-hover:text-red-400 transition-colors line-clamp-1">
                         FLUX domine la Prime League
                       </h3>
-                      <p className="text-sm text-gray-400 leading-relaxed mb-4">
+                      <p className="text-xs text-gray-400 leading-relaxed mb-3 line-clamp-2">
                         Performance exceptionnelle avec un score parfait de 3-0 en finale.
                       </p>
-                      <div className="flex items-center gap-2 text-red-400 text-sm font-semibold group-hover:gap-3 transition-all cursor-pointer">
-                        Lire <ChevronRight className="w-4 h-4" />
+                      <div className="flex items-center gap-1.5 text-red-400 text-xs font-semibold group-hover:gap-2 transition-all cursor-pointer">
+                        Lire <ChevronRight className="w-3 h-3" />
                       </div>
                     </div>
                   </div>
 
                   {/* Actu 2 */}
                   <div className="group relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-600/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
-                    <div className="relative bg-black/60 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-green-500/50 transition-all">
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold uppercase tracking-wider">
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-600/15 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
+                    <div className="relative bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:border-green-500/50 transition-all">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-[10px] font-bold uppercase tracking-wider">
                           Roster
                         </span>
-                        <span className="text-xs text-gray-600">1sem</span>
+                        <span className="text-[10px] text-gray-600">1sem</span>
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-green-400 transition-colors">
+                      <h3 className="text-base font-bold text-white mb-2 group-hover:text-green-400 transition-colors line-clamp-1">
                         Nouveau prodige chez MymétiC
                       </h3>
-                      <p className="text-sm text-gray-400 leading-relaxed mb-4">
+                      <p className="text-xs text-gray-400 leading-relaxed mb-3 line-clamp-2">
                         Un talent Master rejoint notre équipe pour viser le sommet.
                       </p>
-                      <div className="flex items-center gap-2 text-green-400 text-sm font-semibold group-hover:gap-3 transition-all cursor-pointer">
-                        Lire <ChevronRight className="w-4 h-4" />
+                      <div className="flex items-center gap-1.5 text-green-400 text-xs font-semibold group-hover:gap-2 transition-all cursor-pointer">
+                        Lire <ChevronRight className="w-3 h-3" />
                       </div>
                     </div>
                   </div>
 
                   {/* Actu 3 */}
                   <div className="group relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
-                    <div className="relative bg-black/60 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-blue-500/50 transition-all">
-                      <div className="flex items-center justify-between mb-4">
-                        <span className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-bold uppercase tracking-wider">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/15 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
+                    <div className="relative bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:border-blue-500/50 transition-all">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-bold uppercase tracking-wider">
                           Événement
                         </span>
-                        <span className="text-xs text-gray-600">3j</span>
+                        <span className="text-[10px] text-gray-600">3j</span>
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                      <h3 className="text-base font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-1">
                         LAN Finals Paris 2026
                       </h3>
-                      <p className="text-sm text-gray-400 leading-relaxed mb-4">
+                      <p className="text-xs text-gray-400 leading-relaxed mb-3 line-clamp-2">
                         Rendez-vous à l'Accor Arena pour les finales nationales.
                       </p>
-                      <div className="flex items-center gap-2 text-blue-400 text-sm font-semibold group-hover:gap-3 transition-all cursor-pointer">
-                        Lire <ChevronRight className="w-4 h-4" />
+                      <div className="flex items-center gap-1.5 text-blue-400 text-xs font-semibold group-hover:gap-2 transition-all cursor-pointer">
+                        Lire <ChevronRight className="w-3 h-3" />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="text-center mt-12">
+                <div className="text-center mt-6">
                   <button onClick={() => setActiveSection('news')}
-                    className="px-8 py-3 bg-white/5 border border-white/10 text-white font-semibold rounded-xl hover:bg-white/10 hover:border-red-500/50 transition-all">
+                    className="px-6 py-2 bg-white/5 border border-white/10 text-white font-semibold rounded-lg hover:bg-white/10 hover:border-red-500/50 transition-all text-sm">
                     Toutes les actualités
                   </button>
                 </div>
