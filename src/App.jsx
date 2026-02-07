@@ -60,7 +60,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white pb-24">
+    <div className="min-h-screen bg-black text-white pb-16">
       <div className="fixed inset-0 z-0 bg-gradient-to-br from-black via-gray-950 to-black"></div>
 
       {/* Nav - LOGO COMPACT */}
@@ -546,48 +546,72 @@ function App() {
         )}
       </div>
 
-      {/* BANNIÈRE SPONSORS - 3 GAUCHE + 3 DROITE */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-2xl border-t border-red-500/20 py-5">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between gap-8">
-            {/* 3 Sponsors GAUCHE */}
-            <div className="flex gap-4 flex-1 justify-end">
-              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-red-600/10 to-black border border-red-500/20 hover:border-red-500/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
-                <span className="text-3xl mb-1">🔴</span>
-                <span className="text-white font-bold text-xs">Red Bull</span>
-              </div>
-
-              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-green-600/10 to-black border border-green-500/20 hover:border-green-500/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
-                <span className="text-3xl mb-1">🐍</span>
-                <span className="text-white font-bold text-xs">Razer</span>
-              </div>
-
-              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-blue-600/10 to-black border border-blue-500/20 hover:border-blue-500/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
-                <span className="text-3xl mb-1">⌨️</span>
-                <span className="text-white font-bold text-xs">Logitech</span>
-              </div>
+      {/* BANNIÈRE SPONSORS - COMPACTE ET STYLÉE */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-black via-black/98 to-transparent backdrop-blur-xl border-t border-red-500/10">
+        <div className="max-w-7xl mx-auto px-6 py-3">
+          <div className="flex items-center justify-between">
+            {/* Texte gauche */}
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-8 bg-gradient-to-b from-red-600 to-red-400 rounded-full"></div>
+              <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Partenaires Officiels</span>
             </div>
 
-            {/* CENTRE - Texte */}
-            <div className="text-center px-8">
-              <span className="text-xs text-gray-500 uppercase tracking-widest font-semibold whitespace-nowrap">Nos Partenaires</span>
+            {/* Sponsors - Boutons stylés */}
+            <div className="flex items-center gap-3">
+              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-red-600/20 to-red-900/10 border border-red-500/30 hover:border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🔴</span>
+                  <span className="text-xs font-bold text-white">Red Bull</span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-red-500/0 to-red-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </button>
+
+              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-green-600/20 to-green-900/10 border border-green-500/30 hover:border-green-500/60 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🐍</span>
+                  <span className="text-xs font-bold text-white">Razer</span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 to-green-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </button>
+
+              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-blue-600/20 to-blue-900/10 border border-blue-500/30 hover:border-blue-500/60 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">⌨️</span>
+                  <span className="text-xs font-bold text-white">Logitech</span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </button>
+
+              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-900/10 border border-purple-500/30 hover:border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">💬</span>
+                  <span className="text-xs font-bold text-white">Discord</span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </button>
+
+              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-green-400/20 to-green-700/10 border border-green-400/30 hover:border-green-400/60 hover:shadow-lg hover:shadow-green-400/20 transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🎮</span>
+                  <span className="text-xs font-bold text-white">NVIDIA</span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-green-400/0 to-green-400/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </button>
+
+              <button className="group relative px-4 py-2 rounded-lg bg-gradient-to-br from-red-500/20 to-red-800/10 border border-red-400/30 hover:border-red-400/60 hover:shadow-lg hover:shadow-red-400/20 transition-all duration-300">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🎧</span>
+                  <span className="text-xs font-bold text-white">HyperX</span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-red-400/0 to-red-400/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </button>
             </div>
 
-            {/* 3 Sponsors DROITE */}
-            <div className="flex gap-4 flex-1 justify-start">
-              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-purple-600/10 to-black border border-purple-500/20 hover:border-purple-500/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
-                <span className="text-3xl mb-1">💬</span>
-                <span className="text-white font-bold text-xs">Discord</span>
-              </div>
-
-              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-green-400/10 to-black border border-green-400/20 hover:border-green-400/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
-                <span className="text-3xl mb-1">🎮</span>
-                <span className="text-white font-bold text-xs">NVIDIA</span>
-              </div>
-
-              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-red-500/10 to-black border border-red-500/20 hover:border-red-500/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
-                <span className="text-3xl mb-1">🎧</span>
-                <span className="text-white font-bold text-xs">HyperX</span>
+            {/* Icône droite */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-600">Powered by</span>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
+                <span className="text-xs font-black text-white">TL</span>
               </div>
             </div>
           </div>
