@@ -4,7 +4,6 @@ import { TEAMS } from './data/teamsData';
 import Dashboard from './components/Dashboard';
 import LoginForm from './components/LoginForm';
 
-// Import getPlayers depuis PlayerManager
 const getPlayers = () => {
   const stored = localStorage.getItem('travl_players');
   return stored ? JSON.parse(stored) : [];
@@ -19,15 +18,10 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [players, setPlayers] = useState(getPlayers());
 
-  // Rafraîchir les joueurs depuis localStorage
   useEffect(() => {
     const handleStorage = () => setPlayers(getPlayers());
     window.addEventListener('storage', handleStorage);
-    
-    const interval = setInterval(() => {
-      setPlayers(getPlayers());
-    }, 500);
-
+    const interval = setInterval(() => setPlayers(getPlayers()), 500);
     return () => {
       window.removeEventListener('storage', handleStorage);
       clearInterval(interval);
@@ -42,11 +36,7 @@ function App() {
 
   const handleFlipCard = (teamId) => setFlippedCards(prev => ({ ...prev, [teamId]: !prev[teamId] }));
   const handlePlayerClick = (player) => setSelectedPlayer(player);
-
-  const getTeamPlayers = (teamId) => {
-    return players.filter(p => p.teamId === teamId).slice(0, 5);
-  };
-
+  const getTeamPlayers = (teamId) => players.filter(p => p.teamId === teamId).slice(0, 5);
   const filteredTeams = TEAMS.filter(t => 
     !searchQuery || t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     players.some(p => p.teamId === t.id && p.name.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -70,156 +60,149 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white pb-32">
       <div className="fixed inset-0 z-0 bg-gradient-to-br from-black via-gray-950 to-black"></div>
 
-      {/* Nav */}
+      {/* Nav - LOGO COMPACT */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all ${scrollY > 50 ? 'bg-black/95 backdrop-blur-xl border-b border-red-900/30' : ''}`}>
-        <div className="max-w-7xl mx-auto px-4 h-24 flex items-center justify-between">
-          <div className="flex items-center gap-4 cursor-pointer" onClick={() => setActiveSection('home')}>
-            <div className="w-20 h-20 rounded-full flex items-center justify-center transition-all hover:scale-110 hover:rotate-12"
-              style={{ background: '#000', boxShadow: '0 0 30px rgba(220,20,60,0.8)', border: '4px solid #DC143C' }}>
-              <span className="text-4xl font-black font-bebas" style={{ textShadow: '0 0 20px rgba(220,20,60,0.8)' }}>TL</span>
+        <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveSection('home')}>
+            <div className="w-12 h-12 rounded-lg flex items-center justify-center transition-all hover:scale-110"
+              style={{ background: 'linear-gradient(135deg, #DC143C, #FF1744)', boxShadow: '0 0 20px rgba(220,20,60,0.6)' }}>
+              <span className="text-xl font-black font-bebas text-white">TL</span>
             </div>
             <div>
-              <h1 className="text-4xl font-black font-bebas" style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <h1 className="text-2xl font-black font-bebas leading-none" style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Structure TravL
               </h1>
-              <p className="text-sm text-gray-400">E-SPORTS</p>
+              <p className="text-[10px] text-gray-500 uppercase tracking-wider">E-Sports</p>
             </div>
           </div>
           <div className="hidden md:flex gap-1">
-            {['home', 'teams', 'news', 'dashboard'].map(id => (
+            {['home', 'teams', 'recrutement', 'news', 'dashboard'].map(id => (
               <button key={id} onClick={() => setActiveSection(id)}
-                className={`relative px-6 py-3 rounded-lg font-semibold transition-all ${activeSection === id ? 'text-white' : 'text-gray-400 hover:text-white'}`}>
+                className={`relative px-5 py-2.5 rounded-lg font-semibold text-sm transition-all ${activeSection === id ? 'text-white' : 'text-gray-400 hover:text-white'}`}>
                 {activeSection === id && <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 rounded-lg opacity-80"></div>}
-                <span className="relative z-10">{id === 'home' ? 'Accueil' : id === 'teams' ? 'Équipes' : id === 'news' ? 'Actualités' : 'Dashboard'}</span>
+                <span className="relative z-10">
+                  {id === 'home' ? 'Accueil' : id === 'teams' ? 'Équipes' : id === 'recrutement' ? 'Recrutement' : id === 'news' ? 'Actualités' : 'Dashboard'}
+                </span>
               </button>
             ))}
           </div>
         </div>
       </nav>
 
-      <div className="relative z-10 pt-24">
+      <div className="relative z-10 pt-20">
         {/* HOME */}
         {activeSection === 'home' && (
-  <>
-    {/* Hero Section */}
-    <section className="min-h-screen flex items-center justify-center px-4">
-      <div className="max-w-6xl mx-auto text-center">
-        <div className="inline-block mb-6 px-6 py-2 rounded-full bg-red-900/30 border border-red-600/50 animate-pulse">
-          <span className="text-sm font-bold text-red-400">STRUCTURE ESPORTS</span>
-        </div>
-        <h1 className="text-8xl font-black mb-6 font-bebas" style={{ background: 'linear-gradient(to bottom, #FFF, #DC143C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Structure TravL<br />E-SPORTS
-        </h1>
-        <p className="text-2xl text-gray-300 mb-12">Commence ton voyage avec nous</p>
-        <button onClick={() => setActiveSection('teams')}
-          className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold text-lg hover:scale-105 transition-all"
-          style={{ boxShadow: '0 0 40px rgba(220,20,60,0.6)' }}>
-          Découvrir nos équipes <ChevronRight className="inline ml-2" />
-        </button>
-      </div>
-    </section>
-
-    {/* Section Actualités sur Home - NOUVEAU */}
-    <section className="py-20 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-5xl font-black font-bebas mb-4" 
-            style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            DERNIÈRES ACTUALITÉS
-          </h2>
-          <p className="text-gray-400">Suivez nos performances et victoires</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Actu 1 - Victoire */}
-          <div className="group relative overflow-hidden rounded-xl bg-black/40 border border-red-500/30 hover:border-red-500/60 transition-all cursor-pointer">
-            <div className="aspect-video overflow-hidden bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
-              <span className="text-6xl">🏆</span>
-            </div>
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="px-2 py-1 rounded text-xs font-bold uppercase bg-red-500/20 text-red-400 border border-red-500/30">
-                  VICTOIRE
-                </span>
-                <span className="text-xs text-gray-500">Il y a 2 jours</span>
+          <>
+            <section className="min-h-screen flex items-center justify-center px-4">
+              <div className="max-w-6xl mx-auto text-center">
+                <div className="inline-block mb-6 px-6 py-2 rounded-full bg-red-900/30 border border-red-600/50 animate-pulse">
+                  <span className="text-sm font-bold text-red-400">STRUCTURE ESPORTS</span>
+                </div>
+                <h1 className="text-8xl font-black mb-6 font-bebas" style={{ background: 'linear-gradient(to bottom, #FFF, #DC143C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  Structure TravL<br />E-SPORTS
+                </h1>
+                <p className="text-2xl text-gray-300 mb-12">Commence ton voyage avec nous</p>
+                <button onClick={() => setActiveSection('teams')}
+                  className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold text-lg hover:scale-105 transition-all"
+                  style={{ boxShadow: '0 0 40px rgba(220,20,60,0.6)' }}>
+                  Découvrir nos équipes <ChevronRight className="inline ml-2" />
+                </button>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors">
-                FLUX remporte la Prime League !
-              </h3>
-              <p className="text-sm text-gray-400 mb-4">
-                Performance exceptionnelle face aux meilleures équipes européennes.
-              </p>
-              <button className="flex items-center gap-2 text-red-400 font-semibold text-sm group-hover:gap-3 transition-all">
-                Lire la suite <ExternalLink className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+            </section>
 
-          {/* Actu 2 - Roster */}
-          <div className="group relative overflow-hidden rounded-xl bg-black/40 border border-green-500/30 hover:border-green-500/60 transition-all cursor-pointer">
-            <div className="aspect-video overflow-hidden bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center">
-              <span className="text-6xl">👤</span>
-            </div>
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="px-2 py-1 rounded text-xs font-bold uppercase bg-green-500/20 text-green-400 border border-green-500/30">
-                  ROSTER
-                </span>
-                <span className="text-xs text-gray-500">Il y a 1 semaine</span>
+            {/* Actualités SOBRES FUTURISTES */}
+            <section className="py-20 px-4">
+              <div className="max-w-7xl mx-auto">
+                <div className="text-center mb-16">
+                  <h2 className="text-5xl font-black font-bebas mb-4" style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    ACTUALITÉS
+                  </h2>
+                  <div className="w-20 h-1 bg-gradient-to-r from-red-600 to-red-400 mx-auto"></div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Actu 1 */}
+                  <div className="group relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
+                    <div className="relative bg-black/60 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-red-500/50 transition-all">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold uppercase tracking-wider">
+                          Victoire
+                        </span>
+                        <span className="text-xs text-gray-600">2j</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors">
+                        FLUX domine la Prime League
+                      </h3>
+                      <p className="text-sm text-gray-400 leading-relaxed mb-4">
+                        Performance exceptionnelle avec un score parfait de 3-0 en finale.
+                      </p>
+                      <div className="flex items-center gap-2 text-red-400 text-sm font-semibold group-hover:gap-3 transition-all cursor-pointer">
+                        Lire <ChevronRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actu 2 */}
+                  <div className="group relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-600/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
+                    <div className="relative bg-black/60 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-green-500/50 transition-all">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-bold uppercase tracking-wider">
+                          Roster
+                        </span>
+                        <span className="text-xs text-gray-600">1sem</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-green-400 transition-colors">
+                        Nouveau prodige chez MymétiC
+                      </h3>
+                      <p className="text-sm text-gray-400 leading-relaxed mb-4">
+                        Un talent Master rejoint notre équipe pour viser le sommet.
+                      </p>
+                      <div className="flex items-center gap-2 text-green-400 text-sm font-semibold group-hover:gap-3 transition-all cursor-pointer">
+                        Lire <ChevronRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actu 3 */}
+                  <div className="group relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
+                    <div className="relative bg-black/60 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-blue-500/50 transition-all">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-bold uppercase tracking-wider">
+                          Événement
+                        </span>
+                        <span className="text-xs text-gray-600">3j</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                        LAN Finals Paris 2026
+                      </h3>
+                      <p className="text-sm text-gray-400 leading-relaxed mb-4">
+                        Rendez-vous à l'Accor Arena pour les finales nationales.
+                      </p>
+                      <div className="flex items-center gap-2 text-blue-400 text-sm font-semibold group-hover:gap-3 transition-all cursor-pointer">
+                        Lire <ChevronRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-center mt-12">
+                  <button onClick={() => setActiveSection('news')}
+                    className="px-8 py-3 bg-white/5 border border-white/10 text-white font-semibold rounded-xl hover:bg-white/10 hover:border-red-500/50 transition-all">
+                    Toutes les actualités
+                  </button>
+                </div>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">
-                Nouveau talent rejoint MymétiC
-              </h3>
-              <p className="text-sm text-gray-400 mb-4">
-                Un joueur prometteur vient renforcer notre roster Master.
-              </p>
-              <button className="flex items-center gap-2 text-green-400 font-semibold text-sm group-hover:gap-3 transition-all">
-                Lire la suite <ExternalLink className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+            </section>
+          </>
+        )}
 
-          {/* Actu 3 - Événement */}
-          <div className="group relative overflow-hidden rounded-xl bg-black/40 border border-blue-500/30 hover:border-blue-500/60 transition-all cursor-pointer">
-            <div className="aspect-video overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
-              <span className="text-6xl">📅</span>
-            </div>
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="px-2 py-1 rounded text-xs font-bold uppercase bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                  ÉVÉNEMENT
-                </span>
-                <span className="text-xs text-gray-500">Dans 3 jours</span>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
-                LAN Finals à venir
-              </h3>
-              <p className="text-sm text-gray-400 mb-4">
-                Nos équipes se préparent pour les finales en présentiel à Paris.
-              </p>
-              <button className="flex items-center gap-2 text-blue-400 font-semibold text-sm group-hover:gap-3 transition-all">
-                Lire la suite <ExternalLink className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center mt-12">
-          <button 
-            onClick={() => setActiveSection('news')}
-            className="px-8 py-3 bg-red-500/20 border border-red-500/50 text-red-400 font-bold rounded-xl hover:bg-red-500/30 transition-all">
-            Voir toutes les actualités
-          </button>
-        </div>
-      </div>
-    </section>
-  </>
-)}
-
-        {/* TEAMS - NOUVEAU DESIGN COMPACT ET PRO */}
+        {/* TEAMS */}
         {activeSection === 'teams' && (
           <section className="min-h-screen py-20 px-4">
             <div className="max-w-7xl mx-auto">
@@ -235,12 +218,12 @@ function App() {
                 <div className="relative">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                   <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Rechercher une équipe ou un joueur..."
+                    placeholder="Rechercher..."
                     className="w-full pl-12 pr-4 py-3 bg-black border border-gray-800 rounded-xl text-white focus:border-red-600 focus:outline-none" />
                 </div>
               </div>
 
-              {/* NOUVELLES CARTES ROSTER - COMPACTES ET PRO */}
+              {/* CARTES ROSTER */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {filteredTeams.map((team) => {
                   const teamColor = team.color;
@@ -254,17 +237,16 @@ function App() {
                       <div className={`relative w-full h-full transition-all duration-700 ${isFlipped ? 'rotate-y-180' : ''}`}
                         style={{ transformStyle: 'preserve-3d' }}>
                         
-                        {/* RECTO - VERSION COMPACTE */}
+                        {/* RECTO */}
                         <div className="absolute inset-0 rounded-xl overflow-hidden backdrop-blur-xl transition-all group-hover:scale-[1.02]"
                           style={{
-                            background: `linear-gradient(135deg, ${teamColor}20, rgba(0,0,0,0.95))`,
+                            background: `linear-gradient(135deg, ${teamColor}20, rgba(20,20,20,0.95))`,
                             border: `2px solid ${teamColor}40`,
                             boxShadow: `0 8px 32px ${teamColor}30`,
                             backfaceVisibility: 'hidden'
                           }}>
                           
                           <div className="relative p-4 h-full flex flex-col">
-                            {/* Header compact */}
                             <div className="flex items-center justify-between mb-3">
                               <div className="flex items-center gap-2">
                                 <div className="text-xs font-bold px-2 py-1 rounded-lg" 
@@ -280,7 +262,6 @@ function App() {
                             </h3>
                             <p className="text-xs text-gray-500 mb-4">{team.league}</p>
 
-                            {/* Stats compactes */}
                             <div className="grid grid-cols-3 gap-2 mb-4">
                               <div className="text-center py-2 rounded-lg" style={{ background: `${teamColor}10` }}>
                                 <div className="text-lg font-bold" style={{ color: teamColor }}>
@@ -302,7 +283,6 @@ function App() {
                               </div>
                             </div>
 
-                            {/* Roster compact */}
                             <div className="flex-1 space-y-1.5 mb-3 overflow-y-auto">
                               {roster.length > 0 ? (
                                 roster.map((player) => (
@@ -330,7 +310,6 @@ function App() {
                               )}
                             </div>
 
-                            {/* Barre de performance */}
                             <div className="mb-3">
                               <div className="relative w-full h-1.5 rounded-full overflow-hidden bg-white/5">
                                 <div className="absolute inset-0 h-full rounded-full transition-all duration-1000" 
@@ -348,7 +327,6 @@ function App() {
                               </div>
                             </div>
 
-                            {/* Badges compétitions */}
                             <div className="flex gap-1.5 items-center justify-between">
                               <div className="flex gap-1 flex-wrap flex-1">
                                 {team.competitions.slice(0, 2).map((comp, i) => (
@@ -363,16 +341,16 @@ function App() {
                           </div>
                         </div>
 
-                        {/* VERSO - Statistiques détaillées */}
+                        {/* VERSO */}
                         <div className="absolute inset-0 rounded-xl backdrop-blur-xl p-4"
                           style={{ 
-                            background: `linear-gradient(135deg, ${teamColor}25, rgba(0,0,0,0.95))`, 
+                            background: `linear-gradient(135deg, ${teamColor}25, rgba(20,20,20,0.95))`, 
                             border: `2px solid ${teamColor}40`, 
                             backfaceVisibility: 'hidden', 
                             transform: 'rotateY(180deg)'
                           }}>
                           <h3 className="text-xl font-bebas mb-4 text-center" style={{ color: teamColor }}>
-                            STATISTIQUES DÉTAILLÉES
+                            STATISTIQUES
                           </h3>
                           <div className="space-y-2">
                             {team.competitions.map((comp, i) => (
@@ -389,72 +367,163 @@ function App() {
                               </div>
                             ))}
                           </div>
-                          <p className="text-[9px] text-center text-gray-700 mt-4 uppercase">Click pour retourner</p>
+                          <p className="text-[9px] text-center text-gray-700 mt-4 uppercase">Click retour</p>
                         </div>
                       </div>
                     </div>
                   );
                 })}
               </div>
+            </div>
+          </section>
+        )}
 
-              {/* Section NEWS moderne et compacte */}
-              <div className="mt-16 bg-black/20 backdrop-blur-xl border-t border-white/10 rounded-2xl p-8">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className="text-3xl font-black text-white mb-1">DERNIÈRES ACTUALITÉS</h3>
-                    <p className="text-sm text-gray-500">Restez informé de nos performances</p>
+        {/* RECRUTEMENT */}
+        {activeSection === 'recrutement' && (
+          <section className="min-h-screen py-20 px-4">
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-6xl font-black font-bebas text-center mb-8" 
+                style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                RECRUTEMENT
+              </h2>
+              <p className="text-center text-gray-400 mb-16">
+                Tu cherches une équipe ou des joueurs ? Poste ton annonce !
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                {/* Cherche équipe */}
+                <div className="bg-black/40 backdrop-blur-xl border border-red-500/30 rounded-2xl p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <UserPlus className="w-8 h-8 text-red-400" />
+                    <h3 className="text-2xl font-bold text-white">Je cherche une équipe</h3>
                   </div>
-                  <button className="px-4 py-2 rounded-lg bg-red-500/20 border border-red-500/50 text-red-400 font-semibold text-sm hover:bg-red-500/30 transition-all">
-                    Voir tout
-                  </button>
+                  
+                  <form className="space-y-4">
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Pseudo in-game</label>
+                      <input type="text" 
+                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none" 
+                        placeholder="Ton pseudo..." />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Rôle principal</label>
+                      <select className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none">
+                        <option>Top</option>
+                        <option>Jungle</option>
+                        <option>Mid</option>
+                        <option>ADC</option>
+                        <option>Support</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Rang actuel</label>
+                      <input type="text" 
+                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none" 
+                        placeholder="Ex: Diamond 2" />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Message</label>
+                      <textarea 
+                        rows="4"
+                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-red-500/50 outline-none resize-none" 
+                        placeholder="Présente-toi..."></textarea>
+                    </div>
+
+                    <button type="submit" 
+                      className="w-full px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold hover:scale-105 transition-all"
+                      style={{ boxShadow: '0 0 30px rgba(220,20,60,0.4)' }}>
+                      Publier mon annonce
+                    </button>
+                  </form>
                 </div>
 
-                <div className="space-y-3">
-                  {/* Exemple actualité 1 */}
-                  <div className="flex gap-4 p-4 rounded-xl bg-black/40 border border-white/10 hover:border-red-500/30 transition-all group cursor-pointer">
-                    <div className="w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
-                      <span className="text-4xl">🏆</span>
+                {/* Cherche joueurs */}
+                <div className="bg-black/40 backdrop-blur-xl border border-green-500/30 rounded-2xl p-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Search className="w-8 h-8 text-green-400" />
+                    <h3 className="text-2xl font-bold text-white">Je cherche des joueurs</h3>
+                  </div>
+                  
+                  <form className="space-y-4">
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Équipe</label>
+                      <select className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-green-500/50 outline-none">
+                        {TEAMS.map(t => <option key={t.id}>{t.name}</option>)}
+                      </select>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-red-500/20 text-red-400 border border-red-500/30">
-                          VICTOIRE
-                        </span>
-                        <span className="text-xs text-gray-500">Il y a 2 jours</span>
+
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Poste recherché</label>
+                      <select className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-green-500/50 outline-none">
+                        <option>Top</option>
+                        <option>Jungle</option>
+                        <option>Mid</option>
+                        <option>ADC</option>
+                        <option>Support</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Rang minimum</label>
+                      <input type="text" 
+                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-green-500/50 outline-none" 
+                        placeholder="Ex: Platinum 1+" />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm text-gray-400 mb-2">Description</label>
+                      <textarea 
+                        rows="4"
+                        className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:border-green-500/50 outline-none resize-none" 
+                        placeholder="Décris le profil..."></textarea>
+                    </div>
+
+                    <button type="submit" 
+                      className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 rounded-xl font-bold hover:scale-105 transition-all"
+                      style={{ boxShadow: '0 0 30px rgba(34,197,94,0.4)' }}>
+                      Publier l'offre
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              {/* Annonces récentes */}
+              <div>
+                <h3 className="text-3xl font-bold text-white mb-8">Annonces récentes</h3>
+                
+                <div className="space-y-4">
+                  <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl p-6 hover:border-red-500/30 transition-all">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="px-3 py-1 rounded-lg bg-red-500/20 text-red-400 text-xs font-bold">CHERCHE ÉQUIPE</span>
+                          <span className="text-white font-bold">ShadowKing</span>
+                          <span className="text-gray-500 text-sm">• Top • Diamond 1</span>
+                        </div>
+                        <p className="text-gray-400 text-sm">
+                          Joueur Top expérimenté cherche équipe Master+. Disponible tous les soirs.
+                        </p>
                       </div>
-                      <h4 className="text-base font-bold text-white mb-1 group-hover:text-red-400 transition-colors line-clamp-1">
-                        FLUX remporte la Prime League !
-                      </h4>
-                      <p className="text-sm text-gray-400 line-clamp-2 mb-2">
-                        Performance exceptionnelle face aux meilleurs équipes européennes.
-                      </p>
-                      <button className="flex items-center gap-1 text-red-400 font-semibold text-xs group-hover:gap-2 transition-all">
-                        Lire <ExternalLink className="w-3 h-3" />
-                      </button>
+                      <span className="text-xs text-gray-600 whitespace-nowrap">Il y a 2h</span>
                     </div>
                   </div>
 
-                  {/* Exemple actualité 2 */}
-                  <div className="flex gap-4 p-4 rounded-xl bg-black/40 border border-white/10 hover:border-green-500/30 transition-all group cursor-pointer">
-                    <div className="w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center">
-                      <span className="text-4xl">👤</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-green-500/20 text-green-400 border border-green-500/30">
-                          ROSTER
-                        </span>
-                        <span className="text-xs text-gray-500">Il y a 1 semaine</span>
+                  <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl p-6 hover:border-green-500/30 transition-all">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="px-3 py-1 rounded-lg bg-green-500/20 text-green-400 text-xs font-bold">CHERCHE JOUEUR</span>
+                          <span className="text-white font-bold">FLUX</span>
+                          <span className="text-gray-500 text-sm">• Jungle • Platinum 1+</span>
+                        </div>
+                        <p className="text-gray-400 text-sm">
+                          Team Master cherche Jungle motivé pour Prime League.
+                        </p>
                       </div>
-                      <h4 className="text-base font-bold text-white mb-1 group-hover:text-green-400 transition-colors line-clamp-1">
-                        Nouveau joueur rejoint MymétiC
-                      </h4>
-                      <p className="text-sm text-gray-400 line-clamp-2 mb-2">
-                        Un talent prometteur vient renforcer notre roster Master.
-                      </p>
-                      <button className="flex items-center gap-1 text-green-400 font-semibold text-xs group-hover:gap-2 transition-all">
-                        Lire <ExternalLink className="w-3 h-3" />
-                      </button>
+                      <span className="text-xs text-gray-600 whitespace-nowrap">Il y a 5h</span>
                     </div>
                   </div>
                 </div>
@@ -475,6 +544,71 @@ function App() {
             </div>
           </section>
         )}
+      </div>
+
+      {/* BANNIÈRE SPONSORS - 2 LIGNES DE 5 */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-2xl border-t border-red-500/20 py-6">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-4">
+            <span className="text-xs text-gray-500 uppercase tracking-widest font-semibold">Nos Partenaires</span>
+          </div>
+          
+          {/* Ligne 1 - 5 sponsors */}
+          <div className="grid grid-cols-5 gap-3 mb-3">
+            <div className="group aspect-square rounded-xl bg-gradient-to-br from-red-600/10 to-black border border-red-500/20 hover:border-red-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+              <span className="text-3xl mb-1">🔴</span>
+              <span className="text-white font-bold text-xs">Red Bull</span>
+            </div>
+
+            <div className="group aspect-square rounded-xl bg-gradient-to-br from-green-600/10 to-black border border-green-500/20 hover:border-green-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+              <span className="text-3xl mb-1">🐍</span>
+              <span className="text-white font-bold text-xs">Razer</span>
+            </div>
+
+            <div className="group aspect-square rounded-xl bg-gradient-to-br from-blue-600/10 to-black border border-blue-500/20 hover:border-blue-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+              <span className="text-3xl mb-1">⌨️</span>
+              <span className="text-white font-bold text-xs">Logitech</span>
+            </div>
+
+            <div className="group aspect-square rounded-xl bg-gradient-to-br from-purple-600/10 to-black border border-purple-500/20 hover:border-purple-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+              <span className="text-3xl mb-1">💬</span>
+              <span className="text-white font-bold text-xs">Discord</span>
+            </div>
+
+            <div className="group aspect-square rounded-xl bg-gradient-to-br from-green-400/10 to-black border border-green-400/20 hover:border-green-400/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+              <span className="text-3xl mb-1">🎮</span>
+              <span className="text-white font-bold text-xs">NVIDIA</span>
+            </div>
+          </div>
+
+          {/* Ligne 2 - 5 sponsors */}
+          <div className="grid grid-cols-5 gap-3">
+            <div className="group aspect-square rounded-xl bg-gradient-to-br from-blue-400/10 to-black border border-blue-400/20 hover:border-blue-400/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+              <span className="text-3xl mb-1">💻</span>
+              <span className="text-white font-bold text-xs">Intel</span>
+            </div>
+
+            <div className="group aspect-square rounded-xl bg-gradient-to-br from-red-500/10 to-black border border-red-500/20 hover:border-red-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+              <span className="text-3xl mb-1">🎧</span>
+              <span className="text-white font-bold text-xs">HyperX</span>
+            </div>
+
+            <div className="group aspect-square rounded-xl bg-gradient-to-br from-orange-500/10 to-black border border-orange-500/20 hover:border-orange-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+              <span className="text-3xl mb-1">🖱️</span>
+              <span className="text-white font-bold text-xs">SteelSeries</span>
+            </div>
+
+            <div className="group aspect-square rounded-xl bg-gradient-to-br from-cyan-500/10 to-black border border-cyan-500/20 hover:border-cyan-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+              <span className="text-3xl mb-1">🎥</span>
+              <span className="text-white font-bold text-xs">Elgato</span>
+            </div>
+
+            <div className="group aspect-square rounded-xl bg-gradient-to-br from-yellow-500/10 to-black border border-yellow-500/20 hover:border-yellow-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+              <span className="text-3xl mb-1">⚡</span>
+              <span className="text-white font-bold text-xs">Corsair</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* MODAL JOUEUR */}
@@ -514,7 +648,7 @@ function App() {
             </div>
             {selectedPlayer.champions && selectedPlayer.champions.some(c => c) && (
               <div className="mt-4">
-                <div className="text-xs text-gray-500 mb-2">Champions principaux</div>
+                <div className="text-xs text-gray-500 mb-2">Champions</div>
                 <div className="flex gap-2">
                   {selectedPlayer.champions.filter(c => c).map((champ, i) => (
                     <div key={i} className="flex-1 text-xs text-center py-2 rounded bg-white/5 border border-white/10">
@@ -528,71 +662,12 @@ function App() {
         </div>
       )}
 
-<div className="fixed bottom-0 left-0 right-0 z-40 bg-black/90 backdrop-blur-xl border-t border-red-500/30 py-4 overflow-hidden">
-  <div className="text-center mb-2">
-    <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Nos Partenaires</span>
-  </div>
-  <div className="sponsor-scroll-container overflow-hidden">
-    <div className="sponsor-scroll flex gap-8 items-center">
-      {/* Répété 2 fois pour l'effet infini */}
-      {[...Array(2)].map((_, idx) => (
-        <React.Fragment key={idx}>
-          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
-            <span className="text-2xl">🔴</span>
-            <span className="text-white font-bold whitespace-nowrap">Red Bull</span>
-          </div>
-          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
-            <span className="text-2xl">🖱️</span>
-            <span className="text-white font-bold whitespace-nowrap">Razer</span>
-          </div>
-          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
-            <span className="text-2xl">⌨️</span>
-            <span className="text-white font-bold whitespace-nowrap">Logitech</span>
-          </div>
-          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
-            <span className="text-2xl">💬</span>
-            <span className="text-white font-bold whitespace-nowrap">Discord</span>
-          </div>
-          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
-            <span className="text-2xl">📺</span>
-            <span className="text-white font-bold whitespace-nowrap">Twitch</span>
-          </div>
-          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
-            <span className="text-2xl">💻</span>
-            <span className="text-white font-bold whitespace-nowrap">Intel</span>
-          </div>
-          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
-            <span className="text-2xl">🎮</span>
-            <span className="text-white font-bold whitespace-nowrap">NVIDIA</span>
-          </div>
-          <div className="sponsor-item flex items-center gap-3 px-6 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex-shrink-0">
-            <span className="text-2xl">🎧</span>
-            <span className="text-white font-bold whitespace-nowrap">HyperX</span>
-          </div>
-        </React.Fragment>
-      ))}
-    </div>
-  </div>
-</div>
-      
-      <footer className="relative z-10 border-t border-red-900/30 mt-20 py-12 text-center text-sm text-gray-600">
+      <footer className="relative z-10 border-t border-red-900/30 mt-20 py-8 text-center text-sm text-gray-600">
         <p>© 2026 Structure TravL E-sports • Tous droits réservés</p>
       </footer>
 
       <style jsx>{`
         .rotate-y-180 { transform: rotateY(180deg); }
-        .line-clamp-1 {
-          display: -webkit-box;
-          -webkit-line-clamp: 1;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
       `}</style>
     </div>
   );
