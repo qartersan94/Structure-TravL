@@ -550,10 +550,10 @@ function App() {
         )}
       </div>
 
-      {/* BANNIÈRE SPONSORS - EMOJIS PERTINENTS */}
+      {/* BANNIÈRE SPONSORS - BOUTONS CENTRÉS */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-black via-black/98 to-transparent backdrop-blur-xl border-t border-red-500/10">
         <div className="max-w-7xl mx-auto px-6 py-2.5">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center gap-12">
             {/* 3 Boutons GAUCHE */}
             <div className="flex items-center gap-2">
               <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-600/20 to-red-900/10 border border-red-500/30 hover:border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300">
