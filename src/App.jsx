@@ -157,7 +157,7 @@ function App() {
                         <span className="text-[10px] text-gray-600">1sem</span>
                       </div>
                       <h3 className="text-base font-bold text-white mb-2 group-hover:text-green-400 transition-colors line-clamp-1">
-                        Nouveau prodige chez MymétiC
+                        Roster en creation : 2 équipes master - La MymétiC & La Heav'N
                       </h3>
                       <p className="text-xs text-gray-400 leading-relaxed mb-3 line-clamp-2">
                         Un talent Master rejoint notre équipe pour viser le sommet.
