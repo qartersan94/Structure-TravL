@@ -1,150 +1,123 @@
-// teamsData.js - COULEURS OPTIMISÉES POUR VISIBILITÉ MAXIMALE
-
-export const TEAMS = [
+const TEAMS = [
   {
     id: 'flux',
     name: 'FLUX',
-    rank: 'Master',
-    league: 'Flux Ignition',
-    color: '#ff9966', // Orange lumineux - TOUJOURS VISIBLE
     logo: '🔥',
+    color: '#ff9966',
+    rank: 'Master 350LP',
     globalStats: {
-      totalWins: 28,
-      totalLosses: 14,
-      winRate: 67
+      totalWins: 45,
+      totalLosses: 23,
+      winRate: 66
     },
     competitions: [
-      { name: 'Prime League', position: 1, points: 145, wins: 15, losses: 3 },
-      { name: 'Duel Virtuel', position: 2, points: 98, wins: 13, losses: 11 }
+      { name: 'Prime League', position: 2, points: 245, wins: 18, losses: 7 },
+      { name: 'LFL Division 2', position: 1, points: 312, wins: 22, losses: 10 },
+      { name: 'Coupe de France', position: 3, points: 189, wins: 12, losses: 6 }
     ]
   },
   {
     id: 'mymetic',
     name: 'MymétiC',
-    rank: 'Master',
-    league: 'Shadows We Strike',
-    color: '#cccccc', // Gris très clair - TOUJOURS VISIBLE
     logo: '🛡️',
+    color: '#cccccc',
+    rank: 'Master 280LP',
     globalStats: {
-      totalWins: 26,
-      totalLosses: 15,
-      winRate: 63
+      totalWins: 38,
+      totalLosses: 27,
+      winRate: 58
     },
     competitions: [
-      { name: 'Prime League', position: 2, points: 132, wins: 14, losses: 5 },
-      { name: 'Nexus Tour', position: 1, points: 110, wins: 12, losses: 10 }
+      { name: 'Prime League', position: 4, points: 198, wins: 15, losses: 9 },
+      { name: 'LFL Division 2', position: 3, points: 234, wins: 19, losses: 12 },
+      { name: 'Coupe de France', position: 5, points: 145, wins: 10, losses: 8 }
     ]
   },
   {
     id: 'froznlegion',
     name: "Froz'nLégion",
-    rank: 'Low Master',
-    league: 'Frost Guardians',
-    color: '#e8e8e8', // Blanc grisé - TOUJOURS VISIBLE
     logo: '❄️',
+    color: '#e8e8e8',
+    rank: 'Diamond 1 95LP',
     globalStats: {
-      totalWins: 24,
-      totalLosses: 16,
-      winRate: 60
+      totalWins: 42,
+      totalLosses: 25,
+      winRate: 63
     },
     competitions: [
-      { name: 'Prime League', position: 3, points: 118, wins: 13, losses: 7 }
+      { name: 'Prime League', position: 3, points: 223, wins: 17, losses: 8 },
+      { name: 'LFL Division 2', position: 2, points: 267, wins: 21, losses: 11 },
+      { name: 'Coupe de France', position: 4, points: 167, wins: 11, losses: 7 }
     ]
   },
   {
     id: 'mount-x',
     name: 'MOUNT X',
-    rank: 'High Diamond',
-    league: 'Paris Performance',
-    color: '#33ff99', // Vert très lumineux - TOUJOURS VISIBLE
     logo: '⚡',
+    color: '#33ff99',
+    rank: 'Diamond 1 60LP',
     globalStats: {
-      totalWins: 22,
-      totalLosses: 13,
-      winRate: 63
+      totalWins: 35,
+      totalLosses: 30,
+      winRate: 54
     },
     competitions: [
-      { name: 'Nexus Tour', position: 1, points: 105, wins: 12, losses: 8 }
+      { name: 'Prime League', position: 6, points: 176, wins: 13, losses: 11 },
+      { name: 'LFL Division 2', position: 5, points: 201, wins: 17, losses: 13 },
+      { name: 'Coupe de France', position: 7, points: 123, wins: 9, losses: 9 }
     ]
   },
   {
     id: 'visionary',
     name: 'VISIONARY',
-    rank: 'Diamond',
-    league: 'Arcane Vision',
-    color: '#bb99ff', // Violet lumineux - TOUJOURS VISIBLE
     logo: '👁️',
+    color: '#bb99ff',
+    rank: 'Diamond 2 40LP',
     globalStats: {
-      totalWins: 20,
-      totalLosses: 15,
-      winRate: 57
+      totalWins: 33,
+      totalLosses: 32,
+      winRate: 51
     },
     competitions: [
-      { name: 'Duel Virtuel', position: 3, points: 87, wins: 10, losses: 12 }
+      { name: 'Prime League', position: 7, points: 158, wins: 12, losses: 12 },
+      { name: 'LFL Division 2', position: 6, points: 189, wins: 16, losses: 14 },
+      { name: 'Coupe de France', position: 6, points: 134, wins: 10, losses: 10 }
     ]
   },
   {
     id: 'team',
     name: 'TEAM',
-    rank: 'Diamond',
-    league: 'Never Look Back',
-    color: '#ffdd66', // Jaune très lumineux - TOUJOURS VISIBLE
     logo: '⭐',
+    color: '#ffdd66',
+    rank: 'Diamond 3 75LP',
     globalStats: {
-      totalWins: 18,
-      totalLosses: 17,
-      winRate: 51
+      totalWins: 29,
+      totalLosses: 36,
+      winRate: 45
     },
     competitions: [
-      { name: 'Elven League', position: 2, points: 76, wins: 9, losses: 8 }
+      { name: 'Prime League', position: 8, points: 142, wins: 11, losses: 13 },
+      { name: 'LFL Division 2', position: 8, points: 167, wins: 14, losses: 16 },
+      { name: 'Coupe de France', position: 9, points: 98, wins: 7, losses: 11 }
     ]
   },
   {
     id: 'legendary',
     name: 'LEGENDARY',
-    rank: 'Diamond',
-    league: 'Legends Never Die',
-    color: '#66b3ff', // Bleu lumineux - TOUJOURS VISIBLE
     logo: '🏆',
+    color: '#66b3ff',
+    rank: 'Diamond 3 50LP',
     globalStats: {
-      totalWins: 16,
-      totalLosses: 19,
-      winRate: 46
+      totalWins: 27,
+      totalLosses: 38,
+      winRate: 42
     },
     competitions: [
-      { name: 'Duel Virtuel', position: 4, points: 65, wins: 8, losses: 11 }
+      { name: 'Prime League', position: 9, points: 128, wins: 10, losses: 14 },
+      { name: 'LFL Division 2', position: 7, points: 156, wins: 13, losses: 17 },
+      { name: 'Coupe de France', position: 8, points: 112, wins: 8, losses: 12 }
     ]
   }
 ];
-
-// Helper pour récupérer une équipe par ID
-export const getTeamById = (teamId) => {
-  return TEAMS.find(team => team.id === teamId);
-};
-
-// Helper pour récupérer toutes les équipes d'un certain rang
-export const getTeamsByRank = (rank) => {
-  return TEAMS.filter(team => team.rank === rank);
-};
-
-// Helper pour calculer les stats globales
-export const getGlobalStats = () => {
-  const totalGames = TEAMS.reduce((sum, team) => 
-    sum + team.globalStats.totalWins + team.globalStats.totalLosses, 0
-  );
-  
-  const totalWins = TEAMS.reduce((sum, team) => 
-    sum + team.globalStats.totalWins, 0
-  );
-  
-  const globalWinrate = Math.round((totalWins / totalGames) * 100);
-  
-  return {
-    totalTeams: TEAMS.length,
-    totalGames,
-    totalWins,
-    globalWinrate
-  };
-};
 
 export default TEAMS;
