@@ -60,7 +60,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white pb-32">
+    <div className="min-h-screen bg-black text-white pb-24">
       <div className="fixed inset-0 z-0 bg-gradient-to-br from-black via-gray-950 to-black"></div>
 
       {/* Nav - LOGO COMPACT */}
@@ -546,66 +546,49 @@ function App() {
         )}
       </div>
 
-      {/* BANNIÈRE SPONSORS - 2 LIGNES DE 5 */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-2xl border-t border-red-500/20 py-6">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-4">
-            <span className="text-xs text-gray-500 uppercase tracking-widest font-semibold">Nos Partenaires</span>
-          </div>
-          
-          {/* Ligne 1 - 5 sponsors */}
-          <div className="grid grid-cols-5 gap-3 mb-3">
-            <div className="group aspect-square rounded-xl bg-gradient-to-br from-red-600/10 to-black border border-red-500/20 hover:border-red-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
-              <span className="text-3xl mb-1">🔴</span>
-              <span className="text-white font-bold text-xs">Red Bull</span>
+      {/* BANNIÈRE SPONSORS - 3 GAUCHE + 3 DROITE */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-2xl border-t border-red-500/20 py-5">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between gap-8">
+            {/* 3 Sponsors GAUCHE */}
+            <div className="flex gap-4 flex-1 justify-end">
+              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-red-600/10 to-black border border-red-500/20 hover:border-red-500/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
+                <span className="text-3xl mb-1">🔴</span>
+                <span className="text-white font-bold text-xs">Red Bull</span>
+              </div>
+
+              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-green-600/10 to-black border border-green-500/20 hover:border-green-500/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
+                <span className="text-3xl mb-1">🐍</span>
+                <span className="text-white font-bold text-xs">Razer</span>
+              </div>
+
+              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-blue-600/10 to-black border border-blue-500/20 hover:border-blue-500/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
+                <span className="text-3xl mb-1">⌨️</span>
+                <span className="text-white font-bold text-xs">Logitech</span>
+              </div>
             </div>
 
-            <div className="group aspect-square rounded-xl bg-gradient-to-br from-green-600/10 to-black border border-green-500/20 hover:border-green-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
-              <span className="text-3xl mb-1">🐍</span>
-              <span className="text-white font-bold text-xs">Razer</span>
+            {/* CENTRE - Texte */}
+            <div className="text-center px-8">
+              <span className="text-xs text-gray-500 uppercase tracking-widest font-semibold whitespace-nowrap">Nos Partenaires</span>
             </div>
 
-            <div className="group aspect-square rounded-xl bg-gradient-to-br from-blue-600/10 to-black border border-blue-500/20 hover:border-blue-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
-              <span className="text-3xl mb-1">⌨️</span>
-              <span className="text-white font-bold text-xs">Logitech</span>
-            </div>
+            {/* 3 Sponsors DROITE */}
+            <div className="flex gap-4 flex-1 justify-start">
+              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-purple-600/10 to-black border border-purple-500/20 hover:border-purple-500/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
+                <span className="text-3xl mb-1">💬</span>
+                <span className="text-white font-bold text-xs">Discord</span>
+              </div>
 
-            <div className="group aspect-square rounded-xl bg-gradient-to-br from-purple-600/10 to-black border border-purple-500/20 hover:border-purple-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
-              <span className="text-3xl mb-1">💬</span>
-              <span className="text-white font-bold text-xs">Discord</span>
-            </div>
+              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-green-400/10 to-black border border-green-400/20 hover:border-green-400/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
+                <span className="text-3xl mb-1">🎮</span>
+                <span className="text-white font-bold text-xs">NVIDIA</span>
+              </div>
 
-            <div className="group aspect-square rounded-xl bg-gradient-to-br from-green-400/10 to-black border border-green-400/20 hover:border-green-400/50 transition-all flex flex-col items-center justify-center cursor-pointer">
-              <span className="text-3xl mb-1">🎮</span>
-              <span className="text-white font-bold text-xs">NVIDIA</span>
-            </div>
-          </div>
-
-          {/* Ligne 2 - 5 sponsors */}
-          <div className="grid grid-cols-5 gap-3">
-            <div className="group aspect-square rounded-xl bg-gradient-to-br from-blue-400/10 to-black border border-blue-400/20 hover:border-blue-400/50 transition-all flex flex-col items-center justify-center cursor-pointer">
-              <span className="text-3xl mb-1">💻</span>
-              <span className="text-white font-bold text-xs">Intel</span>
-            </div>
-
-            <div className="group aspect-square rounded-xl bg-gradient-to-br from-red-500/10 to-black border border-red-500/20 hover:border-red-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
-              <span className="text-3xl mb-1">🎧</span>
-              <span className="text-white font-bold text-xs">HyperX</span>
-            </div>
-
-            <div className="group aspect-square rounded-xl bg-gradient-to-br from-orange-500/10 to-black border border-orange-500/20 hover:border-orange-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
-              <span className="text-3xl mb-1">🖱️</span>
-              <span className="text-white font-bold text-xs">SteelSeries</span>
-            </div>
-
-            <div className="group aspect-square rounded-xl bg-gradient-to-br from-cyan-500/10 to-black border border-cyan-500/20 hover:border-cyan-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
-              <span className="text-3xl mb-1">🎥</span>
-              <span className="text-white font-bold text-xs">Elgato</span>
-            </div>
-
-            <div className="group aspect-square rounded-xl bg-gradient-to-br from-yellow-500/10 to-black border border-yellow-500/20 hover:border-yellow-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
-              <span className="text-3xl mb-1">⚡</span>
-              <span className="text-white font-bold text-xs">Corsair</span>
+              <div className="group aspect-square w-24 rounded-xl bg-gradient-to-br from-red-500/10 to-black border border-red-500/20 hover:border-red-500/50 hover:scale-110 transition-all flex flex-col items-center justify-center cursor-pointer">
+                <span className="text-3xl mb-1">🎧</span>
+                <span className="text-white font-bold text-xs">HyperX</span>
+              </div>
             </div>
           </div>
         </div>
