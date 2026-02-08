@@ -96,30 +96,42 @@ function App() {
       </header>
 
       <div className="relative z-10 pt-20">
-        {/* HOME */}
+        {/* HOME - HERO SECTION REMONTÉE */}
         {activeSection === 'home' && (
           <>
-            <section className="min-h-[65vh] flex items-center justify-center px-4 py-6">
-              <div className="max-w-6xl mx-auto text-center">
-                <div className="inline-block mb-3 px-4 py-1 rounded-full bg-red-900/30 border border-red-600/50 animate-pulse">
-                  <span className="text-xs font-bold text-red-400">STRUCTURE ESPORTS</span>
+            {/* HERO - Hauteur réduite + padding top réduit */}
+            <section className="min-h-[55vh] flex items-start pt-16 px-4">
+              <div className="max-w-6xl mx-auto text-center w-full">
+                {/* Badge STRUCTURE ESPORTS */}
+                <div className="inline-block mb-4 px-4 py-1 rounded-full bg-red-900/30 border border-red-600/50">
+                  <span className="text-xs font-bold text-red-400 uppercase tracking-wider">Structure Esports</span>
                 </div>
-                <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-3 font-bebas" style={{ background: 'linear-gradient(to bottom, #FFF, #DC143C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  Structure TravL<br />E-SPORTS
+                
+                {/* Titre principal */}
+                <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-4 font-bebas leading-tight" 
+                  style={{ background: 'linear-gradient(to bottom, #FFF, #DC143C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  STRUCTURE TRAVL<br />E-SPORTS
                 </h1>
-                <p className="text-lg md:text-xl text-gray-300 mb-6">Commence ton voyage avec nous</p>
+                
+                {/* Sous-titre */}
+                <p className="text-lg md:text-xl text-gray-300 mb-8">Commence ton voyage avec nous</p>
+                
+                {/* Bouton CTA */}
                 <button onClick={() => setActiveSection('teams')}
-                  className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold text-base hover:scale-105 transition-all"
+                  className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 rounded-xl font-bold text-lg hover:scale-105 transition-all inline-flex items-center gap-2"
                   style={{ boxShadow: '0 0 30px rgba(220,20,60,0.5)' }}>
-                  Découvrir nos équipes <ChevronRight className="inline ml-2 w-5 h-5" />
+                  Découvrir nos équipes 
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
             </section>
 
-            <section className="-mt-12 py-10 px-4 pb-20">
+            {/* ACTUALITÉS - Remontées pour compenser */}
+            <section className="-mt-6 py-10 px-4 pb-20">
               <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-8">
-                  <h2 className="text-3xl md:text-4xl font-black font-bebas mb-2" style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  <h2 className="text-3xl md:text-4xl font-black font-bebas mb-2" 
+                    style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                     DERNIÈRES ACTUALITÉS
                   </h2>
                   <div className="w-16 h-0.5 bg-gradient-to-r from-red-600 to-red-400 mx-auto"></div>
@@ -187,7 +199,8 @@ function App() {
         {activeSection === 'teams' && (
           <section className="min-h-screen py-12 px-4 pb-20">
             <div className="max-w-7xl mx-auto">
-              <h2 className="text-5xl font-black font-bebas text-center mb-12" style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <h2 className="text-5xl font-black font-bebas text-center mb-12" 
+                style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 NOS ÉQUIPES
               </h2>
 
