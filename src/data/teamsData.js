@@ -5,6 +5,13 @@ const TEAMS = [
     logo: '🔥',
     color: '#ff9966',
     rank: 'Master 350LP',
+    roster: [
+      { id: 1, name: 'FluxTop', role: 'Top', kda: '3.2', status: 'online' },
+      { id: 2, name: 'FluxJungle', role: 'Jungle', kda: '4.1', status: 'online' },
+      { id: 3, name: 'FluxMid', role: 'Mid', kda: '5.8', status: 'online' },
+      { id: 4, name: 'FluxADC', role: 'ADC', kda: '6.2', status: 'online' },
+      { id: 5, name: 'FluxSupport', role: 'Support', kda: '2.9', status: 'offline' }
+    ],
     globalStats: {
       totalWins: 45,
       totalLosses: 23,
@@ -22,6 +29,13 @@ const TEAMS = [
     logo: '🛡️',
     color: '#cccccc',
     rank: 'Master 280LP',
+    roster: [
+      { id: 6, name: 'MymeTop', role: 'Top', kda: '2.8', status: 'online' },
+      { id: 7, name: 'MymeJungle', role: 'Jungle', kda: '3.5', status: 'online' },
+      { id: 8, name: 'MymeMid', role: 'Mid', kda: '4.9', status: 'online' },
+      { id: 9, name: 'MymeADC', role: 'ADC', kda: '5.1', status: 'offline' },
+      { id: 10, name: 'MymeSupport', role: 'Support', kda: '2.3', status: 'online' }
+    ],
     globalStats: {
       totalWins: 38,
       totalLosses: 27,
@@ -39,6 +53,13 @@ const TEAMS = [
     logo: '❄️',
     color: '#e8e8e8',
     rank: 'Diamond 1 95LP',
+    roster: [
+      { id: 11, name: 'FrozenTop', role: 'Top', kda: '3.1', status: 'online' },
+      { id: 12, name: 'FrozenJungle', role: 'Jungle', kda: '3.8', status: 'online' },
+      { id: 13, name: 'FrozenMid', role: 'Mid', kda: '5.2', status: 'online' },
+      { id: 14, name: 'FrozenADC', role: 'ADC', kda: '5.7', status: 'online' },
+      { id: 15, name: 'FrozenSupport', role: 'Support', kda: '2.6', status: 'offline' }
+    ],
     globalStats: {
       totalWins: 42,
       totalLosses: 25,
@@ -56,6 +77,13 @@ const TEAMS = [
     logo: '⚡',
     color: '#33ff99',
     rank: 'Diamond 1 60LP',
+    roster: [
+      { id: 16, name: 'MountXTop', role: 'Top', kda: '2.9', status: 'online' },
+      { id: 17, name: 'MountXJungle', role: 'Jungle', kda: '3.3', status: 'online' },
+      { id: 18, name: 'MountXMid', role: 'Mid', kda: '4.6', status: 'offline' },
+      { id: 19, name: 'MountXADC', role: 'ADC', kda: '4.9', status: 'online' },
+      { id: 20, name: 'MountXSupport', role: 'Support', kda: '2.2', status: 'online' }
+    ],
     globalStats: {
       totalWins: 35,
       totalLosses: 30,
@@ -73,6 +101,13 @@ const TEAMS = [
     logo: '👁️',
     color: '#bb99ff',
     rank: 'Diamond 2 40LP',
+    roster: [
+      { id: 21, name: 'VisionTop', role: 'Top', kda: '2.7', status: 'online' },
+      { id: 22, name: 'VisionJungle', role: 'Jungle', kda: '3.1', status: 'offline' },
+      { id: 23, name: 'VisionMid', role: 'Mid', kda: '4.3', status: 'online' },
+      { id: 24, name: 'VisionADC', role: 'ADC', kda: '4.5', status: 'online' },
+      { id: 25, name: 'VisionSupport', role: 'Support', kda: '2.1', status: 'online' }
+    ],
     globalStats: {
       totalWins: 33,
       totalLosses: 32,
@@ -90,6 +125,13 @@ const TEAMS = [
     logo: '⭐',
     color: '#ffdd66',
     rank: 'Diamond 3 75LP',
+    roster: [
+      { id: 26, name: 'TeamTop', role: 'Top', kda: '2.5', status: 'online' },
+      { id: 27, name: 'TeamJungle', role: 'Jungle', kda: '2.9', status: 'online' },
+      { id: 28, name: 'TeamMid', role: 'Mid', kda: '3.8', status: 'offline' },
+      { id: 29, name: 'TeamADC', role: 'ADC', kda: '4.2', status: 'online' },
+      { id: 30, name: 'TeamSupport', role: 'Support', kda: '1.9', status: 'online' }
+    ],
     globalStats: {
       totalWins: 29,
       totalLosses: 36,
@@ -107,6 +149,13 @@ const TEAMS = [
     logo: '🏆',
     color: '#66b3ff',
     rank: 'Diamond 3 50LP',
+    roster: [
+      { id: 31, name: 'LegTop', role: 'Top', kda: '2.4', status: 'offline' },
+      { id: 32, name: 'LegJungle', role: 'Jungle', kda: '2.8', status: 'online' },
+      { id: 33, name: 'LegMid', role: 'Mid', kda: '3.6', status: 'online' },
+      { id: 34, name: 'LegADC', role: 'ADC', kda: '4.0', status: 'online' },
+      { id: 35, name: 'LegSupport', role: 'Support', kda: '1.8', status: 'online' }
+    ],
     globalStats: {
       totalWins: 27,
       totalLosses: 38,
