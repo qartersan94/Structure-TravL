@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, Menu, X, Users, Calendar, Trophy, UserPlus, Search, Newspaper } from 'lucide-react';
+import { ChevronRight, Menu, X, UserPlus, Search } from 'lucide-react';
 import LoginForm from './components/LoginForm';
 import Dashboard from './components/Dashboard';
 import TEAMS from './data/teamsData';
@@ -10,14 +10,9 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [flippedCards, setFlippedCards] = useState({});
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
 
   const handleFlipCard = (teamId) => {
     setFlippedCards(prev => ({ ...prev, [teamId]: !prev[teamId] }));
-  };
-
-  const handlePlayerClick = (player) => {
-    setSelectedPlayer(player);
   };
 
   const handleLogin = (user) => {
@@ -48,7 +43,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Background */}
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-900/20 via-black to-black"></div>
       <div className="fixed inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-40"></div>
 
@@ -62,7 +56,7 @@ function App() {
               </div>
               <div>
                 <h1 className="text-xl font-black font-bebas leading-none">STRUCTURE TRAVL</h1>
-                <p className="text-xs text-gray-500">E-SPORTS ORGANIZATION</p>
+                <p className="text-xs text-gray-500">E-SPORTS</p>
               </div>
             </div>
 
@@ -70,9 +64,7 @@ function App() {
               {navItems.map(item => (
                 <button key={item.id} onClick={() => setActiveSection(item.id)}
                   className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
-                    activeSection === item.id
-                      ? 'bg-red-600 text-white'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    activeSection === item.id ? 'bg-red-600 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'
                   }`}>
                   <span className="mr-2">{item.icon}</span>
                   {item.label}
@@ -80,7 +72,7 @@ function App() {
               ))}
             </nav>
 
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2 hover:bg-white/10 rounded-lg transition-all">
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2 hover:bg-white/10 rounded-lg">
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
@@ -141,13 +133,9 @@ function App() {
                         <span className="px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] font-bold uppercase">Victoire</span>
                         <span className="text-[10px] text-gray-600">2j</span>
                       </div>
-                      <h3 className="text-base font-bold text-white mb-2 group-hover:text-red-400 transition-colors line-clamp-1">
-                        FLUX domine la Prime League
-                      </h3>
-                      <p className="text-xs text-gray-400 leading-relaxed mb-3 line-clamp-2">
-                        Performance exceptionnelle avec un score parfait de 3-0.
-                      </p>
-                      <div className="flex items-center gap-1.5 text-red-400 text-xs font-semibold group-hover:gap-2 transition-all cursor-pointer">
+                      <h3 className="text-base font-bold text-white mb-2">FLUX domine la Prime League</h3>
+                      <p className="text-xs text-gray-400 mb-3 line-clamp-2">Performance exceptionnelle avec un score parfait de 3-0.</p>
+                      <div className="flex items-center gap-1.5 text-red-400 text-xs font-semibold cursor-pointer">
                         Lire <ChevronRight className="w-3 h-3" />
                       </div>
                     </div>
@@ -160,13 +148,9 @@ function App() {
                         <span className="px-2 py-0.5 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-[10px] font-bold uppercase">Roster</span>
                         <span className="text-[10px] text-gray-600">1sem</span>
                       </div>
-                      <h3 className="text-base font-bold text-white mb-2 group-hover:text-green-400 transition-colors line-clamp-1">
-                        Nouveau prodige chez MymétiC
-                      </h3>
-                      <p className="text-xs text-gray-400 leading-relaxed mb-3 line-clamp-2">
-                        Un talent Master rejoint notre équipe pour viser le sommet.
-                      </p>
-                      <div className="flex items-center gap-1.5 text-green-400 text-xs font-semibold group-hover:gap-2 transition-all cursor-pointer">
+                      <h3 className="text-base font-bold text-white mb-2">Nouveau prodige chez MymétiC</h3>
+                      <p className="text-xs text-gray-400 mb-3 line-clamp-2">Un talent Master rejoint notre équipe.</p>
+                      <div className="flex items-center gap-1.5 text-green-400 text-xs font-semibold cursor-pointer">
                         Lire <ChevronRight className="w-3 h-3" />
                       </div>
                     </div>
@@ -179,13 +163,9 @@ function App() {
                         <span className="px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-bold uppercase">Événement</span>
                         <span className="text-[10px] text-gray-600">3j</span>
                       </div>
-                      <h3 className="text-base font-bold text-white mb-2 group-hover:text-blue-400 transition-colors line-clamp-1">
-                        LAN Finals Paris 2026
-                      </h3>
-                      <p className="text-xs text-gray-400 leading-relaxed mb-3 line-clamp-2">
-                        Rendez-vous à l'Accor Arena pour les finales nationales.
-                      </p>
-                      <div className="flex items-center gap-1.5 text-blue-400 text-xs font-semibold group-hover:gap-2 transition-all cursor-pointer">
+                      <h3 className="text-base font-bold text-white mb-2">LAN Finals Paris 2026</h3>
+                      <p className="text-xs text-gray-400 mb-3 line-clamp-2">Rendez-vous à l'Accor Arena.</p>
+                      <div className="flex items-center gap-1.5 text-blue-400 text-xs font-semibold cursor-pointer">
                         Lire <ChevronRight className="w-3 h-3" />
                       </div>
                     </div>
@@ -246,7 +226,7 @@ function App() {
                               </div>
                               <div className="px-1.5 py-0.5 rounded text-[8px] font-bold" 
                                 style={{ background: `${teamColor}18`, color: teamColor }}>
-                                0/5
+                                {team.roster?.length || 0}/5
                               </div>
                             </div>
 
@@ -263,8 +243,33 @@ function App() {
                               </div>
                             </div>
 
-                            <div className="flex-1 flex items-center justify-center">
-                              <p className="text-xs text-gray-600">Roster à venir</p>
+                            <div className="flex-1 space-y-0.5 mb-2 overflow-y-auto custom-scrollbar">
+                              {team.roster && team.roster.length > 0 ? (
+                                team.roster.map((player) => (
+                                  <div key={player.id}
+                                    className="flex items-center justify-between px-1.5 py-1 rounded bg-black/15 hover:bg-black/30">
+                                    <div className="flex items-center gap-1">
+                                      <div className="w-4 h-4 rounded flex items-center justify-center text-[7px] font-bold bg-white/5" 
+                                        style={{ color: teamColor }}>
+                                        {player.role[0]}
+                                      </div>
+                                      <span className="text-[10px] font-medium text-white truncate max-w-[80px]">
+                                        {player.name}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                      <span className="text-[9px] font-mono font-bold" style={{ color: teamColor }}>
+                                        {player.kda}
+                                      </span>
+                                      <div className={`w-1 h-1 rounded-full ${player.status === 'online' ? 'bg-green-400' : 'bg-gray-700'}`}></div>
+                                    </div>
+                                  </div>
+                                ))
+                              ) : (
+                                <div className="flex-1 flex items-center justify-center py-4">
+                                  <p className="text-xs text-gray-600">Roster à venir</p>
+                                </div>
+                              )}
                             </div>
 
                             <div className="mb-1.5">
@@ -334,24 +339,24 @@ function App() {
               </h2>
               <p className="text-center text-gray-500 text-sm mb-8">Rejoins une équipe ou recrute des joueurs</p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-black/40 backdrop-blur-xl border border-red-500/30 rounded-xl p-5">
                   <div className="flex items-center gap-2 mb-4">
                     <UserPlus className="w-5 h-5 text-red-400" />
-                    <h3 className="text-lg font-bold text-white">Rejoindre une équipe TL</h3>
+                    <h3 className="text-lg font-bold text-white">Rejoindre une équipe</h3>
                   </div>
                   
                   <form className="space-y-3">
-                    <input type="text" placeholder="Pseudo in-game *"
-                      className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-red-500/50 outline-none" />
+                    <input type="text" placeholder="Pseudo *"
+                      className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white outline-none" />
                     
-                    <select className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-red-500/50 outline-none">
-                      <option>Équipe souhaitée</option>
+                    <select className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white outline-none">
+                      <option>Équipe</option>
                       {TEAMS.map(t => <option key={t.id}>{t.name}</option>)}
                     </select>
                     
                     <div className="grid grid-cols-2 gap-3">
-                      <select className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-red-500/50 outline-none">
+                      <select className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white outline-none">
                         <option>Rôle</option>
                         <option>Top</option>
                         <option>Jungle</option>
@@ -360,16 +365,15 @@ function App() {
                         <option>Support</option>
                       </select>
                       <input type="text" placeholder="Rang"
-                        className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-red-500/50 outline-none" />
+                        className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white outline-none" />
                     </div>
 
                     <textarea rows="3" placeholder="Message..."
-                      className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-red-500/50 outline-none resize-none"></textarea>
+                      className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white outline-none resize-none"></textarea>
 
                     <button type="submit" 
-                      className="w-full px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 rounded-lg font-bold text-sm hover:scale-105 transition-all"
-                      style={{ boxShadow: '0 0 20px rgba(220,20,60,0.3)' }}>
-                      Envoyer ma candidature
+                      className="w-full px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 rounded-lg font-bold text-sm hover:scale-105 transition-all">
+                      Envoyer
                     </button>
                   </form>
                 </div>
@@ -377,17 +381,17 @@ function App() {
                 <div className="bg-black/40 backdrop-blur-xl border border-green-500/30 rounded-xl p-5">
                   <div className="flex items-center gap-2 mb-4">
                     <Search className="w-5 h-5 text-green-400" />
-                    <h3 className="text-lg font-bold text-white">Recruter des joueurs</h3>
+                    <h3 className="text-lg font-bold text-white">Recruter</h3>
                   </div>
                   
                   <form className="space-y-3">
-                    <select className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-green-500/50 outline-none">
+                    <select className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white outline-none">
                       <option>Équipe</option>
                       {TEAMS.map(t => <option key={t.id}>{t.name}</option>)}
                     </select>
 
                     <div className="grid grid-cols-2 gap-3">
-                      <select className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-green-500/50 outline-none">
+                      <select className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white outline-none">
                         <option>Poste</option>
                         <option>Top</option>
                         <option>Jungle</option>
@@ -395,17 +399,16 @@ function App() {
                         <option>ADC</option>
                         <option>Support</option>
                       </select>
-                      <input type="text" placeholder="Rang minimum"
-                        className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-green-500/50 outline-none" />
+                      <input type="text" placeholder="Rang min"
+                        className="px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white outline-none" />
                     </div>
 
-                    <textarea rows="3" placeholder="Description du profil..."
-                      className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white focus:border-green-500/50 outline-none resize-none"></textarea>
+                    <textarea rows="3" placeholder="Description..."
+                      className="w-full px-3 py-2 text-sm bg-black/50 border border-white/10 rounded-lg text-white outline-none resize-none"></textarea>
 
                     <button type="submit" 
-                      className="w-full px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 rounded-lg font-bold text-sm hover:scale-105 transition-all"
-                      style={{ boxShadow: '0 0 20px rgba(34,197,94,0.3)' }}>
-                      Publier l'offre
+                      className="w-full px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 rounded-lg font-bold text-sm hover:scale-105 transition-all">
+                      Publier
                     </button>
                   </form>
                 </div>
@@ -422,7 +425,7 @@ function App() {
                 style={{ background: 'linear-gradient(to right, #DC143C, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 ACTUALITÉS
               </h2>
-              <p className="text-center text-gray-400">Section actualités en développement</p>
+              <p className="text-center text-gray-400">Section en développement</p>
             </div>
           </section>
         )}
@@ -433,21 +436,21 @@ function App() {
         <div className="max-w-7xl mx-auto px-6 py-2.5">
           <div className="flex items-center justify-center gap-12">
             <div className="flex items-center gap-2">
-              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-600/20 to-red-900/10 border border-red-500/30 hover:border-red-500/60 hover:shadow-lg hover:shadow-red-500/20 transition-all">
+              <button className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-600/20 to-red-900/10 border border-red-500/30 hover:border-red-500/60 transition-all">
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">💰</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
               </button>
 
-              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-green-600/20 to-green-900/10 border border-green-500/30 hover:border-green-500/60 hover:shadow-lg hover:shadow-green-500/20 transition-all">
+              <button className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-green-600/20 to-green-900/10 border border-green-500/30 hover:border-green-500/60 transition-all">
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">🤝</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
               </button>
 
-              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-blue-600/20 to-blue-900/10 border border-blue-500/30 hover:border-blue-500/60 hover:shadow-lg hover:shadow-blue-500/20 transition-all">
+              <button className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-blue-600/20 to-blue-900/10 border border-blue-500/30 hover:border-blue-500/60 transition-all">
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">🎯</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
@@ -462,21 +465,21 @@ function App() {
             </div>
 
             <div className="flex items-center gap-2">
-              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-900/10 border border-purple-500/30 hover:border-purple-500/60 hover:shadow-lg hover:shadow-purple-500/20 transition-all">
+              <button className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-900/10 border border-purple-500/30 hover:border-purple-500/60 transition-all">
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">🏆</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
               </button>
 
-              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-green-400/20 to-green-700/10 border border-green-400/30 hover:border-green-400/60 hover:shadow-lg hover:shadow-green-400/20 transition-all">
+              <button className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-green-400/20 to-green-700/10 border border-green-400/30 hover:border-green-400/60 transition-all">
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">⚡</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
                 </div>
               </button>
 
-              <button className="group relative px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-500/20 to-red-800/10 border border-red-400/30 hover:border-red-400/60 hover:shadow-lg hover:shadow-red-400/20 transition-all">
+              <button className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-500/20 to-red-800/10 border border-red-400/30 hover:border-red-400/60 transition-all">
                 <div className="flex items-center gap-1.5">
                   <span className="text-base">🎮</span>
                   <span className="text-xs font-bold text-white">Vous ?</span>
@@ -490,5 +493,4 @@ function App() {
   );
 }
 
-export default App;
 export default App;
